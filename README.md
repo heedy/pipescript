@@ -30,3 +30,5 @@ Ultimately, each "transform" is separated by a pipe (`|` or `:`), and the result
 
 Combining multiple time series into tabular datasets is critically important for ML applications. The Pipescript query engine allows
 you to do just that!
+
+To view currently implemented transform documentation, please visit the [Transform List](https://connectordb.com/www/docs/transforms.html)
