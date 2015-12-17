@@ -1,3 +1,8 @@
+/**
+Copyright (c) 2015 The PipeScript Contributors (see AUTHORS)
+Licensed under the MIT license.
+**/
+
 package main
 
 import (
