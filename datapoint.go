@@ -1,7 +1,3 @@
-/**
-Copyright (c) 2015 The PipeScript Contributors (see AUTHORS)
-Licensed under the MIT license.
-**/
 package pipescript
 
 import (
@@ -11,27 +7,26 @@ import (
 )
 
 // Datapoint is the core data type which is passed through the transform system. It encodes
-//	an element of a time series.
+// an element of a time series.
+// Note that the data must be a simple structure, and if it is a map,
+// it must be map[string] due to annoyances in reflection. While deeply nested data
+// is supported, its use is not recommended. Data cannot be something that won't work
+// simply with DeepCopy. If you are unsure what works, here is a couple things:
+//	- basic data types (int,string,float, etc)
+//	- map[string]interface{}
+//	- []int, []map[string]...
+//	- struct (fields recognized by duck (github.com/connectordb/duck))
+//
+// What doesn't work: pointers - make sure datapoints don't use pointers to data, as
+// Transforms assume that they are able to Copy() a datapoint without affecting another
+// Datapoint's value.
 type Datapoint struct {
 	Timestamp float64     `json:"t"` // The time stamp in UNIX seconds for the current point
 	Data      interface{} `json:"d"` // The data associated with the datapoint.
-
-	// Note that the data must be a simple structure, and if it is a map,
-	// it must be map[string] due to annoyances in reflection. While deeply nested data
-	// is supported, its use is not recommended. Data cannot be something that won't work
-	// simply with DeepCopy. If you are unsure what works, here is a couple things:
-	//	- basic data types (int,string,float, etc)
-	//	- map[string]interface{}
-	//	- []int, []map[string]...
-	//	- struct (fields recognized by duck (github.com/connectordb/duck))
-	//
-	//	What doesn't work: pointers - make sure datapoints don't use pointers to data, as
-	//	Transforms assume that they are able to Copy() a datapoint without affecting another
-	//	Datapoint's value.
 }
 
 // Copy creates a deep copy of the datapoint and its data. Modifying the data of the copied
-//	datapoint will not change data of the original datapoint. Wrapper for duck.Copy
+// datapoint will not change data of the original datapoint. Wrapper for duck.Copy
 func (d *Datapoint) Copy() *Datapoint {
 	var d2 Datapoint
 	d2.Timestamp = d.Timestamp
@@ -79,8 +74,8 @@ func (d *Datapoint) Get(element interface{}) (interface{}, error) {
 }
 
 // Set attempts to write to a sub-element for the Datapoint. If the datapoint does not have the given sub-element,
-//	then set fails. It can write to arrays (only elements that exist, cannot append), or to map[string]interface{},
-//	where it is capable of inserting new values. Wraps duck.Set
+// then set fails. It can write to arrays (only elements that exist, cannot append), or to map[string]interface{},
+// where it is capable of inserting new values. Wraps duck.Set
 func (d *Datapoint) Set(element interface{}, newdata interface{}) error {
 	if !duck.Set(d.Data, newdata, element) {
 		return fmt.Errorf("Could not set '%v' in %v", element, d.Data)

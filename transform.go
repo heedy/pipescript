@@ -1,7 +1,3 @@
-/**
-Copyright (c) 2015 The PipeScript Contributors (see AUTHORS)
-Licensed under the MIT license.
-**/
 package pipescript
 
 import "fmt"
@@ -29,13 +25,13 @@ type Transform struct {
 
 var (
 	// TransformRegistry is the map of all the transforms that are currently registered. Do not manually
-	//	add/remove elements from this map. Use Transform.Register to insert new transforms.
+	// add/remove elements from this map. Use Transform.Register to insert new transforms.
 	TransformRegistry = make(map[string]Transform)
 )
 
 // Register registers the transform with the system. Note that it is not threadsafe. Register is
-//	assumed to be run once at the startup of the query system. Adding functions during runtime is
-//	not supported.
+// assumed to be run once at the startup of the query system. Adding functions during runtime is
+// not supported.
 func (t Transform) Register() error {
 	if t.Name == "" { //}|| t.Generator == nil {
 		err := fmt.Errorf("Attempted to register invalid transform: '%s'", t.Name)
