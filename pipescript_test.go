@@ -9,3 +9,7 @@ import (
 func TestNothing(t *testing.T) {
 	assert.Equal(t, 1, 1, "Oh no!")
 }
+
+func TestHello(t *testing.T) {
+	PrintHello()
+}
