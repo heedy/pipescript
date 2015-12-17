@@ -24,6 +24,7 @@ func main() {
 	app.Flags = []cli.Flag{
 		cli.StringFlag{
 			Name:  "input,i",
+			Value: "STDIN",
 			Usage: "The input file to perform analysis on.",
 		},
 		cli.StringFlag{

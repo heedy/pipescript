@@ -24,4 +24,10 @@ func TestRegister(t *testing.T) {
 	v, ok := TransformRegistry["test"]
 	assert.True(t, ok)
 	assert.Equal(t, "I am testing!", v.Description)
+
+	//Register a transform - bt it already exists!
+	assert.Error(t, Transform{
+		Name:        "test",
+		Description: "fail",
+	}.Register())
 }
