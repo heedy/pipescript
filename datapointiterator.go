@@ -67,7 +67,7 @@ func (c *DatapointPeekIterator) Peek(forward int) (dp *Datapoint, err error) {
 	if forward < c.PeekList.Len() {
 		// The data is on the peeklist! Now check which way will be faster for access:
 		// forwards or backwards.
-		if c.PeekList.Len()/2 >= forward {
+		if c.PeekList.Len()/2-1 >= forward {
 			// Start from the front
 			peekElement := c.PeekList.Front()
 			for ; forward > 0; forward-- {
@@ -77,7 +77,8 @@ func (c *DatapointPeekIterator) Peek(forward int) (dp *Datapoint, err error) {
 		}
 		// Start from the back
 		peekElement := c.PeekList.Back()
-		for ; forward < c.PeekList.Len(); forward++ {
+
+		for forward++; forward < c.PeekList.Len(); forward++ {
 			peekElement = peekElement.Prev()
 		}
 		return peekElement.Value.(*Datapoint), nil
