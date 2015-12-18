@@ -12,10 +12,11 @@ import (
 // it must be map[string] due to annoyances in reflection. While deeply nested data
 // is supported, its use is not recommended. Data cannot be something that won't work
 // simply with DeepCopy. If you are unsure what works, here is a couple things:
-//	- basic data types (int,string,float, etc)
-//	- map[string]interface{}
-//	- []int, []map[string]...
-//	- struct (fields recognized by duck (github.com/connectordb/duck))
+//
+// - basic data types (int,string,float, etc)
+// - map[string]interface{}
+// - []int, []map[string]...
+// - struct (fields recognized by duck (github.com/connectordb/duck))
 //
 // What doesn't work: pointers - make sure datapoints don't use pointers to data, as
 // Transforms assume that they are able to Copy() a datapoint without affecting another
@@ -64,7 +65,7 @@ func (d *Datapoint) String() (string, error) {
 }
 
 // Get attempts to get a sub-element from a Datapoint's data. The sub-element can be an array index, a
-//	map element, etc. Wrapper for duck.Get
+// map element, etc. Wrapper for duck.Get
 func (d *Datapoint) Get(element interface{}) (interface{}, error) {
 	v, ok := duck.Get(d.Data, element)
 	if !ok {

@@ -2,7 +2,7 @@ package pipescript
 
 import "fmt"
 
-//type TransformGenerator func(name string, )
+//type TransformGenerator func(name string, parent TransformInstance, args ...TransformInstance) TransformInstance
 
 // TransformArg represents an argument passed into the transform function
 type TransformArg struct {
@@ -24,8 +24,9 @@ type Transform struct {
 }
 
 var (
-	// TransformRegistry is the map of all the transforms that are currently registered. Do not manually
-	// add/remove elements from this map. Use Transform.Register to insert new transforms.
+	// TransformRegistry is the map of all the transforms that are currently registered.
+	// Do not manually add/remove elements from this map.
+	// Use Transform.Register to insert new transforms.
 	TransformRegistry = make(map[string]Transform)
 )
 
