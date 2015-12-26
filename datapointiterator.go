@@ -11,14 +11,22 @@ type DatapointIterator interface {
 	Next() (*Datapoint, error)
 }
 
+// DatapointPeekIterator is a DatapointIterator which also supports peeking ahead to datapoints which
+// are yet to come
+type DatapointPeekIterator interface {
+	Next() (*Datapoint, error)
+	Peek(forward int) (dp *Datapoint, err error)
+}
+
 // DatapointArrayIterator is a DatapointIterator which iterates through the given array one datapoint
 // at a time.
 type DatapointArrayIterator struct {
 	Datapoints []Datapoint
 
-	i int // i is the current locatino in the array
+	i int // i is the current location in the array
 }
 
+// NewDatapointArrayIterator creates a new DatapointIterator for an array
 func NewDatapointArrayIterator(dp []Datapoint) *DatapointArrayIterator {
 	return &DatapointArrayIterator{dp, 0}
 }
@@ -33,8 +41,8 @@ func (d *DatapointArrayIterator) Next() (*Datapoint, error) {
 	return nil, nil
 }
 
-// DatapointPeekIterator permits peeking ahead in the sequence of Datapoints given in an iterator
-type DatapointPeekIterator struct {
+// datapointPeekIterator permits peeking ahead in the sequence of Datapoints given in an iterator
+type datapointPeekIterator struct {
 	Iterator DatapointIterator // The iterator used to find the correct datapoint
 	PeekList *list.List        // A cache to permit peeking forward in the sequence
 	Err      error             // If the iterator returns an error, cache it here
@@ -42,11 +50,11 @@ type DatapointPeekIterator struct {
 
 // NewDatapointPeekIterator creates a new lookahead cache
 func NewDatapointPeekIterator(iter DatapointIterator) *DatapointPeekIterator {
-	return &DatapointPeekIterator{iter, list.New(), nil}
+	return &datapointPeekIterator{iter, list.New(), nil}
 }
 
 // Next allows use of DatapointCache as a DatapointIterator
-func (c *DatapointPeekIterator) Next() (*Datapoint, error) {
+func (c *datapointPeekIterator) Next() (*Datapoint, error) {
 	if c.PeekList.Len() > 0 {
 		// There are datapoints in the cache
 		dp := c.PeekList.Remove(c.PeekList.Front()).(*Datapoint)
@@ -61,7 +69,7 @@ func (c *DatapointPeekIterator) Next() (*Datapoint, error) {
 
 // Peek allows to look forward into the data sequence without losing its place for Next. Peek(0) is
 // The value that would be returned from Next. Must be >=0.
-func (c *DatapointPeekIterator) Peek(forward int) (dp *Datapoint, err error) {
+func (c *datapointPeekIterator) Peek(forward int) (dp *Datapoint, err error) {
 
 	// Check if the peeklist has the element
 	if forward < c.PeekList.Len() {

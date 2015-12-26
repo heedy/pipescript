@@ -2,7 +2,9 @@ package pipescript
 
 import "fmt"
 
-//type TransformGenerator func(name string, parent TransformInstance, args ...TransformInstance) TransformInstance
+// TransformGenerator creates a new TransformInstance from the generator. The args given are only the
+// known constants - all other elements are nil
+type TransformGenerator func(name string, args []*Datapoint) (TransformInstance, error)
 
 // TransformArg represents an argument passed into the transform function
 type TransformArg struct {
@@ -19,8 +21,9 @@ type Transform struct {
 	InputSchema  string         `json:"ischema,omitempty"` // The schema of the input datapoint that the given transform expects (optional)
 	OutputSchema string         `json:"oschema,omitempty"` // The schema of the output data that this transform gives (optional).
 	Args         []TransformArg `json:"args"`              // The arguments that the transform accepts
+	OneToOne     bool           `json:"one_to_one"`        //Whether or not the transform is one to one
 
-	//Generator TransformGenerator `json:"-"` // The generator function of the transform
+	Generator TransformGenerator `json:"-"` // The generator function of the transform
 }
 
 var (
@@ -34,7 +37,7 @@ var (
 // assumed to be run once at the startup of the query system. Adding functions during runtime is
 // not supported.
 func (t Transform) Register() error {
-	if t.Name == "" { //}|| t.Generator == nil {
+	if t.Name == "" || t.Generator == nil {
 		err := fmt.Errorf("Attempted to register invalid transform: '%s'", t.Name)
 		return err
 	}
