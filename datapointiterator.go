@@ -49,7 +49,7 @@ type datapointPeekIterator struct {
 }
 
 // NewDatapointPeekIterator creates a new lookahead cache
-func NewDatapointPeekIterator(iter DatapointIterator) *DatapointPeekIterator {
+func NewDatapointPeekIterator(iter DatapointIterator) DatapointPeekIterator {
 	return &datapointPeekIterator{iter, list.New(), nil}
 }
 

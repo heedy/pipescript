@@ -11,18 +11,18 @@ func (lt *lastTransform) Copy() pipescript.TransformInstance {
 }
 
 // Next returns the next element of the transform
-func (lt *lastTransform) Next(dp pipescript.DatapointPeekIterator, args []*pipescript.Datapoint) (*pipescript.Datapoint, error) {
-	dp, err := dp.Next()
+func (lt *lastTransform) Next(dpi pipescript.DatapointPeekIterator, args []*pipescript.Datapoint) (*pipescript.Datapoint, error) {
+	dp, err := dpi.Next()
 	if err != nil || dp == nil {
 		return nil, err
 	}
 	// Peek at the next datapoint, to find out if it is nil (ie, the current datapoint is the last one)
-	dp, err = dp.Peek(0)
+	dp, err = dpi.Peek(0)
 	if err != nil {
 		return nil, err
 	}
 
-	return &Datapoint{Timestamp: dp.Timestamp, Data: dp == nil}, nil
+	return &pipescript.Datapoint{Timestamp: dp.Timestamp, Data: dp == nil}, nil
 }
 
 var last = pipescript.Transform{
@@ -30,7 +30,7 @@ var last = pipescript.Transform{
 	Description:  "Returns true if last datapoint of a sequence, and false otherwise",
 	OutputSchema: `{"type": "boolean"}`,
 	OneToOne:     true,
-	Generator: func(name string, args []*Datapoint) (TransformInstance, error) {
+	Generator: func(name string, args []*pipescript.Datapoint) (pipescript.TransformInstance, error) {
 		return &lastTransform{}, nil
 	},
 }

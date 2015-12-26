@@ -1,6 +1,7 @@
 package pipescript
 
 import (
+	"errors"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -15,6 +16,10 @@ func TestRegister(t *testing.T) {
 	assert.NoError(t, Transform{
 		Name:        "test",
 		Description: "I am testing!",
+
+		Generator: func(name string, args []*Datapoint) (TransformInstance, error) {
+			return nil, errors.New("Not a real transform")
+		},
 	}.Register())
 
 	v, ok := TransformRegistry["test"]
@@ -25,5 +30,9 @@ func TestRegister(t *testing.T) {
 	assert.Error(t, Transform{
 		Name:        "test",
 		Description: "fail",
+
+		Generator: func(name string, args []*Datapoint) (TransformInstance, error) {
+			return nil, errors.New("Not a real transform")
+		},
 	}.Register())
 }

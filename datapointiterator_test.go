@@ -81,7 +81,7 @@ func TestPeek2(t *testing.T) {
 	assert.NoError(t, err)
 	require.EqualValues(t, testarray[3], *dp)
 
-	pi.Err = errors.New("HadError")
+	pi.(*datapointPeekIterator).Err = errors.New("HadError")
 	_, err = pi.Peek(20)
 	assert.Error(t, err)
 
