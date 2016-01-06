@@ -11,8 +11,8 @@ type DatapointIterator interface {
 	Next() (*Datapoint, error)
 }
 
-// DatapointPeekIterator is a DatapointIterator which also supports peeking ahead to datapoints which
-// are yet to come
+// DatapointPeekIterator is a DatapointIterator with an additional Peek function, which allows to look ahead
+// into the datapoint sequence.
 type DatapointPeekIterator interface {
 	Next() (*Datapoint, error)
 	Peek(forward int) (dp *Datapoint, err error)
@@ -23,10 +23,9 @@ type DatapointPeekIterator interface {
 type DatapointArrayIterator struct {
 	Datapoints []Datapoint
 
-	i int // i is the current location in the array
+	i int // i is the current locatino in the array
 }
 
-// NewDatapointArrayIterator creates a new DatapointIterator for an array
 func NewDatapointArrayIterator(dp []Datapoint) *DatapointArrayIterator {
 	return &DatapointArrayIterator{dp, 0}
 }
@@ -41,15 +40,15 @@ func (d *DatapointArrayIterator) Next() (*Datapoint, error) {
 	return nil, nil
 }
 
-// datapointPeekIterator permits peeking ahead in the sequence of Datapoints given in an iterator
+// datapointPeekIterator permits peeking ahead in the sequence of Datapoints given a standard DatapointIterator
 type datapointPeekIterator struct {
 	Iterator DatapointIterator // The iterator used to find the correct datapoint
 	PeekList *list.List        // A cache to permit peeking forward in the sequence
 	Err      error             // If the iterator returns an error, cache it here
 }
 
-// NewDatapointPeekIterator creates a new lookahead cache
-func NewDatapointPeekIterator(iter DatapointIterator) DatapointPeekIterator {
+// NewDatapointPeekIterator creates a new DatapointPeekIterator from a DatapointIterator
+func NewDatapointPeekIterator(iter DatapointIterator) *datapointPeekIterator {
 	return &datapointPeekIterator{iter, list.New(), nil}
 }
 
@@ -110,4 +109,47 @@ func (c *datapointPeekIterator) Peek(forward int) (dp *Datapoint, err error) {
 	}
 
 	return dp, err
+}
+
+// VirtualPeekIterator takes a DatapointPeekIterator and behaves as a DatapointPeekIterator, without
+// ever calling Next on the internal DatapointPeekIterator. It performs peeks and Nexts by calling Peek
+// VirtulPeekIterator is used in the PipelineElements to allow
+// arguments to have their own Peekiterators without affecting the underlying data.
+type VirtualPeekIterator struct {
+	d        DatapointPeekIterator
+	peekiter int
+}
+
+// Performs a Next() function call without calling Next on underying DatapointPeekIterator
+func (v *VirtualPeekIterator) Next() (dp *Datapoint, err error) {
+	dp, err = v.d.Peek(v.peekiter)
+	v.peekiter++
+	return dp, err
+}
+
+// Performs a peek in reference to the underlying Peekiterator
+func (v *VirtualPeekIterator) Peek(forward int) (*Datapoint, error) {
+	return v.d.Peek(v.peekiter + forward)
+}
+
+// SetBack is used when the underlying DatapointPeekIterator has been Next'd. The VirtualPeekOperator
+// is unaware of changes, therefore it needs to have its virtual location changed by the number of Nexts
+// that were done on the underlying DatapointPeekIterator
+func (v *VirtualPeekIterator) SetBack(num int) {
+	v.peekiter -= num
+	if v.peekiter < 0 {
+		v.peekiter = 0
+	}
+}
+
+// Reset sets the current location of the VirtualPeekiterator to the current location of the underlying iter.
+func (v *VirtualPeekIterator) Reset() {
+	v.peekiter = 0
+}
+
+// NewVirtualPeekIterator creates a new Peekiterator that does nto call next on the underlying
+// iterator. This allows PipelineElements to give arguments a PeekIterator without affecting the underlying
+// DatapointPeekiterator (ie, Next is not called)
+func NewVirtualPeekIterator(d DatapointPeekIterator) *VirtualPeekIterator {
+	return &VirtualPeekIterator{d, 0}
 }

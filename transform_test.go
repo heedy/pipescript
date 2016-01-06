@@ -17,8 +17,8 @@ func TestRegister(t *testing.T) {
 		Name:        "test",
 		Description: "I am testing!",
 
-		Generator: func(name string, args []*Datapoint) (TransformInstance, error) {
-			return nil, errors.New("Not a real transform")
+		Generator: func(name string, args []*Script) (script []*Script, ti TransformInstance, constant bool, err error) {
+			return nil, nil, true, errors.New("Not a real transform")
 		},
 	}.Register())
 
@@ -31,8 +31,12 @@ func TestRegister(t *testing.T) {
 		Name:        "test",
 		Description: "fail",
 
-		Generator: func(name string, args []*Datapoint) (TransformInstance, error) {
-			return nil, errors.New("Not a real transform")
+		Generator: func(name string, args []*Script) (script []*Script, ti TransformInstance, constant bool, err error) {
+			return nil, nil, true, errors.New("Not a real transform")
 		},
 	}.Register())
+}
+
+func TestTransformScript(t *testing.T) {
+
 }

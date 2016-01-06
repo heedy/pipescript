@@ -55,6 +55,15 @@ func (d *Datapoint) Float() (float64, error) {
 	return v, nil
 }
 
+// Bool attempts to get the Data of a Datapoint as a boolean. Wrapper for duck.Bool
+func (d *Datapoint) Bool() (bool, error) {
+	v, ok := duck.Bool(d.Data)
+	if !ok {
+		return false, fmt.Errorf("Could not convert '%v' to Bool", d.Data)
+	}
+	return v, nil
+}
+
 // String attempts to get the Data of a Datapoint as a string. Wrapper for duck.String
 func (d *Datapoint) String() (string, error) {
 	v, ok := duck.String(d.Data)

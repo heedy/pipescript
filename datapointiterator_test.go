@@ -81,8 +81,87 @@ func TestPeek2(t *testing.T) {
 	assert.NoError(t, err)
 	require.EqualValues(t, testarray[3], *dp)
 
-	pi.(*datapointPeekIterator).Err = errors.New("HadError")
+	pi.Err = errors.New("HadError")
 	_, err = pi.Peek(20)
 	assert.Error(t, err)
 
+}
+
+func TestVirtualPeek(t *testing.T) {
+	testarray := []Datapoint{
+		Datapoint{1, 1}, Datapoint{2, 2}, Datapoint{3, 3}, Datapoint{4, 4}, Datapoint{5, 5},
+	}
+
+	pi := NewDatapointPeekIterator(NewDatapointArrayIterator(testarray))
+
+	pi2 := NewVirtualPeekIterator(pi)
+
+	dp, err := pi.Peek(0)
+	require.NoError(t, err)
+	dp2, err := pi2.Peek(0)
+	require.NoError(t, err)
+	require.EqualValues(t, dp, dp2)
+
+	dp, err = pi.Peek(80)
+	require.NoError(t, err)
+	dp2, err = pi2.Peek(80)
+	require.NoError(t, err)
+	require.EqualValues(t, dp, dp2)
+
+	dp, err = pi.Peek(0)
+	require.NoError(t, err)
+	dp2, err = pi2.Next()
+	require.NoError(t, err)
+	require.EqualValues(t, dp, dp2)
+
+	dp, err = pi.Peek(1)
+	require.NoError(t, err)
+	dp2, err = pi2.Next()
+	require.NoError(t, err)
+	require.EqualValues(t, dp, dp2)
+
+	pi2.Reset()
+
+	dp, err = pi.Peek(0)
+	require.NoError(t, err)
+	dp2, err = pi2.Next()
+	require.NoError(t, err)
+	require.EqualValues(t, dp, dp2)
+
+	dp, err = pi.Peek(1)
+	require.NoError(t, err)
+	dp2, err = pi2.Next()
+	require.NoError(t, err)
+	require.EqualValues(t, dp, dp2)
+
+	dp, err = pi.Peek(2)
+	require.NoError(t, err)
+	dp2, err = pi2.Next()
+	require.NoError(t, err)
+	require.EqualValues(t, dp, dp2)
+
+	pi2.SetBack(2)
+
+	dp, err = pi.Peek(1)
+	require.NoError(t, err)
+	dp2, err = pi2.Next()
+	require.NoError(t, err)
+	require.EqualValues(t, dp, dp2)
+
+	pi2.SetBack(50)
+
+	dp, err = pi.Peek(0)
+	require.NoError(t, err)
+	dp2, err = pi2.Next()
+	require.NoError(t, err)
+	require.EqualValues(t, dp, dp2)
+
+	// Make sure that Next on the original will have the expected effect
+	_, err = pi.Next()
+	require.NoError(t, err)
+	dp, err = pi.Peek(1)
+	require.NoError(t, err)
+	dp2, err = pi2.Next()
+	require.NoError(t, err)
+	require.EqualValues(t, dp, dp2)
 }
