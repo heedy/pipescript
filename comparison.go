@@ -40,7 +40,7 @@ func eqScript(a1, a2 *Script) (*Script, error) {
 type neqTransform struct{}
 
 func (t neqTransform) Copy() TransformInstance {
-	return eqTransform{}
+	return neqTransform{}
 }
 
 func (t neqTransform) Next(ti *TransformIterator) (*Datapoint, error) {
@@ -70,7 +70,7 @@ func neqScript(a1, a2 *Script) (*Script, error) {
 type ltTransform struct{}
 
 func (t ltTransform) Copy() TransformInstance {
-	return eqTransform{}
+	return ltTransform{}
 }
 
 func (t ltTransform) Next(ti *TransformIterator) (*Datapoint, error) {
@@ -112,7 +112,7 @@ func gtScript(a1, a2 *Script) (*Script, error) {
 type lteTransform struct{}
 
 func (t lteTransform) Copy() TransformInstance {
-	return eqTransform{}
+	return lteTransform{}
 }
 
 func (t lteTransform) Next(ti *TransformIterator) (*Datapoint, error) {
