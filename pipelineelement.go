@@ -43,7 +43,7 @@ func (p *PipelineElement) SetInput(d DatapointPeekIterator) {
 func NewPipelineElement(args []*Script, t TransformInstance) (*PipelineElement, error) {
 	// Ensure the args are one to one
 	for i := range args {
-		if args[i].IsOneToOne {
+		if !args[i].IsOneToOne {
 			return nil, errors.New("All transform arguments must be OneToOne")
 		}
 	}

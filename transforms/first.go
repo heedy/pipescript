@@ -12,19 +12,19 @@ func (ft *firstTransform) Copy() pipescript.TransformInstance {
 }
 
 // Next returns the next element of the transform
-func (ft *firstTransform) Next(dpi pipescript.DatapointPeekIterator, args []*pipescript.Datapoint) (*pipescript.Datapoint, error) {
-	dp, err := dpi.Next()
-	if err != nil {
-		return nil, err
-	}
-	if dp == nil {
+func (ft *firstTransform) Next(ti *pipescript.TransformIterator) (*pipescript.Datapoint, error) {
+	te := ti.Next()
+	if te.Datapoint == nil {
 		// If there is a nil, it means that the sequence is over - any future datapoints will belong to another sequence
 		ft.isfirst = true
 	}
+	if te.IsFinished() {
+		return te.Get()
+	}
 
-	dp = &pipescript.Datapoint{Timestamp: dp.Timestamp, Data: ft.isfirst}
+	dp, err := te.Set(ft.isfirst)
 	ft.isfirst = false
-	return dp, nil
+	return dp, err
 }
 
 var first = pipescript.Transform{
@@ -32,7 +32,7 @@ var first = pipescript.Transform{
 	Description:  "Returns true if first datapoint of a sequence, and false otherwise",
 	OutputSchema: `{"type": "boolean"}`,
 	OneToOne:     true,
-	Generator: func(name string, args []*pipescript.Datapoint) (pipescript.TransformInstance, error) {
-		return &firstTransform{true}, nil
+	Generator: func(name string, args []*pipescript.Script) ([]*pipescript.Script, pipescript.TransformInstance, bool, error) {
+		return nil, &firstTransform{true}, false, nil
 	},
 }

@@ -18,19 +18,17 @@ func (nt *nextTransform) Copy() pipescript.TransformInstance {
 	return &nextTransform{nt.peekindex}
 }
 
-func (nt *nextTransform) Next(dpi pipescript.DatapointPeekIterator, args []*pipescript.Datapoint) (*pipescript.Datapoint, error) {
-	dp, err := dpi.Next()
-	if err != nil || dp == nil {
-		return nil, err
+func (nt *nextTransform) Next(ti *pipescript.TransformIterator) (*pipescript.Datapoint, error) {
+	te := ti.Next()
+	if te.IsFinished() {
+		return te.Get()
 	}
-	dp, err = dpi.Peek(nt.peekindex)
-	if err != nil {
-		return nil, err
+
+	te2 := ti.Peek(nt.peekindex)
+	if te2.IsFinished() {
+		return te.Set(nil)
 	}
-	if dp == nil {
-		return &pipescript.Datapoint{Timestamp: dp.Timestamp, Data: nil}, nil
-	}
-	return dp.Copy(), nil
+	return te.Set(te2.Datapoint.Data)
 }
 
 var next = pipescript.Transform{
@@ -46,21 +44,25 @@ var next = pipescript.Transform{
 		},
 	},
 
-	Generator: func(name string, args []*pipescript.Datapoint) (pipescript.TransformInstance, error) {
+	Generator: func(name string, args []*pipescript.Script) ([]*pipescript.Script, pipescript.TransformInstance, bool, error) {
 		// The args array is guaranteed to be ordered according to the args. The Constant args
 		// are guaranteed to have values already. So we are free to set things up directly
-		i, err := args[0].Int()
+		dp, err := args[0].GetConstant()
 		if err != nil {
-			return nil, err
+			return nil, nil, false, err
+		}
+		i, err := dp.Int()
+		if err != nil {
+			return nil, nil, false, err
 		}
 		if i < 1 {
-			return nil, errors.New("next must look at least one datapoint forward")
+			return nil, nil, false, errors.New("next must look at least one datapoint forward")
 		}
 		if i > NextMax {
-			return nil, fmt.Errorf("next cannot look more than %d datapoints forward", NextMax)
+			return nil, nil, false, fmt.Errorf("next cannot look more than %d datapoints forward", NextMax)
 		}
 
-		// Looks like everything is valid
-		return &nextTransform{int(i - 1)}, nil
+		// Looks like everything is valid - remove the constant arg from consideration
+		return nil, &nextTransform{int(i - 1)}, false, nil
 	},
 }

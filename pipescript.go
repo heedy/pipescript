@@ -36,8 +36,9 @@ func (s *Script) Append(s2 *Script) error {
 	s.output = s2.output
 
 	if s2.Constant {
-		if s.Constant {
-			// If both are constants, replace both with a single constant
+		if s.Constant || s.IsOneToOne {
+			// If both are constants, or if s is one to one, and s2 is constant,
+			// it means that we can replace the full query by a constant
 			c, err := s2.GetConstant()
 			if err != nil {
 				return err
@@ -80,8 +81,8 @@ func (c constantIterator) Peek(p int) (*Datapoint, error) {
 }
 
 // GetConstant passes through a dummy Datapoint through the transform to get the constant value it represents.
-func (s *Script) GetConstant() (interface{}, error) {
-	if s.Constant {
+func (s *Script) GetConstant() (*Datapoint, error) {
+	if !s.Constant {
 		return nil, errors.New("GetConstant was called on a non-constant Script")
 	}
 	oldIterator := s.input.iter.iterator
@@ -100,7 +101,7 @@ func (s *Script) GetConstant() (interface{}, error) {
 		s.SetInput(oldIterator)
 	}
 
-	return dp.Data, nil
+	return dp, nil
 }
 
 // replaceWithConstant replaces the Script with a constant script
