@@ -10,7 +10,7 @@ func TestConstant(t *testing.T) {
 	cs := ConstantScript(1337)
 
 	require.True(t, cs.Constant)
-	require.True(t, cs.IsOneToOne)
+	require.True(t, cs.OneToOne)
 
 	testarray := []Datapoint{
 		Datapoint{1, 1}, Datapoint{2, 2}, Datapoint{3, 3}, Datapoint{4, 4},

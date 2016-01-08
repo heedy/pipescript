@@ -33,8 +33,9 @@ func addScript(a1, a2 *Script) (*Script, error) {
 	return &Script{
 		input:      pe,
 		output:     pe,
-		IsOneToOne: true,
+		OneToOne: true,
 		Constant:   a1.Constant && a2.Constant,
+		Stateless:  true,
 	}, ok
 
 }
@@ -63,8 +64,9 @@ func subtractScript(a1, a2 *Script) (*Script, error) {
 	return &Script{
 		input:      pe,
 		output:     pe,
-		IsOneToOne: true,
+		OneToOne: true,
 		Constant:   a1.Constant && a2.Constant,
+		Stateless:  true,
 	}, ok
 
 }
@@ -93,8 +95,9 @@ func mulScript(a1, a2 *Script) (*Script, error) {
 	return &Script{
 		input:      pe,
 		output:     pe,
-		IsOneToOne: true,
+		OneToOne: true,
 		Constant:   a1.Constant && a2.Constant,
+		Stateless:  true,
 	}, ok
 
 }
@@ -123,8 +126,9 @@ func divScript(a1, a2 *Script) (*Script, error) {
 	return &Script{
 		input:      pe,
 		output:     pe,
-		IsOneToOne: true,
+		OneToOne: true,
 		Constant:   a1.Constant && a2.Constant,
+		Stateless:  true,
 	}, ok
 
 }
@@ -153,8 +157,9 @@ func modScript(a1, a2 *Script) (*Script, error) {
 	return &Script{
 		input:      pe,
 		output:     pe,
-		IsOneToOne: true,
+		OneToOne: true,
 		Constant:   a1.Constant && a2.Constant,
+		Stateless:  true,
 	}, ok
 
 }
@@ -187,8 +192,9 @@ func powScript(a1, a2 *Script) (*Script, error) {
 	return &Script{
 		input:      pe,
 		output:     pe,
-		IsOneToOne: true,
+		OneToOne: true,
 		Constant:   a1.Constant && a2.Constant,
+		Stateless:  true,
 	}, ok
 
 }

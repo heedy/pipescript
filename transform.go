@@ -9,6 +9,14 @@ type TransformInstance interface {
 	Copy() TransformInstance
 }
 
+// TransformInitializer is returned by a TransformGenerator to tell PipeScript how to set up the initialized
+// transform, including some properties, which are used for optimization.
+type TransformInitializer struct {
+	Transform TransformInstance //The transform to set up
+	Args      []*Script         // The arguments that are to be passed in as args to Next()
+	Constant  bool              // Whether the transform is constant
+}
+
 // TransformGenerator creates a new TransformInstance from the generator. The args passed in are the scripts
 // that pass in. The generator returns the script arguments that are to be used during runtime, the TransformInstance
 // and an error. The Script array is used to allow argument magic in transforms, such as using constants on init
@@ -16,7 +24,7 @@ type TransformInstance interface {
 // which actually uses the Script as its arg, and not the transformed arguments. constant notifies if the transform will return
 // a constant value. If this is True, then the constant can be extracted during optimization by calling the transform with a dummy
 // datapoint.
-type TransformGenerator func(name string, args []*Script) (script []*Script, ti TransformInstance, constant bool, err error)
+type TransformGenerator func(name string, args []*Script) (ti *TransformInitializer, err error)
 
 // TransformArg represents an argument passed into the transform function
 type TransformArg struct {
@@ -34,6 +42,7 @@ type Transform struct {
 	OutputSchema string         `json:"oschema,omitempty"` // The schema of the output data that this transform gives (optional).
 	Args         []TransformArg `json:"args"`              // The arguments that the transform accepts
 	OneToOne     bool           `json:"one_to_one"`        //Whether or not the transform is one to one
+	Stateless    bool           `json:"stateless"`         // Whether the transform only uses current datapoint's info (always returns same output given input)
 
 	Generator TransformGenerator `json:"-"` // The generator function of the transform
 }
@@ -77,7 +86,7 @@ func (t *Transform) Script(args []*Script) (*Script, error) {
 		// Check if the argument is given
 		if len(args) >= i {
 			// The argument is given
-			if !args[i].IsOneToOne {
+			if !args[i].OneToOne {
 				return nil, fmt.Errorf("Argument %d of transform '%s' must be OneToOne", i+1, t.Name)
 			}
 			if t.Args[i].Constant && !args[i].Constant {
@@ -97,18 +106,19 @@ func (t *Transform) Script(args []*Script) (*Script, error) {
 	}
 
 	// All of the arguments were checked. Send the args to the Generator
-	args, ti, c, err := t.Generator(t.Name, args)
+	ti, err := t.Generator(t.Name, args)
 	if err != nil {
 		return nil, err
 	}
 
 	// Now we have everything necessary to generate a Script out of the Transform
-	pe, err := NewPipelineElement(args, ti)
+	pe, err := NewPipelineElement(ti.Args, ti.Transform)
 
 	return &Script{
 		input:      pe,
 		output:     pe,
-		IsOneToOne: t.OneToOne,
-		Constant:   c,
+		OneToOne: t.OneToOne,
+		Constant:   ti.Constant,
+		Stateless:  t.Stateless,
 	}, err
 }

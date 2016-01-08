@@ -5,12 +5,12 @@ import "github.com/connectordb/pipescript"
 type lastTransform struct{}
 
 // Copy creates a copy of the last transform
-func (lt *lastTransform) Copy() pipescript.TransformInstance {
+func (lt lastTransform) Copy() pipescript.TransformInstance {
 	return &lastTransform{}
 }
 
 // Next returns the next element of the transform
-func (lt *lastTransform) Next(ti *pipescript.TransformIterator) (*pipescript.Datapoint, error) {
+func (lt lastTransform) Next(ti *pipescript.TransformIterator) (*pipescript.Datapoint, error) {
 	te := ti.Next()
 	if te.IsFinished() {
 		return te.Get()
@@ -26,7 +26,7 @@ var last = pipescript.Transform{
 	Description:  "Returns true if last datapoint of a sequence, and false otherwise",
 	OutputSchema: `{"type": "boolean"}`,
 	OneToOne:     true,
-	Generator: func(name string, args []*pipescript.Script) ([]*pipescript.Script, pipescript.TransformInstance, bool, error) {
-		return nil, &lastTransform{}, false, nil
+	Generator: func(name string, args []*pipescript.Script) (*pipescript.TransformInitializer, error) {
+		return &pipescript.TransformInitializer{Transform: lastTransform{}}, nil
 	},
 }

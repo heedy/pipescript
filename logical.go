@@ -30,7 +30,7 @@ func andScript(a1, a2 *Script) (*Script, error) {
 	return &Script{
 		input:      pe,
 		output:     pe,
-		IsOneToOne: true,
+		OneToOne: true,
 		Constant:   a1.Constant && a2.Constant,
 	}, err
 
@@ -66,7 +66,7 @@ func orScript(a1, a2 *Script) (*Script, error) {
 	return &Script{
 		input:      pe,
 		output:     pe,
-		IsOneToOne: true,
+		OneToOne: true,
 		Constant:   a1.Constant && a2.Constant,
 	}, err
 

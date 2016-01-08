@@ -121,7 +121,8 @@ func comparisonScript(comparison string, a1, a2 *Script) (*Script, error) {
 	return &Script{
 		input:      pe,
 		output:     pe,
-		IsOneToOne: true,
+		OneToOne: true,
 		Constant:   a1.Constant && a2.Constant,
+		Stateless:  true,
 	}, err
 }

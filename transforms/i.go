@@ -30,7 +30,7 @@ var i = pipescript.Transform{
 	Description:  "Corresponds to the number of datapoints that have been seen. It is equivalent to the i in a loop over the sequence.",
 	OutputSchema: `{"type": "integer","minimum": 0}`,
 	OneToOne:     true,
-	Generator: func(name string, args []*pipescript.Script) ([]*pipescript.Script, pipescript.TransformInstance, bool, error) {
-		return nil, &iTransform{0}, false, nil
+	Generator: func(name string, args []*pipescript.Script) (*pipescript.TransformInitializer, error) {
+		return &pipescript.TransformInitializer{Transform: &iTransform{0}}, nil
 	},
 }

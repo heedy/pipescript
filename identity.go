@@ -38,6 +38,7 @@ var identityTransform = Transform{
 	Name:        "$",
 	Description: "Identity transform - gives the current datapoint in sequence (or if given argument, a sub-object). Useful when performing comparisons ($ < 5)",
 	OneToOne:    true,
+	Stateless:   true,
 	Args: []TransformArg{
 		{
 			Description: "The subobject to return. For use in json-object type data.",
@@ -46,18 +47,18 @@ var identityTransform = Transform{
 			Constant:    true,
 		},
 	},
-	Generator: func(name string, args []*Script) ([]*Script, TransformInstance, bool, error) {
+	Generator: func(name string, args []*Script) (*TransformInitializer, error) {
 		// Get the subobject
 		dp, err := args[0].GetConstant()
 		if err != nil {
-			return nil, nil, false, err
+			return nil, err
 		}
 
 		if dp.Data == nil {
 			// This means that the optional argument was not given
-			return nil, iTransform{}, false, nil
+			return &TransformInitializer{Transform: iTransform{}}, nil
 		}
 
-		return nil, &subobjectTransform{dp.Data}, false, nil
+		return &TransformInitializer{Transform: &subobjectTransform{dp.Data}}, nil
 	},
 }

@@ -11,7 +11,7 @@ func TestAndTransform(t *testing.T) {
 	require.NoError(t, err)
 
 	require.True(t, s.Constant)
-	require.True(t, s.IsOneToOne)
+	require.True(t, s.OneToOne)
 	vb, err := s.GetConstant()
 	require.NoError(t, err)
 	v, err := vb.Bool()
@@ -49,7 +49,7 @@ func TestAndTransform(t *testing.T) {
 	require.Error(t, err)
 
 	one := ConstantScript("true")
-	one.IsOneToOne = false
+	one.OneToOne = false
 	s, err = andScript(one, ConstantScript("false"))
 	require.Error(t, err)
 }
@@ -59,7 +59,7 @@ func TestOrTransform(t *testing.T) {
 	require.NoError(t, err)
 
 	require.True(t, s.Constant)
-	require.True(t, s.IsOneToOne)
+	require.True(t, s.OneToOne)
 	vb, err := s.GetConstant()
 	require.NoError(t, err)
 	v, err := vb.Bool()
@@ -97,7 +97,7 @@ func TestOrTransform(t *testing.T) {
 	require.Error(t, err)
 
 	one := ConstantScript("true")
-	one.IsOneToOne = false
+	one.OneToOne = false
 	s, err = orScript(one, ConstantScript("false"))
 	require.Error(t, err)
 }

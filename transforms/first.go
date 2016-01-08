@@ -32,7 +32,7 @@ var first = pipescript.Transform{
 	Description:  "Returns true if first datapoint of a sequence, and false otherwise",
 	OutputSchema: `{"type": "boolean"}`,
 	OneToOne:     true,
-	Generator: func(name string, args []*pipescript.Script) ([]*pipescript.Script, pipescript.TransformInstance, bool, error) {
-		return nil, &firstTransform{true}, false, nil
+	Generator: func(name string, args []*pipescript.Script) (*pipescript.TransformInitializer, error) {
+		return &pipescript.TransformInitializer{Transform: &firstTransform{true}}, nil
 	},
 }

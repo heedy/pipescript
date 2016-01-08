@@ -99,7 +99,7 @@ func (p *PipelineElement) copyUntil(pe *PipelineElement) (input, output *Pipelin
 func NewPipelineElement(args []*Script, t TransformInstance) (*PipelineElement, error) {
 	// Ensure the args are one to one
 	for i := range args {
-		if !args[i].IsOneToOne {
+		if !args[i].OneToOne {
 			return nil, errors.New("All transform arguments must be OneToOne")
 		}
 	}

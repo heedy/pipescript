@@ -44,25 +44,25 @@ var next = pipescript.Transform{
 		},
 	},
 
-	Generator: func(name string, args []*pipescript.Script) ([]*pipescript.Script, pipescript.TransformInstance, bool, error) {
+	Generator: func(name string, args []*pipescript.Script) (*pipescript.TransformInitializer, error) {
 		// The args array is guaranteed to be ordered according to the args. The Constant args
 		// are guaranteed to have values already. So we are free to set things up directly
 		dp, err := args[0].GetConstant()
 		if err != nil {
-			return nil, nil, false, err
+			return nil, err
 		}
 		i, err := dp.Int()
 		if err != nil {
-			return nil, nil, false, err
+			return nil, err
 		}
 		if i < 1 {
-			return nil, nil, false, errors.New("next must look at least one datapoint forward")
+			return nil, errors.New("next must look at least one datapoint forward")
 		}
 		if i > NextMax {
-			return nil, nil, false, fmt.Errorf("next cannot look more than %d datapoints forward", NextMax)
+			return nil, fmt.Errorf("next cannot look more than %d datapoints forward", NextMax)
 		}
 
 		// Looks like everything is valid - remove the constant arg from consideration
-		return nil, &nextTransform{int(i - 1)}, false, nil
+		return &pipescript.TransformInitializer{Transform: &nextTransform{int(i - 1)}}, nil
 	},
 }

@@ -13,46 +13,61 @@ const (
 
 // Script is the main type used in PipeScript
 type Script struct {
-	input      *PipelineElement
-	output     *PipelineElement
-	IsOneToOne bool
-	Constant   bool
+	input     *PipelineElement
+	output    *PipelineElement
+	OneToOne  bool // Whether the script is one to one (for each input, gives an output)
+	Constant  bool // Whether the script is constant (always returns the same answer)
+	Stateless bool // Whether the script is stateless (given input, always returns the same value)
 }
 
 // Append takes a Script and appends another script to the end of its command chain. That is,
-// if s = (a | b | c) and s2 = (d | e | f) then s.Append(s2) will make s = (a | b | c | d | e | f)
+// if
+//	s = (a | b | c)
+// and
+//	s2 = (d | e | f)
+// then
+//	s.Append(s2) => s = (a | b | c | d | e | f)
+//
 // WARNING: This only works for uninitialized scripts (ie, scripts that have not had Datapoints pass through yet)
 // behavior for initialized scripts is undefined.
 func (s *Script) Append(s2 *Script) error {
 
-	if !s2.IsOneToOne {
-		s.IsOneToOne = false
+	if !s2.OneToOne {
+		s.OneToOne = false
 	}
 	// Link the output of s with the input of s2
 	dpi := NewDatapointPeekIterator(s2.output)
 	s2.input.SetInput(dpi)
 
-	// The total output is not s2's output
+	// The total output is now s2's output
 	s.output = s2.output
 
-	if s2.Constant {
-		if s.Constant || s.IsOneToOne {
-			// If both are constants, or if s is one to one, and s2 is constant,
-			// it means that we can replace the full query by a constant
-			c, err := s2.GetConstant()
-			if err != nil {
-				return err
-			}
-			s.replaceWithConstant(c)
-			return nil
+	if s2.Constant && s.OneToOne || s.Constant && s2.Stateless {
+		// if s is one to one, and s2 is constant,
+		// it means that we can replace the full query by a constant
+
+		// Similarly, if the input to a stateless transform is constant,
+		// we can replace the full thing with a constant
+		s.Constant = true
+		c, err := s2.GetConstant()
+		if err != nil {
+			return err
 		}
-	} else {
-		s.Constant = false
+		s.replaceWithConstant(c.Data)
+		return nil
 	}
+
+	s.Constant = false
+
+	if !s2.Stateless {
+		s.Stateless = false
+	}
+
 	return nil
 }
 
 // SetInput sets the input DatapointIterator of the stream. It will automatically recognize PeekIterators.
+// use this command to link a Script to data.
 func (s *Script) SetInput(d DatapointIterator) {
 	pi, ok := d.(DatapointPeekIterator)
 	if !ok {
@@ -111,8 +126,9 @@ func (s *Script) replaceWithConstant(c interface{}) {
 	s2 := ConstantScript(c)
 	s.input = s2.input
 	s.output = s2.output
-	s.IsOneToOne = s2.IsOneToOne
+	s.OneToOne = s2.OneToOne
 	s.Constant = s2.Constant
+	s.Stateless = s2.Stateless
 
 	if oldIterator != nil {
 		s.SetInput(oldIterator)
@@ -127,7 +143,7 @@ func (s *Script) replaceWithConstant(c interface{}) {
 //
 func (s *Script) Copy() (*Script, error) {
 	i, o, err := s.output.copyUntil(s.input)
-	return &Script{i, o, s.Constant, s.IsOneToOne}, err
+	return &Script{i, o, s.Constant, s.OneToOne, s.Stateless}, err
 }
 
 // Parse parses the given transform, and returns the corresponding script object

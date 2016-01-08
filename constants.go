@@ -21,7 +21,7 @@ func ConstantScript(c interface{}) *Script {
 	return &Script{
 		input:      pe,
 		output:     pe,
-		IsOneToOne: true,
+		OneToOne: true,
 		Constant:   true,
 	}
 }

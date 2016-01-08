@@ -50,6 +50,9 @@ func TestParser(t *testing.T) {
 		{"'string\\r'", "string\r"},
 		{"'string\"'", "string\""},
 		{"'string\\''", "string'"},
+
+		// Test Pipe
+		{"5 | true", true},
 	}
 
 	for i := range testcases {

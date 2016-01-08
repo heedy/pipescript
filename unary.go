@@ -21,10 +21,11 @@ func (t notTransform) Next(ti *TransformIterator) (*Datapoint, error) {
 func notScript(a *Script) (*Script, error) {
 	pe, err := NewPipelineElement([]*Script{a}, notTransform{})
 	return &Script{
-		input:      pe,
-		output:     pe,
-		IsOneToOne: true,
-		Constant:   a.Constant,
+		input:     pe,
+		output:    pe,
+		OneToOne:  true,
+		Constant:  a.Constant,
+		Stateless: true,
 	}, err
 }
 
@@ -56,9 +57,10 @@ func (t negativeTransform) Next(ti *TransformIterator) (*Datapoint, error) {
 func negativeScript(a *Script) (*Script, error) {
 	pe, err := NewPipelineElement([]*Script{a}, negativeTransform{})
 	return &Script{
-		input:      pe,
-		output:     pe,
-		IsOneToOne: true,
-		Constant:   a.Constant,
+		input:     pe,
+		output:    pe,
+		OneToOne:  true,
+		Constant:  a.Constant,
+		Stateless: true,
 	}, err
 }

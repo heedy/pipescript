@@ -7,7 +7,9 @@ package pipescript
 
 import (
 	"strconv"
+	"fmt"
 )
+
 %}
 
 
@@ -18,18 +20,21 @@ import (
 }
 
 %type <script> script pipescript constant logical algebra
-%token <strVal> pNUMBER  pSTRING  pBOOL
-%token <strVal> pAND pOR pNOT pCOMPARISON pPLUS pMINUS pMULTIPLY pDIVIDE pMODULO pPOW
+%type <scriptArray> script_array
+%token <strVal> pNUMBER  pSTRING  pBOOL pIDENTIFIER
+%token <strVal> pAND pOR pNOT pCOMPARISON pPLUS pMINUS pMULTIPLY pDIVIDE pMODULO pPOW pPIPE pCOMMA
 %token <strVal> pRPARENS pLPARENS pRSQUARE pLSQUARE pRBRACKET pLBRACKET
 
 /* Set up order of operations */
+%left pPIPE
+%left pIDENTIFIER
 %left pAND pOR
 %left pCOMPARISON
 %left pNOT
 %left pPLUS pMINUS
 %left pMULTIPLY pDIVIDE
 %left pMODULO pPOW
-%left UMINUS      /*  supplies  precedence  for  unary  minus  */
+%left pUMINUS      /*  supplies  precedence  for  unary  minus  */
 
 %%
 
@@ -54,6 +59,64 @@ script:
 	logical
 	|
 	constant
+	|
+	pIDENTIFIER pLPARENS pRPARENS
+		{
+			v,ok := TransformRegistry[$1]
+			if ok {
+				s,err := v.Script(nil)
+				if err!=nil {
+					parserlex.Error(err.Error())
+					goto ret1
+				}
+				$$ = s
+			} else {
+				parserlex.Error(fmt.Sprintf("Transform %s not found",$1))
+				goto ret1
+			}
+		}
+	|
+	pIDENTIFIER script_array
+		{
+			v,ok := TransformRegistry[$1]
+			if ok {
+				s,err := v.Script($2)
+				if err!=nil {
+					parserlex.Error(err.Error())
+					goto ret1
+				}
+				$$ = s
+			} else {
+				parserlex.Error(fmt.Sprintf("Transform %s not found",$1))
+				goto ret1
+			}
+		}
+	|
+	pIDENTIFIER
+		{
+			v,ok := TransformRegistry[$1]
+			if ok {
+				s,err := v.Script(nil)
+				if err!=nil {
+					parserlex.Error(err.Error())
+					goto ret1
+				}
+				$$ = s
+			} else {
+				parserlex.Error(fmt.Sprintf("Transform %s not found",$1))
+				goto ret1
+			}
+		}
+	|
+	script pPIPE script
+		{
+			err := $1.Append($3)
+			if err!=nil {
+				parserlex.Error(err.Error())
+				goto ret1
+			}
+			$$ = $1
+		}
 	;
 
 
@@ -118,7 +181,7 @@ algebra:
 			$$ = s
 		}
 	|
-	pMINUS script %prec UMINUS
+	pMINUS script %prec pUMINUS
 		{
 			s,err := negativeScript($2)
 			if err!=nil {
@@ -172,6 +235,31 @@ logical:
 		}
 	;
 
+script_array:
+	/* Set up the handlers of parentheses */
+	pLPARENS script_array pRPARENS { $$ = $2 }
+	|
+	pLBRACKET script_array pRBRACKET { $$ = $2 }
+	|
+	pLSQUARE script_array pRSQUARE { $$ = $2 }
+
+	|
+	script
+		{
+			$$ = []*Script{$1}
+		}
+	|
+	script_array pCOMMA script
+		{
+			/* Allows usage in function */
+			$$ = append($1,$3)
+		}
+	|
+	script_array script
+		{
+			/* Allows usage in bash-like syntax */
+			$$ = append($1,$2)
+		}
 
 /* Convert constants to their corresponding scripts */
 constant:
