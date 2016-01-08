@@ -77,7 +77,7 @@ func (tc TestCase) Run(t *testing.T) {
 		require.EqualValues(t, &tc.Output[i], v2, "Copied script '%s'", tc.Pipescript)
 	}
 
-	if len(tc.Output) > 0 && tc.OutputError && tc.SecondaryInput == nil { // If there is supposed to be output error, and there is no secondary
+	if tc.OutputError && tc.SecondaryInput == nil { // If there is supposed to be output error, and there is no secondary
 		_, err := s.Next()
 		require.Error(t, err, "Script '%s' did not give error", tc.Pipescript)
 		_, err = s2.Next()
@@ -103,12 +103,12 @@ func (tc TestCase) Run(t *testing.T) {
 
 		for i := range tc.SecondaryOutput {
 			v, err := s.Next()
-			require.NoError(t, err, "Script '%s' gave error on output %d in secondary output", tc.Pipescript, i)
+			require.NoError(t, err, "Script '%s' gave error on output %d in secondary output %d", tc.Pipescript, i)
 			v2, err := s2.Next()
-			require.NoError(t, err, "Copied script '%s' gave error on output %d in secondary output", tc.Pipescript, i)
+			require.NoError(t, err, "Copied script '%s' gave error on output %d in secondary output %d", tc.Pipescript, i)
 
-			require.EqualValues(t, &tc.SecondaryOutput[i], v, "Script '%s' in secondary output", tc.Pipescript)
-			require.EqualValues(t, &tc.SecondaryOutput[i], v2, "Copied script '%s' in secondary output", tc.Pipescript)
+			require.EqualValues(t, &tc.SecondaryOutput[i], v, "Script '%s' in secondary output %d", tc.Pipescript, i)
+			require.EqualValues(t, &tc.SecondaryOutput[i], v2, "Copied script '%s' in secondary output %d", tc.Pipescript, i)
 		}
 
 		if tc.OutputError {

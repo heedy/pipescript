@@ -38,6 +38,22 @@ func TestUnary(t *testing.T) {
 	}.Run(t)
 
 	TestCase{
+		Pipescript: "not 'hello'",
+		Input: []Datapoint{
+			{1, 1},
+		},
+		OutputError: true,
+	}.Run(t)
+
+	TestCase{
+		Pipescript: "-'hello'",
+		Input: []Datapoint{
+			{1, 1},
+		},
+		OutputError: true,
+	}.Run(t)
+
+	TestCase{
 		Pipescript: "-true",
 		Input: []Datapoint{
 			{1, 1},

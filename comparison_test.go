@@ -32,179 +32,93 @@ func TestConstantComparison(t *testing.T) {
 }
 
 func TestComparison(t *testing.T) {
+
 	TestCase{
-		Pipescript: "true==false",
+		Pipescript: "$==false",
 		Input: []Datapoint{
 			{1, 1},
-			{2, 2},
-			{3, 3},
+			{2, 0},
+			{3, "false"},
 		},
 		Output: []Datapoint{
 			{1, false},
-			{2, false},
-			{3, false},
+			{2, true},
+			{3, true},
 		},
 		SecondaryInput: []Datapoint{
 			{4, 4},
-			{5, 5},
+			{5, "hi"},
 		},
 		SecondaryOutput: []Datapoint{
 			{4, false},
-			{5, false},
 		},
+		OutputError: true,
 	}.Run(t)
 
 	TestCase{
-		Pipescript: "6 < 5",
+		Pipescript: "$<5",
 		Input: []Datapoint{
 			{1, 1},
-			{2, 2},
-			{3, 3},
+			{2, 5},
+			{3, "false"},
 		},
 		Output: []Datapoint{
-			{1, false},
+			{1, true},
 			{2, false},
-			{3, false},
+			{3, true},
 		},
 		SecondaryInput: []Datapoint{
-			{4, 4},
-			{5, 5},
+			{4, 8},
+			{5, "hi"},
 		},
 		SecondaryOutput: []Datapoint{
 			{4, false},
-			{5, false},
 		},
+		OutputError: true,
 	}.Run(t)
 
 	TestCase{
-		Pipescript: "true!=true",
+		Pipescript: "$ != true",
 		Input: []Datapoint{
 			{1, 1},
-			{2, 2},
-			{3, 3},
+			{2, 0},
+			{3, "false"},
 		},
 		Output: []Datapoint{
 			{1, false},
-			{2, false},
-			{3, false},
+			{2, true},
+			{3, true},
 		},
 		SecondaryInput: []Datapoint{
 			{4, 4},
-			{5, 5},
+			{5, "hi"},
 		},
 		SecondaryOutput: []Datapoint{
-			{4, false},
-			{5, false},
+			{4, true},
 		},
+		OutputError: true,
 	}.Run(t)
 
 	TestCase{
-		Pipescript: "5 > 6",
+		Pipescript: "$ >= 5",
 		Input: []Datapoint{
-			{1, 1},
-			{2, 2},
-			{3, 3},
+			{1, 8},
+			{2, 5},
+			{3, "false"},
 		},
 		Output: []Datapoint{
-			{1, false},
-			{2, false},
+			{1, true},
+			{2, true},
 			{3, false},
 		},
 		SecondaryInput: []Datapoint{
-			{4, 4},
-			{5, 5},
+			{4, 8},
+			{5, "hi"},
 		},
 		SecondaryOutput: []Datapoint{
-			{4, false},
-			{5, false},
+			{4, true},
 		},
+		OutputError: true,
 	}.Run(t)
 
-	TestCase{
-		Pipescript: "true!=true",
-		Input: []Datapoint{
-			{1, 1},
-			{2, 2},
-			{3, 3},
-		},
-		Output: []Datapoint{
-			{1, false},
-			{2, false},
-			{3, false},
-		},
-		SecondaryInput: []Datapoint{
-			{4, 4},
-			{5, 5},
-		},
-		SecondaryOutput: []Datapoint{
-			{4, false},
-			{5, false},
-		},
-	}.Run(t)
-
-	TestCase{
-		Pipescript: "5 > 6",
-		Input: []Datapoint{
-			{1, 1},
-			{2, 2},
-			{3, 3},
-		},
-		Output: []Datapoint{
-			{1, false},
-			{2, false},
-			{3, false},
-		},
-		SecondaryInput: []Datapoint{
-			{4, 4},
-			{5, 5},
-		},
-		SecondaryOutput: []Datapoint{
-			{4, false},
-			{5, false},
-		},
-	}.Run(t)
-
-	TestCase{
-		Pipescript: "5 >= 6",
-		Input: []Datapoint{
-			{1, 1},
-			{2, 2},
-			{3, 3},
-		},
-		Output: []Datapoint{
-			{1, false},
-			{2, false},
-			{3, false},
-		},
-		SecondaryInput: []Datapoint{
-			{4, 4},
-			{5, 5},
-		},
-		SecondaryOutput: []Datapoint{
-			{4, false},
-			{5, false},
-		},
-	}.Run(t)
-
-	TestCase{
-		Pipescript: "6 <= 5",
-		Input: []Datapoint{
-			{1, 1},
-			{2, 2},
-			{3, 3},
-		},
-		Output: []Datapoint{
-			{1, false},
-			{2, false},
-			{3, false},
-		},
-		SecondaryInput: []Datapoint{
-			{4, 4},
-			{5, 5},
-		},
-		SecondaryOutput: []Datapoint{
-			{4, false},
-			{5, false},
-		},
-	}.Run(t)
 }

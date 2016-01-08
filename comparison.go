@@ -94,7 +94,6 @@ func comparisonScript(comparison string, a1, a2 *Script) (*Script, error) {
 	var ti TransformInstance
 
 	args := []*Script{a1, a2}
-
 	switch comparison {
 	case "==":
 		ti = eqTransform{}
@@ -119,10 +118,10 @@ func comparisonScript(comparison string, a1, a2 *Script) (*Script, error) {
 	pe, err := NewPipelineElement(args, ti)
 
 	return &Script{
-		input:      pe,
-		output:     pe,
-		OneToOne: true,
-		Constant:   a1.Constant && a2.Constant,
-		Stateless:  true,
+		input:     pe,
+		output:    pe,
+		OneToOne:  true,
+		Constant:  a1.Constant && a2.Constant,
+		Stateless: true,
 	}, err
 }

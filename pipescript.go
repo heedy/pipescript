@@ -143,7 +143,7 @@ func (s *Script) replaceWithConstant(c interface{}) {
 //
 func (s *Script) Copy() (*Script, error) {
 	i, o, err := s.output.copyUntil(s.input)
-	return &Script{i, o, s.Constant, s.OneToOne, s.Stateless}, err
+	return &Script{i, o, s.OneToOne, s.Constant, s.Stateless}, err
 }
 
 // Parse parses the given transform, and returns the corresponding script object

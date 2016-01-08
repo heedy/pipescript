@@ -19,9 +19,10 @@ func (c ConstantTransform) Next(ti *TransformIterator) (*Datapoint, error) {
 func ConstantScript(c interface{}) *Script {
 	pe, _ := NewPipelineElement(nil, ConstantTransform{c})
 	return &Script{
-		input:      pe,
-		output:     pe,
-		OneToOne: true,
-		Constant:   true,
+		input:     pe,
+		output:    pe,
+		OneToOne:  true,
+		Constant:  true,
+		Stateless: true,
 	}
 }

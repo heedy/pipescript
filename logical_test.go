@@ -13,6 +13,11 @@ func TestAndTransform(t *testing.T) {
 	_, err = s.GetConstant()
 	require.Error(t, err)
 
+	s, err = andScript(ConstantScript("false"), ConstantScript("pff"))
+	require.NoError(t, err)
+	_, err = s.GetConstant()
+	require.Error(t, err)
+
 	one := ConstantScript("true")
 	one.OneToOne = false
 	s, err = andScript(one, ConstantScript("false"))
@@ -22,6 +27,11 @@ func TestAndTransform(t *testing.T) {
 func TestOrTransform(t *testing.T) {
 	// Now get error
 	s, err := orScript(ConstantScript("pff"), ConstantScript("false"))
+	require.NoError(t, err)
+	_, err = s.GetConstant()
+	require.Error(t, err)
+
+	s, err = orScript(ConstantScript("false"), ConstantScript("pff"))
 	require.NoError(t, err)
 	_, err = s.GetConstant()
 	require.Error(t, err)

@@ -58,7 +58,6 @@ var identityTransform = Transform{
 			// This means that the optional argument was not given
 			return &TransformInitializer{Transform: iTransform{}}, nil
 		}
-
 		return &TransformInitializer{Transform: &subobjectTransform{dp.Data}}, nil
 	},
 }
