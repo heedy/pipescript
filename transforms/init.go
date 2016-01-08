@@ -6,5 +6,5 @@ This package imports EVERYTHING
 package transforms
 
 import (
-	_ "github.com/connectordb/transforms/core" // The core transforms
+	_ "github.com/connectordb/pipescript/transforms/core" // The core transforms
 )
