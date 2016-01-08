@@ -11,6 +11,8 @@ func TestSyntax(t *testing.T) {
 	require.Error(t, err)
 	_, err = Parse("'")
 	require.Error(t, err)
+	_, err = Parse("this_transform_DNE")
+	require.Error(t, err)
 }
 
 func TestParser(t *testing.T) {

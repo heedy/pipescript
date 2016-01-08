@@ -1,6 +1,15 @@
 package pipescript
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/stretchr/testify/require"
+)
+
+func TestInvalidComparison(t *testing.T) {
+	_, err := comparisonScript("lol", nil, nil)
+	require.Error(t, err)
+}
 
 func TestConstantComparison(t *testing.T) {
 	ConstantTestCases{

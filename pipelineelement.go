@@ -81,6 +81,9 @@ func (p *PipelineElement) copyUntil(pe *PipelineElement) (input, output *Pipelin
 	if !ok {
 		return nil, nil, errIncompatible
 	}
+	if prevPipeline == p {
+		return nil, nil, errors.New("Pipeline Loop Detected!")
+	}
 
 	var o *PipelineElement
 	input, o, err = prevPipeline.copyUntil(pe)

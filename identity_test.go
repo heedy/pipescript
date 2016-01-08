@@ -1,10 +1,21 @@
 package pipescript
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/stretchr/testify/require"
+)
+
+func TestIdentityError(t *testing.T) {
+	c := ConstantScript("hi")
+	c.Constant = false
+	_, err := identityTransform.Generator("$", []*Script{c})
+	require.Error(t, err)
+}
 
 func TestIdentity(t *testing.T) {
 	TestCase{
-		Pipescript: "$",
+		Pipescript: "$ | $",
 		Input: []Datapoint{
 			{1, 1},
 			{2, true},
@@ -47,6 +58,11 @@ func TestIdentity(t *testing.T) {
 
 	TestCase{
 		Pipescript: "$[$]", // The transform requries a constant
+		ParseError: true,
+	}.Run(t)
+
+	TestCase{
+		Pipescript: "$[1,2]", // Identity only accepts one arg
 		ParseError: true,
 	}.Run(t)
 

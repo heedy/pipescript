@@ -31,12 +31,20 @@ type Script struct {
 // WARNING: This only works for uninitialized scripts (ie, scripts that have not had Datapoints pass through yet)
 // behavior for initialized scripts is undefined.
 func (s *Script) Append(s2 *Script) error {
+	if s2 == s {
+		return errors.New("Can't append self to self")
+	}
 
 	if !s2.OneToOne {
 		s.OneToOne = false
 	}
+
+	if !s2.Stateless {
+		s.Stateless = false
+	}
+
 	// Link the output of s with the input of s2
-	dpi := NewDatapointPeekIterator(s2.output)
+	dpi := NewDatapointPeekIterator(s.output)
 	s2.input.SetInput(dpi)
 
 	// The total output is now s2's output
@@ -58,11 +66,6 @@ func (s *Script) Append(s2 *Script) error {
 	}
 
 	s.Constant = false
-
-	if !s2.Stateless {
-		s.Stateless = false
-	}
-
 	return nil
 }
 
