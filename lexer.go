@@ -111,10 +111,10 @@ func (l *parserLex) Lex(lval *parserSymType) int {
 		return pCOMPARISON
 	case "true", "false":
 		return pBOOL
-
-	case "|", ":":
+	case "|":
 		return pPIPE
-
+	case ":":
+		return pCOLON
 	case ",":
 		return pCOMMA
 	case "-":

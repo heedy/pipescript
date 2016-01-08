@@ -153,10 +153,11 @@ func (s *Script) Copy() (*Script, error) {
 func Parse(script string) (*Script, error) {
 	lexer := parserLex{input: script}
 
-	parserParse(&lexer)
-
-	if lexer.errorString != "" {
-		return nil, errors.New(lexer.errorString)
+	if parserParse(&lexer) != 0 {
+		if lexer.errorString != "" {
+			return nil, errors.New(lexer.errorString)
+		}
+		return nil, errors.New("Unknown error")
 	}
 
 	return lexer.output, nil

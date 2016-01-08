@@ -95,7 +95,7 @@ func (t *Transform) Script(args []*Script) (*Script, error) {
 		} else {
 			// The argument was not given
 			if !t.Args[i].Optional {
-				return nil, fmt.Errorf("Argument %d of transform '%s' is required.", i+1, t.Name)
+				return nil, fmt.Errorf("Argument %d of transform '%s' is required (got %d args).", i+1, t.Name, len(args))
 			}
 
 			// The argument was optional and was NOT passed in. We set it up using a ConstantScript using the default value

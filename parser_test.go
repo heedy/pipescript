@@ -15,7 +15,7 @@ func TestSyntax(t *testing.T) {
 	require.Error(t, err)
 }
 
-func TestParser(t *testing.T) {
+func TestParserConstant(t *testing.T) {
 	ConstantTestCases{
 		// Check builtins
 		{"true", true},
@@ -52,5 +52,23 @@ func TestParser(t *testing.T) {
 
 		// Test Pipe
 		{"5 | true", true},
+	}.Run(t)
+}
+
+func TestParser(t *testing.T) {
+	// Here we perform more advanced pipes to make sure everything works as it should in the parser
+	// We assume all built-in functions are available
+	TestCase{
+		// This tests order of prescedence: ":" pipes are high prescedence, and will be executed first
+		Pipescript: "if ($['test']:$ < 5) | $['test']",
+		Input: []Datapoint{
+			{1, map[string]int{"test": 4}},
+			{2, map[string]int{"test": 8}},
+			{3, map[string]int{"test": 3}},
+		},
+		Output: []Datapoint{
+			{1, 4},
+			{3, 3},
+		},
 	}.Run(t)
 }

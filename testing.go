@@ -58,6 +58,7 @@ func (tc TestCase) Run(t *testing.T) {
 		require.Error(t, err, "Parsing script '%s' didn't give expected parser error", tc.Pipescript)
 		return
 	}
+	require.NoError(t, err, "Failed to parse '%s'", tc.Pipescript)
 	s2, err := s.Copy()
 	require.NoError(t, err, "Failed to copy script '%s'", tc.Pipescript)
 

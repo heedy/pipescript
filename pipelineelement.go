@@ -43,6 +43,7 @@ func (p *PipelineElement) SetInput(d DatapointPeekIterator) {
 // reaches the passed in pipelineElement (inclusive), and returns a copy of itself, as well as a pointer to the
 // starting element (equivalent to the passed in parameter for the copied pipelineElement)
 func (p *PipelineElement) copyUntil(pe *PipelineElement) (input, output *PipelineElement, err error) {
+
 	// First copy the TransformInstance
 	tInstance := p.transform.Copy()
 

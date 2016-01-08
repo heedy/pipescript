@@ -10,32 +10,40 @@ import (
 	"fmt"
 )
 
+type scriptFunc struct {
+	transform string
+	args []*Script
+}
+
 %}
+
 
 
 %union{
 	script *Script
+	sfunc scriptFunc
 	scriptArray []*Script
 	strVal string	// This is how variables are passed in: by their string value
 }
 
 %type <script> script pipescript constant logical algebra
+%type <sfunc> function
 %type <scriptArray> script_array
 %token <strVal> pNUMBER  pSTRING  pBOOL pIDENTIFIER
-%token <strVal> pAND pOR pNOT pCOMPARISON pPLUS pMINUS pMULTIPLY pDIVIDE pMODULO pPOW pPIPE pCOMMA
-%token <strVal> pRPARENS pLPARENS pRSQUARE pLSQUARE pRBRACKET pLBRACKET
+%token <strVal> pAND pOR pNOT pCOMPARISON pPLUS pMINUS pMULTIPLY pDIVIDE pMODULO pPOW pCOMMA
+%token <strVal> pRPARENS pLPARENS pRSQUARE pLSQUARE pRBRACKET pLBRACKET pPIPE pCOLON
 
 /* Set up order of operations */
 %left pPIPE
-%left pIDENTIFIER
+%left pIDENTIFIER pCOMMA
 %left pAND pOR
 %left pCOMPARISON
 %left pNOT
 %left pPLUS pMINUS
 %left pMULTIPLY pDIVIDE
 %left pMODULO pPOW
+%left pCOLON
 %left pUMINUS      /*  supplies  precedence  for  unary  minus  */
-
 %%
 
 pipescript:
@@ -54,60 +62,40 @@ script:
 	|
 	pLSQUARE script pRSQUARE { $$ = $2 }
 	|
+	script pCOLON script
+		{
+			/* The colon is a pipe operator with high prescedence */
+			err := $1.Append($3)
+			if err!=nil {
+				parserlex.Error(err.Error())
+				goto ret1
+			}
+			$$ = $1
+		}
+	|
 	algebra
 	|
 	logical
 	|
 	constant
 	|
-	pIDENTIFIER pLPARENS pRPARENS
+	function
 		{
-			v,ok := TransformRegistry[$1]
+			v,ok := TransformRegistry[$1.transform]
 			if ok {
-				s,err := v.Script(nil)
+				s,err := v.Script($1.args)
 				if err!=nil {
 					parserlex.Error(err.Error())
 					goto ret1
 				}
 				$$ = s
 			} else {
-				parserlex.Error(fmt.Sprintf("Transform %s not found",$1))
+				parserlex.Error(fmt.Sprintf("Transform %s not found",$1.transform))
 				goto ret1
 			}
 		}
 	|
-	pIDENTIFIER script_array
-		{
-			v,ok := TransformRegistry[$1]
-			if ok {
-				s,err := v.Script($2)
-				if err!=nil {
-					parserlex.Error(err.Error())
-					goto ret1
-				}
-				$$ = s
-			} else {
-				parserlex.Error(fmt.Sprintf("Transform %s not found",$1))
-				goto ret1
-			}
-		}
-	|
-	pIDENTIFIER
-		{
-			v,ok := TransformRegistry[$1]
-			if ok {
-				s,err := v.Script(nil)
-				if err!=nil {
-					parserlex.Error(err.Error())
-					goto ret1
-				}
-				$$ = s
-			} else {
-				parserlex.Error(fmt.Sprintf("Transform %s not found",$1))
-				goto ret1
-			}
-		}
-	|
+
 	script pPIPE script
 		{
 			err := $1.Append($3)
@@ -235,31 +223,50 @@ logical:
 		}
 	;
 
-script_array:
+function:
 	/* Set up the handlers of parentheses */
-	pLPARENS script_array pRPARENS { $$ = $2 }
+	pIDENTIFIER pLPARENS script_array pRPARENS
+		{
+			$$.transform = $1
+			$$.args = $3
+		}
 	|
-	pLBRACKET script_array pRBRACKET { $$ = $2 }
+	pIDENTIFIER pLBRACKET script_array pRBRACKET
+		{
+			$$.transform = $1
+			$$.args = $3
+		}
 	|
-	pLSQUARE script_array pRSQUARE { $$ = $2 }
+	pIDENTIFIER pLSQUARE script_array pRSQUARE
+		{
+			$$.transform = $1
+			$$.args = $3
+		}
 
+	|
+	pIDENTIFIER
+		{
+			$$.transform = $1
+			$$.args = []*Script{}
+		}
+	|
+	function script
+		{
+			$$.transform = $1.transform
+			$$.args = append($1.args,$2)
+		}
+	;
+script_array:
+	script_array pCOMMA script
+		{
+			$$ = append($1,$3)
+		}
 	|
 	script
 		{
 			$$ = []*Script{$1}
 		}
-	|
-	script_array pCOMMA script
-		{
-			/* Allows usage in function */
-			$$ = append($1,$3)
-		}
-	|
-	script_array script
-		{
-			/* Allows usage in bash-like syntax */
-			$$ = append($1,$2)
-		}
+	;
 
 /* Convert constants to their corresponding scripts */
 constant:
