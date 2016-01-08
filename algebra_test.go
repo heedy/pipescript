@@ -6,22 +6,25 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestUnary(t *testing.T) {
+func TestAlgebra(t *testing.T) {
 	testcases := []struct {
 		pipeline string
 		output   interface{}
 	}{
-		{"not true", false},
-		{"not false", true},
-		{"-true", false},
-		{"-false", true},
-		{"- 50", float64(-50)},
-		{"- '0.54'", float64(-0.54)},
+		{"5+5", float64(10)},
+		{"'hello'+'world'", "helloworld"},
+		{"23 - 3", float64(20)},
+		{"23-3", float64(20)}, // This caused error since lexer checked negative numbers
+		{"5*3", float64(15)},
+		{"15/3", float64(5)},
+		{"4%2", float64(0)},
+		{"5%2", float64(1)},
+		{"3^2", float64(9)},
 	}
 
 	for i := range testcases {
 		s, err := Parse(testcases[i].pipeline)
-		require.NoError(t, err)
+		require.NoError(t, err, testcases[i].pipeline)
 		s2, err := s.Copy()
 		require.NoError(t, err)
 		bv, err := s.GetConstant()

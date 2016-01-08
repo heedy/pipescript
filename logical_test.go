@@ -6,28 +6,6 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestConstant(t *testing.T) {
-	cs := ConstantScript(1337)
-
-	require.True(t, cs.Constant)
-	require.True(t, cs.IsOneToOne)
-
-	testarray := []Datapoint{
-		Datapoint{1, 1}, Datapoint{2, 2}, Datapoint{3, 3}, Datapoint{4, 4},
-	}
-	cs.SetInput(NewDatapointArrayIterator(testarray))
-
-	for i := 1; i < 5; i++ {
-		dp, err := cs.Next()
-		require.NoError(t, err)
-		require.EqualValues(t, &Datapoint{float64(i), 1337}, dp)
-	}
-
-	dp, err := cs.Next()
-	require.NoError(t, err)
-	require.Nil(t, dp)
-}
-
 func TestAndTransform(t *testing.T) {
 	s, err := andScript(ConstantScript(true), ConstantScript(true))
 	require.NoError(t, err)
@@ -122,4 +100,34 @@ func TestOrTransform(t *testing.T) {
 	one.IsOneToOne = false
 	s, err = orScript(one, ConstantScript("false"))
 	require.Error(t, err)
+}
+
+func TestLogical(t *testing.T) {
+	testcases := []struct {
+		pipeline string
+		output   bool
+	}{
+		{"true and true", true},
+		{"false and false", false},
+		{"true and false", false},
+		{"false or true", true},
+		{"false or false", false},
+		{"true or true", true},
+	}
+
+	for i := range testcases {
+		s, err := Parse(testcases[i].pipeline)
+		require.NoError(t, err)
+		s2, err := s.Copy()
+		require.NoError(t, err)
+		bv, err := s.GetConstant()
+		require.NoError(t, err)
+		require.NotNil(t, bv)
+		require.Equal(t, testcases[i].output, bv.Data, testcases[i].pipeline)
+		bv, err = s2.GetConstant()
+		require.NoError(t, err)
+		require.NotNil(t, bv)
+		require.Equal(t, testcases[i].output, bv.Data, testcases[i].pipeline)
+	}
+
 }

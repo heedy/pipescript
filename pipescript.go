@@ -118,3 +118,27 @@ func (s *Script) replaceWithConstant(c interface{}) {
 		s.SetInput(oldIterator)
 	}
 }
+
+// Copy performs a script copy.
+//
+// Warning: Copy may only be used during script initialization. If it is used after
+// datapoints started flowing through the script, copy will fail. This is because peeked
+// data is not copied at this time.
+//
+func (s *Script) Copy() (*Script, error) {
+	i, o, err := s.output.copyUntil(s.input)
+	return &Script{i, o, s.Constant, s.IsOneToOne}, err
+}
+
+// Parse parses the given transform, and returns the corresponding script object
+func Parse(script string) (*Script, error) {
+	lexer := parserLex{input: script}
+
+	parserParse(&lexer)
+
+	if lexer.errorString != "" {
+		return nil, errors.New(lexer.errorString)
+	}
+
+	return lexer.output, nil
+}

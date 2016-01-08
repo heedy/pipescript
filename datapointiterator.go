@@ -6,7 +6,7 @@ import "container/list"
 // At any point in time, there can be a read error, which will cause the iterator to fail.
 // In that case, it returns an error value, at which point the iterator is assumed to be invalid.
 // If there is no error, the iterator returns Datapoints until the stream is finished, at which point
-// it returns `nil` (without an error), signalling EOF.
+// it returns `nil` (without an error), signalling pEOF.
 type DatapointIterator interface {
 	Next() (*Datapoint, error)
 }

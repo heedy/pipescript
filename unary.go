@@ -40,6 +40,11 @@ func (t negativeTransform) Next(ti *TransformIterator) (*Datapoint, error) {
 	if te.IsFinished() {
 		return te.Get()
 	}
+	// There is a special case: if we do negative boolean, we behave as a not
+	b, ok := te.Args[0].Data.(bool)
+	if ok {
+		return te.Set(!b)
+	}
 	// We just deal with numbers, so float is the same thing as int for our purposes
 	v, err := te.Args[0].Float()
 	if err != nil {
