@@ -1,36 +1,61 @@
 package pipescript
 
-import (
-	"testing"
+import "testing"
 
-	"github.com/stretchr/testify/require"
-)
-
-func TestUnary(t *testing.T) {
-	testcases := []struct {
-		pipeline string
-		output   interface{}
-	}{
+func TestUnaryConstant(t *testing.T) {
+	ConstantTestCases{
 		{"not true", false},
 		{"not false", true},
 		{"-true", false},
 		{"-false", true},
 		{"- 50", float64(-50)},
 		{"- '0.54'", float64(-0.54)},
-	}
+	}.Run(t)
+}
 
-	for i := range testcases {
-		s, err := Parse(testcases[i].pipeline)
-		require.NoError(t, err)
-		s2, err := s.Copy()
-		require.NoError(t, err)
-		bv, err := s.GetConstant()
-		require.NoError(t, err)
-		require.NotNil(t, bv)
-		require.Equal(t, testcases[i].output, bv.Data, testcases[i].pipeline)
-		bv, err = s2.GetConstant()
-		require.NoError(t, err)
-		require.NotNil(t, bv)
-		require.Equal(t, testcases[i].output, bv.Data, testcases[i].pipeline)
-	}
+// These tests make sure it behaves correctly in normal usage
+func TestUnary(t *testing.T) {
+	TestCase{
+		Pipescript: "not true",
+		Input: []Datapoint{
+			{1, 1},
+			{2, 2},
+			{3, 3},
+		},
+		Output: []Datapoint{
+			{1, false},
+			{2, false},
+			{3, false},
+		},
+		SecondaryInput: []Datapoint{
+			{4, 4},
+			{5, 5},
+		},
+		SecondaryOutput: []Datapoint{
+			{4, false},
+			{5, false},
+		},
+	}.Run(t)
+
+	TestCase{
+		Pipescript: "-true",
+		Input: []Datapoint{
+			{1, 1},
+			{2, 2},
+			{3, 3},
+		},
+		Output: []Datapoint{
+			{1, false},
+			{2, false},
+			{3, false},
+		},
+		SecondaryInput: []Datapoint{
+			{4, 4},
+			{5, 5},
+		},
+		SecondaryOutput: []Datapoint{
+			{4, false},
+			{5, false},
+		},
+	}.Run(t)
 }

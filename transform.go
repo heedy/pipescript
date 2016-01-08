@@ -84,7 +84,7 @@ func (t *Transform) Script(args []*Script) (*Script, error) {
 	// Now check the ordering/Constantness of arguments
 	for i := range t.Args {
 		// Check if the argument is given
-		if len(args) >= i {
+		if len(args) > i {
 			// The argument is given
 			if !args[i].OneToOne {
 				return nil, fmt.Errorf("Argument %d of transform '%s' must be OneToOne", i+1, t.Name)
@@ -115,10 +115,10 @@ func (t *Transform) Script(args []*Script) (*Script, error) {
 	pe, err := NewPipelineElement(ti.Args, ti.Transform)
 
 	return &Script{
-		input:      pe,
-		output:     pe,
-		OneToOne: t.OneToOne,
-		Constant:   ti.Constant,
-		Stateless:  t.Stateless,
+		input:     pe,
+		output:    pe,
+		OneToOne:  t.OneToOne,
+		Constant:  ti.Constant,
+		Stateless: t.Stateless,
 	}, err
 }

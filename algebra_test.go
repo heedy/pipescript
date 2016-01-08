@@ -1,16 +1,9 @@
 package pipescript
 
-import (
-	"testing"
+import "testing"
 
-	"github.com/stretchr/testify/require"
-)
-
-func TestAlgebra(t *testing.T) {
-	testcases := []struct {
-		pipeline string
-		output   interface{}
-	}{
+func TestConstantAlgebra(t *testing.T) {
+	ConstantTestCases{
 		{"5+5", float64(10)},
 		{"'hello'+'world'", "helloworld"},
 		{"23 - 3", float64(20)},
@@ -20,20 +13,97 @@ func TestAlgebra(t *testing.T) {
 		{"4%2", float64(0)},
 		{"5%2", float64(1)},
 		{"3^2", float64(9)},
-	}
+	}.Run(t)
+}
 
-	for i := range testcases {
-		s, err := Parse(testcases[i].pipeline)
-		require.NoError(t, err, testcases[i].pipeline)
-		s2, err := s.Copy()
-		require.NoError(t, err)
-		bv, err := s.GetConstant()
-		require.NoError(t, err)
-		require.NotNil(t, bv)
-		require.Equal(t, testcases[i].output, bv.Data, testcases[i].pipeline)
-		bv, err = s2.GetConstant()
-		require.NoError(t, err)
-		require.NotNil(t, bv)
-		require.Equal(t, testcases[i].output, bv.Data, testcases[i].pipeline)
-	}
+func TestAlgebra(t *testing.T) {
+	TestCase{
+		Pipescript: "5+3",
+		Input: []Datapoint{
+			{1, 1},
+		},
+		Output: []Datapoint{
+			{1, float64(8)},
+		},
+		SecondaryInput: []Datapoint{
+			{4, 4},
+			{5, 5},
+		},
+		SecondaryOutput: []Datapoint{
+			{4, float64(8)},
+			{5, float64(8)},
+		},
+	}.Run(t)
+
+	TestCase{
+		Pipescript: "14-6",
+		Input: []Datapoint{
+			{1, 1},
+		},
+		Output: []Datapoint{
+			{1, float64(8)},
+		},
+		SecondaryInput: []Datapoint{
+			{4, 4},
+			{5, 5},
+		},
+		SecondaryOutput: []Datapoint{
+			{4, float64(8)},
+			{5, float64(8)},
+		},
+	}.Run(t)
+
+	TestCase{
+		Pipescript: "40/5",
+		Input: []Datapoint{
+			{1, 1},
+		},
+		Output: []Datapoint{
+			{1, float64(8)},
+		},
+		SecondaryInput: []Datapoint{
+			{4, 4},
+			{5, 5},
+		},
+		SecondaryOutput: []Datapoint{
+			{4, float64(8)},
+			{5, float64(8)},
+		},
+	}.Run(t)
+
+	TestCase{
+		Pipescript: "28%20",
+		Input: []Datapoint{
+			{1, 1},
+		},
+		Output: []Datapoint{
+			{1, float64(8)},
+		},
+		SecondaryInput: []Datapoint{
+			{4, 4},
+			{5, 5},
+		},
+		SecondaryOutput: []Datapoint{
+			{4, float64(8)},
+			{5, float64(8)},
+		},
+	}.Run(t)
+
+	TestCase{
+		Pipescript: "2^3",
+		Input: []Datapoint{
+			{1, 1},
+		},
+		Output: []Datapoint{
+			{1, float64(8)},
+		},
+		SecondaryInput: []Datapoint{
+			{4, 4},
+			{5, 5},
+		},
+		SecondaryOutput: []Datapoint{
+			{4, float64(8)},
+			{5, float64(8)},
+		},
+	}.Run(t)
 }

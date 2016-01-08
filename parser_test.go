@@ -14,10 +14,7 @@ func TestSyntax(t *testing.T) {
 }
 
 func TestParser(t *testing.T) {
-	testcases := []struct {
-		pipeline string
-		output   interface{}
-	}{
+	ConstantTestCases{
 		// Check builtins
 		{"true", true},
 		{"false", false},
@@ -53,20 +50,5 @@ func TestParser(t *testing.T) {
 
 		// Test Pipe
 		{"5 | true", true},
-	}
-
-	for i := range testcases {
-		s, err := Parse(testcases[i].pipeline)
-		require.NoError(t, err, testcases[i].pipeline)
-		s2, err := s.Copy()
-		require.NoError(t, err)
-		bv, err := s.GetConstant()
-		require.NoError(t, err)
-		require.NotNil(t, bv)
-		require.Equal(t, testcases[i].output, bv.Data, testcases[i].pipeline)
-		bv, err = s2.GetConstant()
-		require.NoError(t, err)
-		require.NotNil(t, bv)
-		require.Equal(t, testcases[i].output, bv.Data, testcases[i].pipeline)
-	}
+	}.Run(t)
 }
