@@ -1,4 +1,4 @@
-package transforms
+package core
 
 import "github.com/connectordb/pipescript"
 

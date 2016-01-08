@@ -1,4 +1,4 @@
-package transforms
+package core
 
 import (
 	"errors"
@@ -28,7 +28,7 @@ func (nt *nextTransform) Next(ti *pipescript.TransformIterator) (*pipescript.Dat
 	if te2.IsFinished() {
 		return te.Set(nil)
 	}
-	return te.Set(te2.Datapoint.Data)
+	return te2.Datapoint, nil
 }
 
 var next = pipescript.Transform{

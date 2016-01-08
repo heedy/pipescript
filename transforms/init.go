@@ -1,15 +1,10 @@
-/*
-Package transforms contains the core basic transforms which are available in PipeScript.
-It should be imported by default by basically all users of PipeScript
+/*Package transforms imports all of the transforms that are available with PipeScript. The core PipeScript
+only has an if statement and the identity operator, which are not nearly enough.
+
+This package imports EVERYTHING
 */
 package transforms
 
-func init() {
-	first.Register()
-	last.Register()
-
-	//prev.Register()
-	next.Register()
-
-	i.Register()
-}
+import (
+	_ "github.com/connectordb/transforms/core" // The core transforms
+)
