@@ -5,6 +5,7 @@ It should be imported by default by basically all users of PipeScript
 package core
 
 func init() {
+
 	first.Register()
 	last.Register()
 
@@ -12,6 +13,7 @@ func init() {
 	next.Register()
 
 	count.Register()
+	sum.Register()
 
 	tTransform.Register()
 	tshift.Register()
