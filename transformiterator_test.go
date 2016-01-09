@@ -11,8 +11,8 @@ import (
 // The second argument is assumed to be a constant 1
 type testPeekTransform struct{ t *testing.T }
 
-func (t testPeekTransform) Copy() TransformInstance {
-	return testPeekTransform{}
+func (t testPeekTransform) Copy() (TransformInstance, error) {
+	return testPeekTransform{}, nil
 }
 
 func (t testPeekTransform) Next(ti *TransformIterator) (*Datapoint, error) {

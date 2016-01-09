@@ -3,8 +3,8 @@ package pipescript
 // andTransform is used when given (a and b)
 type andTransform struct{}
 
-func (a andTransform) Copy() TransformInstance {
-	return andTransform{}
+func (a andTransform) Copy() (TransformInstance, error) {
+	return andTransform{}, nil
 }
 
 // Next performs an and on two boolean datapoints
@@ -28,10 +28,10 @@ func andScript(a1, a2 *Script) (*Script, error) {
 	pe, err := NewPipelineElement([]*Script{a1, a2}, andTransform{})
 
 	return &Script{
-		input:      pe,
-		output:     pe,
+		input:    pe,
+		output:   pe,
 		OneToOne: true,
-		Constant:   a1.Constant && a2.Constant,
+		Constant: a1.Constant && a2.Constant,
 	}, err
 
 }
@@ -39,8 +39,8 @@ func andScript(a1, a2 *Script) (*Script, error) {
 // orTransform is used when given (a or b)
 type orTransform struct{}
 
-func (o orTransform) Copy() TransformInstance {
-	return orTransform{}
+func (o orTransform) Copy() (TransformInstance, error) {
+	return orTransform{}, nil
 }
 
 // Next performs an or on two boolean datapoints
@@ -64,10 +64,10 @@ func orScript(a1, a2 *Script) (*Script, error) {
 	pe, err := NewPipelineElement([]*Script{a1, a2}, orTransform{})
 
 	return &Script{
-		input:      pe,
-		output:     pe,
+		input:    pe,
+		output:   pe,
 		OneToOne: true,
-		Constant:   a1.Constant && a2.Constant,
+		Constant: a1.Constant && a2.Constant,
 	}, err
 
 }

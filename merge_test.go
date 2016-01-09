@@ -38,4 +38,8 @@ func TestMerge(t *testing.T) {
 		require.EqualValues(t, &dpa3[i], v)
 	}
 
+	v, err := m.Next()
+	require.NoError(t, err)
+	require.Nil(t, v)
+
 }

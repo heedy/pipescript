@@ -11,8 +11,8 @@ var errConversion = errors.New("Failed to perform algebraic operation: couldn't 
 
 type addTransform struct{}
 
-func (t addTransform) Copy() TransformInstance {
-	return addTransform{}
+func (t addTransform) Copy() (TransformInstance, error) {
+	return addTransform{}, nil
 }
 
 func (t addTransform) Next(ti *TransformIterator) (*Datapoint, error) {
@@ -31,19 +31,19 @@ func addScript(a1, a2 *Script) (*Script, error) {
 	pe, ok := NewPipelineElement([]*Script{a1, a2}, addTransform{})
 
 	return &Script{
-		input:      pe,
-		output:     pe,
-		OneToOne: true,
-		Constant:   a1.Constant && a2.Constant,
-		Stateless:  true,
+		input:     pe,
+		output:    pe,
+		OneToOne:  true,
+		Constant:  a1.Constant && a2.Constant,
+		Stateless: true,
 	}, ok
 
 }
 
 type subtractTransform struct{}
 
-func (t subtractTransform) Copy() TransformInstance {
-	return subtractTransform{}
+func (t subtractTransform) Copy() (TransformInstance, error) {
+	return subtractTransform{}, nil
 }
 
 func (t subtractTransform) Next(ti *TransformIterator) (*Datapoint, error) {
@@ -62,19 +62,19 @@ func subtractScript(a1, a2 *Script) (*Script, error) {
 	pe, ok := NewPipelineElement([]*Script{a1, a2}, subtractTransform{})
 
 	return &Script{
-		input:      pe,
-		output:     pe,
-		OneToOne: true,
-		Constant:   a1.Constant && a2.Constant,
-		Stateless:  true,
+		input:     pe,
+		output:    pe,
+		OneToOne:  true,
+		Constant:  a1.Constant && a2.Constant,
+		Stateless: true,
 	}, ok
 
 }
 
 type mulTransform struct{}
 
-func (t mulTransform) Copy() TransformInstance {
-	return mulTransform{}
+func (t mulTransform) Copy() (TransformInstance, error) {
+	return mulTransform{}, nil
 }
 
 func (t mulTransform) Next(ti *TransformIterator) (*Datapoint, error) {
@@ -93,19 +93,19 @@ func mulScript(a1, a2 *Script) (*Script, error) {
 	pe, ok := NewPipelineElement([]*Script{a1, a2}, mulTransform{})
 
 	return &Script{
-		input:      pe,
-		output:     pe,
-		OneToOne: true,
-		Constant:   a1.Constant && a2.Constant,
-		Stateless:  true,
+		input:     pe,
+		output:    pe,
+		OneToOne:  true,
+		Constant:  a1.Constant && a2.Constant,
+		Stateless: true,
 	}, ok
 
 }
 
 type divTransform struct{}
 
-func (t divTransform) Copy() TransformInstance {
-	return divTransform{}
+func (t divTransform) Copy() (TransformInstance, error) {
+	return divTransform{}, nil
 }
 
 func (t divTransform) Next(ti *TransformIterator) (*Datapoint, error) {
@@ -124,19 +124,19 @@ func divScript(a1, a2 *Script) (*Script, error) {
 	pe, ok := NewPipelineElement([]*Script{a1, a2}, divTransform{})
 
 	return &Script{
-		input:      pe,
-		output:     pe,
-		OneToOne: true,
-		Constant:   a1.Constant && a2.Constant,
-		Stateless:  true,
+		input:     pe,
+		output:    pe,
+		OneToOne:  true,
+		Constant:  a1.Constant && a2.Constant,
+		Stateless: true,
 	}, ok
 
 }
 
 type modTransform struct{}
 
-func (t modTransform) Copy() TransformInstance {
-	return modTransform{}
+func (t modTransform) Copy() (TransformInstance, error) {
+	return modTransform{}, nil
 }
 
 func (t modTransform) Next(ti *TransformIterator) (*Datapoint, error) {
@@ -155,19 +155,19 @@ func modScript(a1, a2 *Script) (*Script, error) {
 	pe, ok := NewPipelineElement([]*Script{a1, a2}, modTransform{})
 
 	return &Script{
-		input:      pe,
-		output:     pe,
-		OneToOne: true,
-		Constant:   a1.Constant && a2.Constant,
-		Stateless:  true,
+		input:     pe,
+		output:    pe,
+		OneToOne:  true,
+		Constant:  a1.Constant && a2.Constant,
+		Stateless: true,
 	}, ok
 
 }
 
 type powTransform struct{}
 
-func (t powTransform) Copy() TransformInstance {
-	return powTransform{}
+func (t powTransform) Copy() (TransformInstance, error) {
+	return powTransform{}, nil
 }
 
 func (t powTransform) Next(ti *TransformIterator) (*Datapoint, error) {
@@ -190,11 +190,11 @@ func powScript(a1, a2 *Script) (*Script, error) {
 	pe, ok := NewPipelineElement([]*Script{a1, a2}, powTransform{})
 
 	return &Script{
-		input:      pe,
-		output:     pe,
-		OneToOne: true,
-		Constant:   a1.Constant && a2.Constant,
-		Stateless:  true,
+		input:     pe,
+		output:    pe,
+		OneToOne:  true,
+		Constant:  a1.Constant && a2.Constant,
+		Stateless: true,
 	}, ok
 
 }

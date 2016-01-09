@@ -3,8 +3,8 @@ package pipescript
 // The Identity ($)
 type iTransform struct{}
 
-func (t iTransform) Copy() TransformInstance {
-	return iTransform{}
+func (t iTransform) Copy() (TransformInstance, error) {
+	return iTransform{}, nil
 }
 
 func (t iTransform) Next(ti *TransformIterator) (*Datapoint, error) {
@@ -16,8 +16,8 @@ type subobjectTransform struct {
 	Obj interface{}
 }
 
-func (t *subobjectTransform) Copy() TransformInstance {
-	return &subobjectTransform{t.Obj}
+func (t *subobjectTransform) Copy() (TransformInstance, error) {
+	return &subobjectTransform{t.Obj}, nil
 }
 
 func (t *subobjectTransform) Next(ti *TransformIterator) (*Datapoint, error) {

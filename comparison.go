@@ -9,8 +9,8 @@ import (
 // eqTransform returns whether its two arguments are equal
 type eqTransform struct{}
 
-func (t eqTransform) Copy() TransformInstance {
-	return eqTransform{}
+func (t eqTransform) Copy() (TransformInstance, error) {
+	return eqTransform{}, nil
 }
 
 func (t eqTransform) Next(ti *TransformIterator) (*Datapoint, error) {
@@ -28,8 +28,8 @@ func (t eqTransform) Next(ti *TransformIterator) (*Datapoint, error) {
 // neqTransform returns whether its two arguments are not equal
 type neqTransform struct{}
 
-func (t neqTransform) Copy() TransformInstance {
-	return neqTransform{}
+func (t neqTransform) Copy() (TransformInstance, error) {
+	return neqTransform{}, nil
 }
 
 func (t neqTransform) Next(ti *TransformIterator) (*Datapoint, error) {
@@ -47,8 +47,8 @@ func (t neqTransform) Next(ti *TransformIterator) (*Datapoint, error) {
 // ltTransform returns whether a < b
 type ltTransform struct{}
 
-func (t ltTransform) Copy() TransformInstance {
-	return ltTransform{}
+func (t ltTransform) Copy() (TransformInstance, error) {
+	return ltTransform{}, nil
 }
 
 func (t ltTransform) Next(ti *TransformIterator) (*Datapoint, error) {
@@ -66,8 +66,8 @@ func (t ltTransform) Next(ti *TransformIterator) (*Datapoint, error) {
 // lteTransform returns whether a <= b
 type lteTransform struct{}
 
-func (t lteTransform) Copy() TransformInstance {
-	return lteTransform{}
+func (t lteTransform) Copy() (TransformInstance, error) {
+	return lteTransform{}, nil
 }
 
 func (t lteTransform) Next(ti *TransformIterator) (*Datapoint, error) {

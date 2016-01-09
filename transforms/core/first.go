@@ -7,8 +7,8 @@ type firstTransform struct {
 }
 
 // Copy creates a copy of the first transform
-func (ft *firstTransform) Copy() pipescript.TransformInstance {
-	return &firstTransform{ft.isfirst}
+func (ft *firstTransform) Copy() (pipescript.TransformInstance, error) {
+	return &firstTransform{ft.isfirst}, nil
 }
 
 // Next returns the next element of the transform

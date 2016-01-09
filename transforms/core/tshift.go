@@ -6,8 +6,8 @@ type tshiftTransform struct {
 	shiftby float64
 }
 
-func (t tshiftTransform) Copy() pipescript.TransformInstance {
-	return tshiftTransform{t.shiftby}
+func (t tshiftTransform) Copy() (pipescript.TransformInstance, error) {
+	return tshiftTransform{t.shiftby}, nil
 }
 
 func (t tshiftTransform) Next(ti *pipescript.TransformIterator) (*pipescript.Datapoint, error) {

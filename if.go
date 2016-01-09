@@ -4,8 +4,8 @@ import "fmt"
 
 type ifTransformStruct struct{}
 
-func (t ifTransformStruct) Copy() TransformInstance {
-	return ifTransformStruct{}
+func (t ifTransformStruct) Copy() (TransformInstance, error) {
+	return ifTransformStruct{}, nil
 }
 
 func (t ifTransformStruct) Next(ti *TransformIterator) (dp *Datapoint, err error) {

@@ -18,6 +18,7 @@ type Script struct {
 	OneToOne  bool // Whether the script is one to one (for each input, gives an output)
 	Constant  bool // Whether the script is constant (always returns the same answer)
 	Stateless bool // Whether the script is stateless (given input, always returns the same value)
+	Peek      bool // Whether the script peeks at future values.
 }
 
 // Append takes a Script and appends another script to the end of its command chain. That is,
@@ -41,6 +42,10 @@ func (s *Script) Append(s2 *Script) error {
 
 	if !s2.Stateless {
 		s.Stateless = false
+	}
+
+	if s2.Peek {
+		s.Peek = true
 	}
 
 	// Link the output of s with the input of s2
@@ -132,6 +137,7 @@ func (s *Script) replaceWithConstant(c interface{}) {
 	s.OneToOne = s2.OneToOne
 	s.Constant = s2.Constant
 	s.Stateless = s2.Stateless
+	s.Peek = s2.Peek
 
 	if oldIterator != nil {
 		s.SetInput(oldIterator)
@@ -146,7 +152,7 @@ func (s *Script) replaceWithConstant(c interface{}) {
 //
 func (s *Script) Copy() (*Script, error) {
 	i, o, err := s.output.copyUntil(s.input)
-	return &Script{i, o, s.OneToOne, s.Constant, s.Stateless}, err
+	return &Script{i, o, s.OneToOne, s.Constant, s.Stateless, s.Peek}, err
 }
 
 // Parse parses the given transform, and returns the corresponding script object

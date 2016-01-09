@@ -45,7 +45,10 @@ func (p *PipelineElement) SetInput(d DatapointPeekIterator) {
 func (p *PipelineElement) copyUntil(pe *PipelineElement) (input, output *PipelineElement, err error) {
 
 	// First copy the TransformInstance
-	tInstance := p.transform.Copy()
+	tInstance, err := p.transform.Copy()
+	if err != nil {
+		return nil, nil, err
+	}
 
 	// Next get copies of all of the args
 	args := make([]*Script, 0, len(p.iter.args))

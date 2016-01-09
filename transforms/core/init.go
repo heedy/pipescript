@@ -11,8 +11,10 @@ func init() {
 	//prev.Register()
 	next.Register()
 
-	i.Register()
-	tTransform.Register()
+	count.Register()
 
+	tTransform.Register()
 	tshift.Register()
+
+	split.Register()
 }

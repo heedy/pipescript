@@ -6,8 +6,8 @@ type ConstantTransform struct {
 }
 
 // Copy generates another
-func (c ConstantTransform) Copy() TransformInstance {
-	return ConstantTransform{c.C}
+func (c ConstantTransform) Copy() (TransformInstance, error) {
+	return ConstantTransform{c.C}, nil
 }
 
 // Next returns a Constant datapoint whose timestamp is the current timestamp, but whose data is

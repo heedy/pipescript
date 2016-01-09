@@ -4,8 +4,8 @@ import "github.com/connectordb/pipescript"
 
 type tTransformStruct struct{}
 
-func (t tTransformStruct) Copy() pipescript.TransformInstance {
-	return tTransformStruct{}
+func (t tTransformStruct) Copy() (pipescript.TransformInstance, error) {
+	return tTransformStruct{}, nil
 }
 
 func (t tTransformStruct) Next(ti *pipescript.TransformIterator) (*pipescript.Datapoint, error) {

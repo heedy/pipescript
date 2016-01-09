@@ -3,9 +3,9 @@ package pipescript
 // TransformEnvironment contains a single instance of data. This information is NOT to be modified
 // by individual transforms!
 type TransformEnvironment struct {
-	Datapoint *Datapoint
-	Args      []*Datapoint
-	Error     error
+	Datapoint *Datapoint   // The datapoint that is passed through the pipeline
+	Args      []*Datapoint // The array of datapoint arguments
+	Error     error        // Whether there was an error
 }
 
 // IsFinished is true if the iterator is done or of the error is non-nil

@@ -14,8 +14,8 @@ type nextTransform struct {
 	peekindex int
 }
 
-func (nt *nextTransform) Copy() pipescript.TransformInstance {
-	return &nextTransform{nt.peekindex}
+func (nt *nextTransform) Copy() (pipescript.TransformInstance, error) {
+	return &nextTransform{nt.peekindex}, nil
 }
 
 func (nt *nextTransform) Next(ti *pipescript.TransformIterator) (*pipescript.Datapoint, error) {
@@ -35,6 +35,7 @@ var next = pipescript.Transform{
 	Name:        "next",
 	Description: "Returns the datapoint that will be next in the sequence. If given an argument, can return the nth datapoint forward.",
 	OneToOne:    true,
+	Peek:        true,
 	Args: []pipescript.TransformArg{
 		{
 			Description: "The number of datapoints forward to look. Starts at 1.",

@@ -2,8 +2,8 @@ package pipescript
 
 type notTransform struct{}
 
-func (t notTransform) Copy() TransformInstance {
-	return notTransform{}
+func (t notTransform) Copy() (TransformInstance, error) {
+	return notTransform{}, nil
 }
 
 func (t notTransform) Next(ti *TransformIterator) (*Datapoint, error) {
@@ -32,8 +32,8 @@ func notScript(a *Script) (*Script, error) {
 // negativeTransform performs the unary minus
 type negativeTransform struct{}
 
-func (t negativeTransform) Copy() TransformInstance {
-	return negativeTransform{}
+func (t negativeTransform) Copy() (TransformInstance, error) {
+	return negativeTransform{}, nil
 }
 
 func (t negativeTransform) Next(ti *TransformIterator) (*Datapoint, error) {

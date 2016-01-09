@@ -6,7 +6,7 @@ import "fmt"
 // of this transform instance as it is right now.
 type TransformInstance interface {
 	Next(*TransformIterator) (*Datapoint, error)
-	Copy() TransformInstance
+	Copy() (TransformInstance, error)
 }
 
 // TransformInitializer is returned by a TransformGenerator to tell PipeScript how to set up the initialized
@@ -43,6 +43,7 @@ type Transform struct {
 	Args         []TransformArg `json:"args"`              // The arguments that the transform accepts
 	OneToOne     bool           `json:"one_to_one"`        //Whether or not the transform is one to one
 	Stateless    bool           `json:"stateless"`         // Whether the transform only uses current datapoint's info (always returns same output given input)
+	Peek         bool           `json:"peek"`              // Whether the transform peeks at future values
 
 	Generator TransformGenerator `json:"-"` // The generator function of the transform
 }
@@ -120,5 +121,6 @@ func (t *Transform) Script(args []*Script) (*Script, error) {
 		OneToOne:  t.OneToOne,
 		Constant:  ti.Constant,
 		Stateless: t.Stateless,
+		Peek:      t.Peek,
 	}, err
 }
