@@ -12,17 +12,12 @@ func (t *countTransform) Copy() (pipescript.TransformInstance, error) {
 
 func (t *countTransform) Next(ti *pipescript.TransformIterator) (*pipescript.Datapoint, error) {
 	te := ti.Next()
-	if te.Datapoint == nil {
-		// If there is a nil, it means that the sequence is over - any future datapoints will belong to another sequence
-		t.i = 1
-	}
 	if te.IsFinished() {
+		t.i = 0
 		return te.Get()
 	}
-
-	dp, err := te.Set(t.i)
 	t.i++
-	return dp, err
+	return te.Set(t.i)
 }
 
 var count = pipescript.Transform{
@@ -31,6 +26,6 @@ var count = pipescript.Transform{
 	OutputSchema: `{"type": "integer","minimum": 0}`,
 	OneToOne:     true,
 	Generator: func(name string, args []*pipescript.Script) (*pipescript.TransformInitializer, error) {
-		return &pipescript.TransformInitializer{Transform: &countTransform{1}}, nil
+		return &pipescript.TransformInitializer{Transform: &countTransform{0}}, nil
 	},
 }
