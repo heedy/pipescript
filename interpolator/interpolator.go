@@ -13,7 +13,7 @@ import (
 // timestamp that is given to the interpolator, the interpolator figures out what to return based upon the underlying data stream.
 // It is assumed that the interpolator's decision is fairly greedy, and can work on arbitrarily large data without running out of memory.
 type InterpolatorInstance interface {
-	Next(timestamp float64) (*pipescript.Datapoint, error)
+	Interpolate(timestamp float64) (*pipescript.Datapoint, error)
 }
 
 // InterpolatorRegsitry is a map of the registered interpolators. Only use this structure when displaying documentation, do not manually
@@ -25,8 +25,10 @@ type InterpolatorGenerator func(name string, dpi pipescript.DatapointIterator) (
 
 // Interpolator is the struct which holds documentation and generator for an Interpolation method.
 type Interpolator struct {
-	Name        string
-	Description string
+	Name         string `json:"name"`        // The name of the interpolator
+	Description  string `json:"description"` // The docstring of the interpolator
+	InputSchema  string `json:"ischema"`     // The schema of datapoints that are expected (optional)
+	OutputSchema string `json:"oschema"`     // The schema of datapoints that are output (optional)
 
 	Generator InterpolatorGenerator `json:"-"` // The generator function of the interpolator
 }

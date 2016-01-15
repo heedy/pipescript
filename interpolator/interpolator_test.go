@@ -8,6 +8,19 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+// The standard datapoint array to use when testing
+var testDpa = []pipescript.Datapoint{
+	{1., "test0"},
+	{2., "test1"},
+	{3., "test2"},
+	{4., "test3"},
+	{5., "test4"},
+	{6., "test5"},
+	{6., "test6"},
+	{7., "test7"},
+	{8., "test8"},
+}
+
 func TestRegister(t *testing.T) {
 
 	// Make sure empty interpolator is rejected

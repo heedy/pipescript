@@ -75,8 +75,8 @@ func NewScriptInterpolator(s *pipescript.Script, dpi pipescript.DatapointIterato
 	return &ScriptInterpolator{s, tsi, nilanswer}, err
 }
 
-// Next allows you to get the interpolated datapoint
-func (s *ScriptInterpolator) Next(timestamp float64) (*pipescript.Datapoint, error) {
+// Interpolate allows you to get the interpolated datapoint
+func (s *ScriptInterpolator) Interpolate(timestamp float64) (*pipescript.Datapoint, error) {
 	// Clear out the script (it might have some remaining values in pipeline from previous run)
 	dp, err := s.s.Next()
 	if err != nil {

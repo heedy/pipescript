@@ -16,16 +16,15 @@ func TestScriptInterpolator(t *testing.T) {
 			{4, "4"},
 			{5, "5"},
 		},
-		InterpolationTime: []float64{0.1, 1.3, 2, 3, 4, 4, 6, 8},
-		Output: []*pipescript.Datapoint{
-			nil,
-			{1, "1"},
-			{2, "2"},
-			nil,
-			{4, "4"},
-			nil,
-			{5, "5"},
-			nil,
+		Output: []TestOutput{
+			{0.1, nil},
+			{1.3, &pipescript.Datapoint{1, "1"}},
+			{2, &pipescript.Datapoint{2, "2"}},
+			{3, nil},
+			{4, &pipescript.Datapoint{4, "4"}},
+			{4, nil},
+			{6, &pipescript.Datapoint{5, "5"}},
+			{8, nil},
 		},
 	}.Run(t)
 }

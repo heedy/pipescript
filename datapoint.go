@@ -22,8 +22,8 @@ import (
 // Transforms assume that they are able to Copy() a datapoint without affecting another
 // Datapoint's value.
 type Datapoint struct {
-	Timestamp float64     `json:"t"` // The time stamp in UNIX seconds for the current point
-	Data      interface{} `json:"d"` // The data associated with the datapoint.
+	Timestamp float64     `json:"t" msgpack:"t,omitempty" duck:"t"` // The time stamp in UNIX seconds for the current point
+	Data      interface{} `json:"d" msgpack:"d,omitempty" duck:"d"` // The data associated with the datapoint.
 }
 
 // Copy creates a deep copy of the datapoint and its data. Modifying the data of the copied

@@ -14,4 +14,9 @@ func init() {
 	if err != nil {
 		panic("Could not generate script for 'if last' for ScriptInterpolator.")
 	}
+
+	// Register built-in interpolators
+	after.Register()
+	before.Register()
+	closest.Register()
 }
