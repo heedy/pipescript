@@ -6,15 +6,15 @@ import (
 	"github.com/connectordb/pipescript"
 )
 
-func TestSplit(t *testing.T) {
+func TestReduce(t *testing.T) {
 	pipescript.TestCase{
-		Pipescript: "split $ {next}",
+		Pipescript: "reduce $ {next}",
 		ParseError: true,
 	}.Run(t)
 
 	pipescript.TestCase{
 		// This tests order of prescedence: ":" pipes are high prescedence, and will be executed first
-		Pipescript: "split $ > 5 {count}",
+		Pipescript: "reduce $ > 5 {count}",
 		Input: []pipescript.Datapoint{
 			{1, 4},
 			{2, 6},

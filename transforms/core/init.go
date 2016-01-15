@@ -20,5 +20,5 @@ func init() {
 	tTransform.Register()
 	tshift.Register()
 
-	split.Register()
+	reduce.Register()
 }

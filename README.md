@@ -23,6 +23,7 @@ PipeScript is a very basic transform language and interpolation/dataset generati
 
 We think that its simplicity and utility for ML applications makes it a great fit for data analysis.
 
+TL;DR: PipeScript is a small-scale spark.
 
 ## Tutorial
 

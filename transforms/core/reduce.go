@@ -7,17 +7,17 @@ import (
 	"github.com/connectordb/pipescript"
 )
 
-// The maximum number of elements in a split
+// The maximum number of elements in a reduce
 var SplitMax = 1000
 
-type splitTransform struct {
+type reduceTransform struct {
 	script    *pipescript.Script // The uninitialized script to be used for splitting
 	iter      *pipescript.SingleDatapointIterator
 	scriptmap map[string]*pipescript.Script // Map of initialized scripts
 	datamap   map[string]interface{}        // Map of data associated with scripts
 }
 
-func (t *splitTransform) Copy() (pipescript.TransformInstance, error) {
+func (t *reduceTransform) Copy() (pipescript.TransformInstance, error) {
 	var err error
 	scriptmap := make(map[string]*pipescript.Script)
 	for i, val := range t.scriptmap {
@@ -30,10 +30,10 @@ func (t *splitTransform) Copy() (pipescript.TransformInstance, error) {
 	for i, val := range t.datamap {
 		datamap[i] = val // No need to worry abotu copying datapoints
 	}
-	return &splitTransform{t.script, &pipescript.SingleDatapointIterator{}, scriptmap, datamap}, nil
+	return &reduceTransform{t.script, &pipescript.SingleDatapointIterator{}, scriptmap, datamap}, nil
 }
 
-func (t *splitTransform) Next(ti *pipescript.TransformIterator) (*pipescript.Datapoint, error) {
+func (t *reduceTransform) Next(ti *pipescript.TransformIterator) (*pipescript.Datapoint, error) {
 	te := ti.Next()
 	if te.IsFinished() {
 
@@ -54,7 +54,7 @@ func (t *splitTransform) Next(ti *pipescript.TransformIterator) (*pipescript.Dat
 	s, ok := t.scriptmap[v]
 	if !ok {
 		if len(t.scriptmap) >= SplitMax {
-			return nil, fmt.Errorf("Reached maximum split amount %d.", SplitMax)
+			return nil, fmt.Errorf("Reached maximum reduce amount %d.", SplitMax)
 		}
 
 		// Initialize the new script, and add it to our map
@@ -81,10 +81,10 @@ func (t *splitTransform) Next(ti *pipescript.TransformIterator) (*pipescript.Dat
 	return te.Set(t.datamap)
 }
 
-var split = pipescript.Transform{
-	Name: "split",
+var reduce = pipescript.Transform{
+	Name: "reduce",
 	Description: `Splits the script by the first argument's value, creating new instances of the second argument's script.
-Think of it as a switch statement where each choice has copies of the same code.
+Think of it as a switch statement where each choice has copies of the same code. It can also be thought of as a map reduce which returns intermediate results on the stream.
 It is very useful for splitting by time. For example:
 "split weekday {count} | if last" will return {"monday": ...,"tuesday":...} with the number of datapoints that happened in each day.`,
 	OneToOne: true,
@@ -98,13 +98,13 @@ It is very useful for splitting by time. For example:
 	},
 	Generator: func(name string, args []*pipescript.Script) (*pipescript.TransformInitializer, error) {
 		if args[1].Peek {
-			return nil, errors.New("Split cannot be used with transforms that peek.")
+			return nil, errors.New("Reduce cannot be used with transforms that peek.")
 		}
 		scriptmap := make(map[string]*pipescript.Script)
 		datamap := make(map[string]interface{})
 		return &pipescript.TransformInitializer{
 			Args:      []*pipescript.Script{args[0]},
-			Transform: &splitTransform{args[1], &pipescript.SingleDatapointIterator{}, scriptmap, datamap},
+			Transform: &reduceTransform{args[1], &pipescript.SingleDatapointIterator{}, scriptmap, datamap},
 		}, nil
 	},
 }
