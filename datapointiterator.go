@@ -69,7 +69,6 @@ func (c *datapointPeekIterator) Next() (*Datapoint, error) {
 // Peek allows to look forward into the data sequence without losing its place for Next. Peek(0) is
 // The value that would be returned from Next. Must be >=0.
 func (c *datapointPeekIterator) Peek(forward int) (dp *Datapoint, err error) {
-
 	// Check if the peeklist has the element
 	if forward < c.PeekList.Len() {
 		// The data is on the peeklist! Now check which way will be faster for access:

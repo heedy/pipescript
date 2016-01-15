@@ -33,9 +33,9 @@ func (p *PipelineElement) SetInput(d DatapointPeekIterator) {
 	p.iter.iterator = d
 
 	// Next, we create the virtual PeekIterator, and set it as input for all of the arguments
-	p.iter.argpeeker = NewVirtualPeekIterator(d)
 	for i := range p.iter.args {
-		p.iter.args[i].SetInput(p.iter.argpeeker)
+		p.iter.argpeeker[i] = NewVirtualPeekIterator(d)
+		p.iter.args[i].SetInput(p.iter.argpeeker[i])
 	}
 }
 
@@ -114,7 +114,7 @@ func NewPipelineElement(args []*Script, t TransformInstance) (*PipelineElement, 
 	return &PipelineElement{
 		iter: TransformIterator{
 			args:      args,
-			argpeeker: nil,
+			argpeeker: make([]*VirtualPeekIterator, len(args)),
 			iterator:  nil,
 			peeklist:  list.New(),
 			Err:       nil,

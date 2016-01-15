@@ -5,9 +5,9 @@ import "container/list"
 // PipelineElement is an element of the pipeline. It represents a statement between two pipes, and satisfies the DatapointIterator interface
 type TransformIterator struct {
 	args      []*Script
-	argpeeker *VirtualPeekIterator  // The VirtualPeekIterator used for args
-	iterator  DatapointPeekIterator // The PeekIterator used to find the right datapoint
-	peeklist  *list.List            // A cache that permits peeking forward in the sequence
+	argpeeker []*VirtualPeekIterator // The VirtualPeekIterator used for args
+	iterator  DatapointPeekIterator  // The PeekIterator used to find the right datapoint
+	peeklist  *list.List             // A cache that permits peeking forward in the sequence
 	Err       error
 }
 
@@ -16,12 +16,10 @@ func (t *TransformIterator) getNextEnvironment() *TransformEnvironment {
 	var err error
 
 	// Set up the arguments. The ArgPeeker is assumed to be a VirtualPeekIterator based upon iterator
-	// and is set up as the input to all of the args. The args are all guaranteed to be one to one, meaning
-	// that they all call Next exactly once. Therefore, for each argument, we reset the VirtualPeekIterator
-	// and get the Next datapoint from the arg script.
+	// and is set up as the input to all of the args.
 	args := make([]*Datapoint, len(t.args))
 	for i := range t.args {
-		t.argpeeker.Reset()
+		t.argpeeker[i].SetBack(1)
 		args[i], err = t.args[i].Next()
 		if err != nil {
 			t.Err = err

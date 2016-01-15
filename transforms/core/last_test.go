@@ -8,6 +8,16 @@ import (
 
 func TestLast(t *testing.T) {
 	pipescript.TestCase{
+		Pipescript: "if last",
+		Input: []pipescript.Datapoint{
+			{1, 1},
+			{2, 2},
+		},
+		Output: []pipescript.Datapoint{
+			{2, 2},
+		},
+	}.Run(t)
+	pipescript.TestCase{
 		Pipescript: "last",
 		Input: []pipescript.Datapoint{
 			{1, 1},
@@ -30,4 +40,5 @@ func TestLast(t *testing.T) {
 			{6, true},
 		},
 	}.Run(t)
+
 }

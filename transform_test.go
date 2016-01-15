@@ -26,7 +26,7 @@ func TestRegister(t *testing.T) {
 	assert.True(t, ok)
 	assert.Equal(t, "I am testing!", v.Description)
 
-	//Register a transform - bt it already exists!
+	//Register a transform - but it already exists!
 	assert.Error(t, Transform{
 		Name:        "test",
 		Description: "fail",
