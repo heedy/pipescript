@@ -83,7 +83,7 @@ const parserEofCode = 1
 const parserErrCode = 2
 const parserMaxDepth = 200
 
-//line parser.y:406
+//line parser.y:452
 
 //line yacctab:1
 var parserExca = [...]int{
@@ -92,90 +92,91 @@ var parserExca = [...]int{
 	-2, 0,
 }
 
-const parserNprod = 42
+const parserNprod = 47
 const parserPrivate = 57344
 
 var parserTokenNames []string
 var parserStates []string
 
-const parserLast = 170
+const parserLast = 180
 
 var parserAct = [...]int{
 
-	3, 18, 13, 36, 33, 2, 30, 31, 60, 66,
-	57, 68, 20, 67, 58, 37, 34, 35, 20, 38,
-	39, 43, 44, 45, 46, 47, 48, 49, 50, 51,
-	52, 56, 32, 20, 54, 53, 55, 20, 54, 59,
-	70, 61, 63, 65, 14, 73, 34, 35, 4, 70,
-	62, 64, 75, 70, 69, 22, 23, 8, 21, 28,
-	29, 26, 27, 24, 25, 72, 9, 77, 78, 79,
-	74, 80, 7, 81, 24, 25, 62, 64, 15, 16,
-	17, 19, 1, 0, 5, 0, 0, 6, 28, 29,
-	26, 27, 24, 25, 10, 0, 12, 0, 11, 15,
-	16, 17, 19, 0, 0, 5, 0, 0, 6, 0,
-	26, 27, 24, 25, 0, 40, 0, 42, 0, 41,
-	22, 23, 0, 21, 28, 29, 26, 27, 24, 25,
-	72, 22, 23, 76, 21, 28, 29, 26, 27, 24,
-	25, 72, 71, 22, 23, 0, 21, 28, 29, 26,
-	27, 24, 25, 22, 0, 0, 21, 28, 29, 26,
-	27, 24, 25, 21, 28, 29, 26, 27, 24, 25,
+	3, 19, 35, 34, 10, 65, 31, 32, 66, 21,
+	21, 63, 11, 36, 37, 2, 64, 21, 21, 12,
+	40, 41, 45, 46, 47, 48, 49, 50, 51, 52,
+	53, 54, 38, 39, 33, 57, 57, 57, 56, 60,
+	62, 76, 75, 67, 69, 71, 55, 59, 61, 76,
+	25, 26, 68, 70, 79, 4, 8, 76, 38, 39,
+	81, 23, 24, 9, 22, 29, 30, 27, 28, 25,
+	26, 78, 7, 83, 84, 85, 80, 86, 1, 87,
+	0, 58, 68, 70, 13, 14, 15, 20, 0, 0,
+	5, 0, 0, 6, 16, 72, 18, 74, 17, 73,
+	16, 0, 18, 0, 17, 13, 14, 15, 20, 0,
+	0, 5, 0, 0, 6, 29, 30, 27, 28, 25,
+	26, 42, 0, 44, 0, 43, 23, 24, 0, 22,
+	29, 30, 27, 28, 25, 26, 78, 23, 24, 82,
+	22, 29, 30, 27, 28, 25, 26, 78, 77, 23,
+	24, 0, 22, 29, 30, 27, 28, 25, 26, 23,
+	0, 0, 22, 29, 30, 27, 28, 25, 26, 22,
+	29, 30, 27, 28, 25, 26, 27, 28, 25, 26,
 }
 var parserPact = [...]int{
 
-	74, -1000, 8, 135, -1000, 74, 74, 6, -1000, -1000,
-	74, 74, 74, -23, 74, -1000, -1000, -1000, 74, 95,
-	74, 74, 74, 74, 74, 74, 74, 74, 74, 74,
-	76, -1000, 29, 12, -13, -7, 29, 135, 135, 135,
-	74, 74, 74, 135, 76, 152, 145, -1000, -1000, 58,
-	58, 96, 96, -1000, -1000, -11, -1000, -1000, -1000, -1000,
-	35, 123, 22, 47, 31, 112, 74, 74, 74, -1000,
-	74, -1000, 74, -1000, -1000, -1000, -1000, 123, 47, 112,
-	135, 135,
+	80, -1000, -15, 141, -1000, 80, 80, 8, -1000, -1000,
+	-23, -24, 80, -1000, -1000, -1000, 80, 80, 80, 80,
+	101, 80, 80, 80, 80, 80, 80, 80, 80, 80,
+	80, 103, -1000, 74, 74, 74, 141, -8, -7, -16,
+	141, 141, 80, 80, 80, 141, 103, 158, 151, -1000,
+	-1000, 34, 34, 162, 162, -1000, -1000, -1000, 75, -1000,
+	-1000, -1000, -1000, -1000, -1000, -1000, 23, 129, 31, 53,
+	39, 118, 80, 80, 80, -1000, 80, -1000, 80, -1000,
+	-1000, -1000, -1000, 129, 53, 118, 141, 141,
 }
 var parserPgo = [...]int{
 
-	0, 82, 4, 72, 66, 0, 2, 57, 48, 44,
-	1, 8,
+	0, 78, 14, 72, 63, 0, 12, 56, 55, 4,
+	19, 1, 8,
 }
 var parserR1 = [...]int{
 
-	0, 1, 2, 2, 3, 3, 7, 7, 6, 9,
-	9, 9, 10, 10, 10, 10, 10, 10, 10, 11,
-	11, 5, 5, 5, 5, 5, 5, 5, 5, 5,
-	5, 5, 5, 8, 8, 8, 8, 8, 8, 4,
-	4, 4,
+	0, 1, 2, 2, 3, 3, 3, 3, 3, 3,
+	7, 7, 6, 10, 10, 10, 11, 11, 11, 11,
+	11, 11, 11, 12, 12, 5, 5, 5, 5, 5,
+	5, 5, 5, 5, 5, 5, 5, 8, 8, 8,
+	8, 9, 9, 9, 4, 4, 4,
 }
 var parserR2 = [...]int{
 
-	0, 1, 1, 3, 3, 3, 1, 1, 1, 2,
-	2, 2, 4, 4, 4, 4, 4, 4, 1, 3,
-	3, 1, 2, 3, 3, 3, 3, 3, 3, 3,
-	3, 3, 2, 1, 1, 1, 3, 3, 3, 1,
-	1, 1,
+	0, 1, 1, 3, 3, 3, 3, 3, 3, 3,
+	1, 1, 1, 2, 2, 2, 4, 4, 4, 4,
+	4, 4, 1, 3, 3, 1, 2, 3, 3, 3,
+	3, 3, 3, 3, 3, 3, 2, 1, 1, 1,
+	1, 3, 3, 3, 1, 1, 1,
 }
 var parserChk = [...]int{
 
 	-1000, -1, -2, -5, -8, 10, 13, -3, -7, -4,
-	20, 24, 22, -6, -9, 4, 5, 6, -10, 7,
-	25, 11, 8, 9, 16, 17, 14, 15, 12, 13,
-	-5, -5, 26, -2, -2, -2, 26, -5, -5, -5,
-	20, 24, 22, -5, -5, -5, -5, -5, -5, -5,
-	-5, -5, -5, -6, -10, 7, 19, 23, 21, -6,
-	-11, -5, -11, -5, -11, -5, 20, 24, 22, 19,
-	18, 19, 18, 23, 23, 21, 21, -5, -5, -5,
-	-5, -5,
+	-9, -6, -10, 4, 5, 6, 20, 24, 22, -11,
+	7, 25, 11, 8, 9, 16, 17, 14, 15, 12,
+	13, -5, -5, 26, 26, 26, -5, -2, -2, -2,
+	-5, -5, 20, 24, 22, -5, -5, -5, -5, -5,
+	-5, -5, -5, -5, -5, -6, -9, -11, 7, -6,
+	-9, -6, -9, 19, 23, 21, -12, -5, -12, -5,
+	-12, -5, 20, 24, 22, 19, 18, 19, 18, 23,
+	23, 21, 21, -5, -5, -5, -5, -5,
 }
 var parserDef = [...]int{
 
-	0, -2, 1, 2, 21, 0, 0, 33, 34, 35,
-	0, 0, 0, 6, 7, 39, 40, 41, 8, 18,
-	0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	22, 32, 0, 0, 0, 0, 0, 10, 9, 11,
-	0, 0, 0, 3, 23, 24, 25, 26, 27, 28,
-	29, 30, 31, 5, 8, 18, 36, 37, 38, 4,
-	0, 2, 0, 2, 0, 2, 0, 0, 0, 12,
-	0, 15, 0, 13, 16, 14, 17, 0, 0, 0,
-	19, 20,
+	0, -2, 1, 2, 25, 0, 0, 37, 38, 39,
+	40, 10, 11, 44, 45, 46, 0, 0, 0, 12,
+	22, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	0, 26, 36, 0, 0, 0, 14, 0, 0, 0,
+	13, 15, 0, 0, 0, 3, 27, 28, 29, 30,
+	31, 32, 33, 34, 35, 8, 9, 12, 22, 5,
+	6, 4, 7, 41, 42, 43, 0, 2, 0, 2,
+	0, 2, 0, 0, 0, 16, 0, 19, 0, 17,
+	20, 18, 21, 0, 0, 0, 23, 24,
 }
 var parserTok1 = [...]int{
 
@@ -571,26 +572,53 @@ parserdefault:
 			}
 			parserVAL.script = parserDollar[1].script
 		}
-	case 7:
-		parserDollar = parserS[parserpt-1 : parserpt+1]
-		//line parser.y:117
+	case 6:
+		parserDollar = parserS[parserpt-3 : parserpt+1]
+		//line parser.y:108
 		{
-			v, ok := TransformRegistry[parserDollar[1].sfunc.transform]
-			if ok {
-				s, err := v.Script(parserDollar[1].sfunc.args)
-				if err != nil {
-					parserlex.Error(err.Error())
-					goto ret1
-				}
-				parserVAL.script = s
-			} else {
-				parserlex.Error(fmt.Sprintf("Transform %s not found", parserDollar[1].sfunc.transform))
+			err := parserDollar[1].script.Append(parserDollar[3].script)
+			if err != nil {
+				parserlex.Error(err.Error())
 				goto ret1
 			}
+			parserVAL.script = parserDollar[1].script
+		}
+	case 7:
+		parserDollar = parserS[parserpt-3 : parserpt+1]
+		//line parser.y:118
+		{
+			err := parserDollar[1].script.Append(parserDollar[3].script)
+			if err != nil {
+				parserlex.Error(err.Error())
+				goto ret1
+			}
+			parserVAL.script = parserDollar[1].script
 		}
 	case 8:
+		parserDollar = parserS[parserpt-3 : parserpt+1]
+		//line parser.y:128
+		{
+			err := parserDollar[1].script.Append(parserDollar[3].script)
+			if err != nil {
+				parserlex.Error(err.Error())
+				goto ret1
+			}
+			parserVAL.script = parserDollar[1].script
+		}
+	case 9:
+		parserDollar = parserS[parserpt-3 : parserpt+1]
+		//line parser.y:138
+		{
+			err := parserDollar[1].script.Append(parserDollar[3].script)
+			if err != nil {
+				parserlex.Error(err.Error())
+				goto ret1
+			}
+			parserVAL.script = parserDollar[1].script
+		}
+	case 11:
 		parserDollar = parserS[parserpt-1 : parserpt+1]
-		//line parser.y:135
+		//line parser.y:158
 		{
 			v, ok := TransformRegistry[parserDollar[1].sfunc.transform]
 			if ok {
@@ -605,9 +633,26 @@ parserdefault:
 				goto ret1
 			}
 		}
-	case 9:
+	case 12:
+		parserDollar = parserS[parserpt-1 : parserpt+1]
+		//line parser.y:176
+		{
+			v, ok := TransformRegistry[parserDollar[1].sfunc.transform]
+			if ok {
+				s, err := v.Script(parserDollar[1].sfunc.args)
+				if err != nil {
+					parserlex.Error(err.Error())
+					goto ret1
+				}
+				parserVAL.script = s
+			} else {
+				parserlex.Error(fmt.Sprintf("Transform %s not found", parserDollar[1].sfunc.transform))
+				goto ret1
+			}
+		}
+	case 13:
 		parserDollar = parserS[parserpt-2 : parserpt+1]
-		//line parser.y:153
+		//line parser.y:194
 		{
 			/* A simplefunction can have at most one argument if it is to be called in bash style */
 			if len(parserDollar[1].sfunc.args) > 1 {
@@ -617,84 +662,84 @@ parserdefault:
 			parserVAL.sfunc.transform = parserDollar[1].sfunc.transform
 			parserVAL.sfunc.args = append(parserDollar[1].sfunc.args, parserDollar[2].script)
 		}
-	case 10:
+	case 14:
 		parserDollar = parserS[parserpt-2 : parserpt+1]
-		//line parser.y:164
+		//line parser.y:205
 		{
 			parserVAL.sfunc.transform = parserDollar[1].sfunc.transform
 			parserVAL.sfunc.args = append(parserDollar[1].sfunc.args, parserDollar[2].script)
 		}
-	case 11:
+	case 15:
 		parserDollar = parserS[parserpt-2 : parserpt+1]
-		//line parser.y:170
+		//line parser.y:211
 		{
 			parserVAL.sfunc.transform = parserDollar[1].strVal
 			parserVAL.sfunc.args = []*Script{parserDollar[2].script}
 		}
-	case 12:
-		parserDollar = parserS[parserpt-4 : parserpt+1]
-		//line parser.y:179
-		{
-			parserVAL.sfunc.transform = parserDollar[1].strVal
-			parserVAL.sfunc.args = parserDollar[3].scriptArray
-		}
-	case 13:
-		parserDollar = parserS[parserpt-4 : parserpt+1]
-		//line parser.y:185
-		{
-			parserVAL.sfunc.transform = parserDollar[1].strVal
-			parserVAL.sfunc.args = parserDollar[3].scriptArray
-		}
-	case 14:
-		parserDollar = parserS[parserpt-4 : parserpt+1]
-		//line parser.y:191
-		{
-			parserVAL.sfunc.transform = parserDollar[1].strVal
-			parserVAL.sfunc.args = parserDollar[3].scriptArray
-		}
-	case 15:
-		parserDollar = parserS[parserpt-4 : parserpt+1]
-		//line parser.y:198
-		{
-			parserVAL.sfunc.transform = parserDollar[1].strVal
-			parserVAL.sfunc.args = []*Script{parserDollar[3].script}
-		}
 	case 16:
 		parserDollar = parserS[parserpt-4 : parserpt+1]
-		//line parser.y:204
+		//line parser.y:220
 		{
 			parserVAL.sfunc.transform = parserDollar[1].strVal
-			parserVAL.sfunc.args = []*Script{parserDollar[3].script}
+			parserVAL.sfunc.args = parserDollar[3].scriptArray
 		}
 	case 17:
 		parserDollar = parserS[parserpt-4 : parserpt+1]
-		//line parser.y:210
+		//line parser.y:226
+		{
+			parserVAL.sfunc.transform = parserDollar[1].strVal
+			parserVAL.sfunc.args = parserDollar[3].scriptArray
+		}
+	case 18:
+		parserDollar = parserS[parserpt-4 : parserpt+1]
+		//line parser.y:232
+		{
+			parserVAL.sfunc.transform = parserDollar[1].strVal
+			parserVAL.sfunc.args = parserDollar[3].scriptArray
+		}
+	case 19:
+		parserDollar = parserS[parserpt-4 : parserpt+1]
+		//line parser.y:239
 		{
 			parserVAL.sfunc.transform = parserDollar[1].strVal
 			parserVAL.sfunc.args = []*Script{parserDollar[3].script}
 		}
-	case 18:
+	case 20:
+		parserDollar = parserS[parserpt-4 : parserpt+1]
+		//line parser.y:245
+		{
+			parserVAL.sfunc.transform = parserDollar[1].strVal
+			parserVAL.sfunc.args = []*Script{parserDollar[3].script}
+		}
+	case 21:
+		parserDollar = parserS[parserpt-4 : parserpt+1]
+		//line parser.y:251
+		{
+			parserVAL.sfunc.transform = parserDollar[1].strVal
+			parserVAL.sfunc.args = []*Script{parserDollar[3].script}
+		}
+	case 22:
 		parserDollar = parserS[parserpt-1 : parserpt+1]
-		//line parser.y:217
+		//line parser.y:258
 		{
 			parserVAL.sfunc.transform = parserDollar[1].strVal
 			parserVAL.sfunc.args = []*Script{}
 		}
-	case 19:
+	case 23:
 		parserDollar = parserS[parserpt-3 : parserpt+1]
-		//line parser.y:225
+		//line parser.y:266
 		{
 			parserVAL.scriptArray = append(parserDollar[1].scriptArray, parserDollar[3].script)
 		}
-	case 20:
+	case 24:
 		parserDollar = parserS[parserpt-3 : parserpt+1]
-		//line parser.y:230
+		//line parser.y:271
 		{
 			parserVAL.scriptArray = []*Script{parserDollar[1].script, parserDollar[3].script}
 		}
-	case 22:
+	case 26:
 		parserDollar = parserS[parserpt-2 : parserpt+1]
-		//line parser.y:245
+		//line parser.y:286
 		{
 			s, err := notScript(parserDollar[2].script)
 			if err != nil {
@@ -703,9 +748,9 @@ parserdefault:
 			}
 			parserVAL.script = s
 		}
-	case 23:
+	case 27:
 		parserDollar = parserS[parserpt-3 : parserpt+1]
-		//line parser.y:256
+		//line parser.y:297
 		{
 			s, err := comparisonScript(parserDollar[2].strVal, parserDollar[1].script, parserDollar[3].script)
 			if err != nil {
@@ -714,9 +759,9 @@ parserdefault:
 			}
 			parserVAL.script = s
 		}
-	case 24:
+	case 28:
 		parserDollar = parserS[parserpt-3 : parserpt+1]
-		//line parser.y:266
+		//line parser.y:307
 		{
 			s, err := andScript(parserDollar[1].script, parserDollar[3].script)
 			if err != nil {
@@ -725,9 +770,9 @@ parserdefault:
 			}
 			parserVAL.script = s
 		}
-	case 25:
+	case 29:
 		parserDollar = parserS[parserpt-3 : parserpt+1]
-		//line parser.y:276
+		//line parser.y:317
 		{
 			s, err := orScript(parserDollar[1].script, parserDollar[3].script)
 			if err != nil {
@@ -736,9 +781,9 @@ parserdefault:
 			}
 			parserVAL.script = s
 		}
-	case 26:
+	case 30:
 		parserDollar = parserS[parserpt-3 : parserpt+1]
-		//line parser.y:286
+		//line parser.y:327
 		{
 			s, err := modScript(parserDollar[1].script, parserDollar[3].script)
 			if err != nil {
@@ -747,9 +792,9 @@ parserdefault:
 			}
 			parserVAL.script = s
 		}
-	case 27:
+	case 31:
 		parserDollar = parserS[parserpt-3 : parserpt+1]
-		//line parser.y:296
+		//line parser.y:337
 		{
 			s, err := powScript(parserDollar[1].script, parserDollar[3].script)
 			if err != nil {
@@ -758,9 +803,9 @@ parserdefault:
 			}
 			parserVAL.script = s
 		}
-	case 28:
+	case 32:
 		parserDollar = parserS[parserpt-3 : parserpt+1]
-		//line parser.y:306
+		//line parser.y:347
 		{
 			s, err := mulScript(parserDollar[1].script, parserDollar[3].script)
 			if err != nil {
@@ -769,9 +814,9 @@ parserdefault:
 			}
 			parserVAL.script = s
 		}
-	case 29:
+	case 33:
 		parserDollar = parserS[parserpt-3 : parserpt+1]
-		//line parser.y:316
+		//line parser.y:357
 		{
 			s, err := divScript(parserDollar[1].script, parserDollar[3].script)
 			if err != nil {
@@ -780,9 +825,9 @@ parserdefault:
 			}
 			parserVAL.script = s
 		}
-	case 30:
+	case 34:
 		parserDollar = parserS[parserpt-3 : parserpt+1]
-		//line parser.y:326
+		//line parser.y:367
 		{
 			s, err := addScript(parserDollar[1].script, parserDollar[3].script)
 			if err != nil {
@@ -791,9 +836,9 @@ parserdefault:
 			}
 			parserVAL.script = s
 		}
-	case 31:
+	case 35:
 		parserDollar = parserS[parserpt-3 : parserpt+1]
-		//line parser.y:336
+		//line parser.y:377
 		{
 			s, err := subtractScript(parserDollar[1].script, parserDollar[3].script)
 			if err != nil {
@@ -802,9 +847,9 @@ parserdefault:
 			}
 			parserVAL.script = s
 		}
-	case 32:
+	case 36:
 		parserDollar = parserS[parserpt-2 : parserpt+1]
-		//line parser.y:346
+		//line parser.y:387
 		{
 			s, err := negativeScript(parserDollar[2].script)
 			if err != nil {
@@ -813,27 +858,27 @@ parserdefault:
 			}
 			parserVAL.script = s
 		}
-	case 36:
+	case 41:
 		parserDollar = parserS[parserpt-3 : parserpt+1]
-		//line parser.y:368
+		//line parser.y:414
 		{
 			parserVAL.script = parserDollar[2].script
 		}
-	case 37:
+	case 42:
 		parserDollar = parserS[parserpt-3 : parserpt+1]
-		//line parser.y:370
+		//line parser.y:416
 		{
 			parserVAL.script = parserDollar[2].script
 		}
-	case 38:
+	case 43:
 		parserDollar = parserS[parserpt-3 : parserpt+1]
-		//line parser.y:372
+		//line parser.y:418
 		{
 			parserVAL.script = parserDollar[2].script
 		}
-	case 39:
+	case 44:
 		parserDollar = parserS[parserpt-1 : parserpt+1]
-		//line parser.y:382
+		//line parser.y:428
 		{
 			num, err := strconv.ParseFloat(parserDollar[1].strVal, 64)
 			if err != nil {
@@ -842,15 +887,15 @@ parserdefault:
 			}
 			parserVAL.script = ConstantScript(num)
 		}
-	case 40:
+	case 45:
 		parserDollar = parserS[parserpt-1 : parserpt+1]
-		//line parser.y:392
+		//line parser.y:438
 		{
 			parserVAL.script = ConstantScript(parserDollar[1].strVal)
 		}
-	case 41:
+	case 46:
 		parserDollar = parserS[parserpt-1 : parserpt+1]
-		//line parser.y:397
+		//line parser.y:443
 		{
 			if parserDollar[1].strVal == "true" {
 				parserVAL.script = ConstantScript(true)

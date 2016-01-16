@@ -26,7 +26,7 @@ type scriptFunc struct {
 	strVal string	// This is how variables are passed in: by their string value
 }
 
-%type <script> script pipescript colonscript constant algebraic simpletransform transform statement
+%type <script> script pipescript colonscript constant algebraic simpletransform transform statement parensvalue
 %type <sfunc> function simplefunction
 %type <scriptArray> script_array
 %token <strVal> pNUMBER  pSTRING  pBOOL pIDENTIFIER
@@ -94,6 +94,36 @@ colonscript:
 			$$ = $1
 		}
 	|
+	parensvalue pCOLON simpletransform
+		{
+			err := $1.Append($3)
+			if err!=nil {
+				parserlex.Error(err.Error())
+				goto ret1
+			}
+			$$ = $1
+		}
+	|
+	parensvalue pCOLON parensvalue
+		{
+			err := $1.Append($3)
+			if err!=nil {
+				parserlex.Error(err.Error())
+				goto ret1
+			}
+			$$ = $1
+		}
+	|
+	simpletransform pCOLON parensvalue
+		{
+			err := $1.Append($3)
+			if err!=nil {
+				parserlex.Error(err.Error())
+				goto ret1
+			}
+			$$ = $1
+		}
+	|
 	colonscript pCOLON simpletransform
 		{
 			err := $1.Append($3)
@@ -103,7 +133,18 @@ colonscript:
 			}
 			$$ = $1
 		}
+	|
+	colonscript pCOLON parensvalue
+		{
+			err := $1.Append($3)
+			if err!=nil {
+				parserlex.Error(err.Error())
+				goto ret1
+			}
+			$$ = $1
+		}
 	;
+
 
 /*************************************************************************************
  Handle functions (transforms). transforms are all transforms (including bash args)
@@ -364,6 +405,11 @@ statement: colonscript
 	|
 	constant
 	|
+	/* Set up the handlers of parentheses */
+	parensvalue
+	;
+
+parensvalue:
 	/* Set up the handlers of parentheses */
 	pLPARENS pipescript pRPARENS { $$ = $2 }
 	|
