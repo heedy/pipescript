@@ -26,7 +26,7 @@ type scriptFunc struct {
 	strVal string	// This is how variables are passed in: by their string value
 }
 
-%type <script> script pipescript colonscript constant algebraic simpletransform transform statement parensvalue
+%type <script> script pipescript constant algebraic simpletransform transform statement parensvalue
 %type <sfunc> function simplefunction
 %type <scriptArray> script_array
 %token <strVal> pNUMBER  pSTRING  pBOOL pIDENTIFIER
@@ -34,7 +34,6 @@ type scriptFunc struct {
 %token <strVal> pRPARENS pLPARENS pRSQUARE pLSQUARE pRBRACKET pLBRACKET pPIPE pCOLON
 
 %left pCOMMA
-%left pCOLON
 
 /* Order of operations for algebraic expressions */
 %left pOR
@@ -45,6 +44,7 @@ type scriptFunc struct {
 %left pMULTIPLY pDIVIDE
 %left pMODULO pPOW
 %left pUMINUS      /*  supplies  precedence  for  unary  minus  */
+%left pCOLON
 
 %%
 
@@ -62,79 +62,9 @@ Set up the scripts that are separated by pipe. Pipescript uses full transforms a
  	Input: transform | transform | transform
 	Output: pipescript
 *************************************************************************************/
-pipescript: algebraic
+pipescript: transform
 	|
-	pipescript pPIPE algebraic
-		{
-			err := $1.Append($3)
-			if err!=nil {
-				parserlex.Error(err.Error())
-				goto ret1
-			}
-			$$ = $1
-		}
-	;
-
-/*************************************************************************************
-Create the colon-script. It only accepts simpletransforms (since bash-like calling would
-cause issues)
- 	Input: simpletransform : simpletransform
-	Output: colonscript
-*************************************************************************************/
-
-colonscript:
-	/* Only create a colonscript if there is a colon! */
-	simpletransform pCOLON simpletransform
-		{
-			err := $1.Append($3)
-			if err!=nil {
-				parserlex.Error(err.Error())
-				goto ret1
-			}
-			$$ = $1
-		}
-	|
-	parensvalue pCOLON simpletransform
-		{
-			err := $1.Append($3)
-			if err!=nil {
-				parserlex.Error(err.Error())
-				goto ret1
-			}
-			$$ = $1
-		}
-	|
-	parensvalue pCOLON parensvalue
-		{
-			err := $1.Append($3)
-			if err!=nil {
-				parserlex.Error(err.Error())
-				goto ret1
-			}
-			$$ = $1
-		}
-	|
-	simpletransform pCOLON parensvalue
-		{
-			err := $1.Append($3)
-			if err!=nil {
-				parserlex.Error(err.Error())
-				goto ret1
-			}
-			$$ = $1
-		}
-	|
-	colonscript pCOLON simpletransform
-		{
-			err := $1.Append($3)
-			if err!=nil {
-				parserlex.Error(err.Error())
-				goto ret1
-			}
-			$$ = $1
-		}
-	|
-	colonscript pCOLON parensvalue
+	pipescript pPIPE transform
 		{
 			err := $1.Append($3)
 			if err!=nil {
@@ -146,13 +76,13 @@ colonscript:
 	;
 
 
+
 /*************************************************************************************
- Handle functions (transforms). transforms are all transforms (including bash args)
- and simpletransforms are transforms with function style f(x,y,z)
+ Handle functions (transforms). transforms are bash-like arguments
  	Input: statement
 	Output: algebraic
 *************************************************************************************/
-transform: simpletransform
+transform: algebraic
 	|
 	function
 		{
@@ -171,36 +101,7 @@ transform: simpletransform
 		}
 	;
 
-simpletransform:
-	simplefunction
-		{
-			v,ok := TransformRegistry[$1.transform]
-			if ok {
-				s,err := v.Script($1.args)
-				if err!=nil {
-					parserlex.Error(err.Error())
-					goto ret1
-				}
-				$$ = s
-			} else {
-				parserlex.Error(fmt.Sprintf("Transform %s not found",$1.transform))
-				goto ret1
-			}
-		}
-	;
-
 function:
-	simplefunction algebraic
-		{
-			/* A simplefunction can have at most one argument if it is to be called in bash style */
-			if len($1.args) > 1 {
-				parserlex.Error("Used both function f(x,y) and bash-style function calling at same time for a single function call. This probably means you made a syntax error")
-				goto ret1
-			}
-			$$.transform = $1.transform
-			$$.args = append($1.args,$2)
-		}
-	|
 	function algebraic
 		{
 			$$.transform = $1.transform
@@ -214,64 +115,7 @@ function:
 		}
 	;
 
-simplefunction:
-	/* Set up the handlers of parentheses */
-	pIDENTIFIER pLPARENS script_array pRPARENS
-		{
-			$$.transform = $1
-			$$.args = $3
-		}
-	|
-	pIDENTIFIER pLBRACKET script_array pRBRACKET
-		{
-			$$.transform = $1
-			$$.args = $3
-		}
-	|
-	pIDENTIFIER pLSQUARE script_array pRSQUARE
-		{
-			$$.transform = $1
-			$$.args = $3
-		}
 
-	|
-	pIDENTIFIER pLPARENS algebraic pRPARENS
-		{
-			$$.transform = $1
-			$$.args = []*Script{$3}
-		}
-	|
-	pIDENTIFIER pLBRACKET algebraic pRBRACKET
-		{
-			$$.transform = $1
-			$$.args = []*Script{$3}
-		}
-	|
-	pIDENTIFIER pLSQUARE algebraic pRSQUARE
-		{
-			$$.transform = $1
-			$$.args = []*Script{$3}
-		}
-
-	|
-	pIDENTIFIER
-		{
-			$$.transform = $1
-			$$.args = []*Script{}
-		}
-	;
-
-script_array:
-	script_array pCOMMA algebraic
-		{
-			$$ = append($1,$3)
-		}
-	|
-	algebraic pCOMMA algebraic
-		{
-			$$ = []*Script{$1,$3}
-		}
-	;
 
 /*************************************************************************************
  Handle algebra and comparisons. Note that order of operations is defined above by
@@ -281,6 +125,16 @@ script_array:
 *************************************************************************************/
 
 algebraic: statement
+	|
+	algebraic pCOLON algebraic
+		{
+			err := $1.Append($3)
+			if err!=nil {
+				parserlex.Error(err.Error())
+				goto ret1
+			}
+			$$ = $1
+		}
 	|
 	pNOT algebraic
 		{
@@ -394,14 +248,14 @@ algebraic: statement
 		}
 	;
 
+
 /*************************************************************************************
 Create the statement!
 	Output: statement
 *************************************************************************************/
 
-statement: colonscript
-	|
-	transform
+statement:
+	simpletransform
 	|
 	constant
 	|
@@ -419,7 +273,94 @@ parensvalue:
 	;
 
 /*************************************************************************************
-Prepare constant values
+simplefunction/transform combines script_array and identifier to form function: f(a,b,c,d)
+*************************************************************************************/
+
+simpletransform:
+	simplefunction
+		{
+			v,ok := TransformRegistry[$1.transform]
+			if ok {
+				s,err := v.Script($1.args)
+				if err!=nil {
+					parserlex.Error(err.Error())
+					goto ret1
+				}
+				$$ = s
+			} else {
+				parserlex.Error(fmt.Sprintf("Transform %s not found",$1.transform))
+				goto ret1
+			}
+		}
+	;
+
+simplefunction:
+	/* Set up the handlers of parentheses - we need to match correct type of parens */
+	pIDENTIFIER pLPARENS script_array pRPARENS
+		{
+			$$.transform = $1
+			$$.args = $3
+		}
+	|
+	pIDENTIFIER pLBRACKET script_array pRBRACKET
+		{
+			$$.transform = $1
+			$$.args = $3
+		}
+	|
+	pIDENTIFIER pLSQUARE script_array pRSQUARE
+		{
+			$$.transform = $1
+			$$.args = $3
+		}
+
+	|
+	pIDENTIFIER pLPARENS algebraic pRPARENS
+		{
+			$$.transform = $1
+			$$.args = []*Script{$3}
+		}
+	|
+	pIDENTIFIER pLBRACKET algebraic pRBRACKET
+		{
+			$$.transform = $1
+			$$.args = []*Script{$3}
+		}
+	|
+	pIDENTIFIER pLSQUARE algebraic pRSQUARE
+		{
+			$$.transform = $1
+			$$.args = []*Script{$3}
+		}
+
+	|
+	pIDENTIFIER
+		{
+			$$.transform = $1
+			$$.args = []*Script{}
+		}
+	;
+
+
+
+/*************************************************************************************
+script_array allows us to prepare the args of a function f(a,b,c,d)
+*************************************************************************************/
+script_array:
+	script_array pCOMMA algebraic
+		{
+			$$ = append($1,$3)
+		}
+	|
+	algebraic pCOMMA algebraic
+		{
+			$$ = []*Script{$1,$3}
+		}
+	;
+
+/*************************************************************************************
+Prepare constant values. The lexed values are all strings, so convert to correct type
+and convert into ConstantScript
  	Input: lexed values
 	Output: constant
 *************************************************************************************/

@@ -127,4 +127,17 @@ func TestParser(t *testing.T) {
 		},
 	}.Run(t)
 
+	TestCase{
+		// This tests order of prescedence: ":" pipes are high prescedence, and will be executed first
+		Pipescript: "if $:5 > $['test']:$:$:$ | $['test']:$",
+		Input: []Datapoint{
+			{1, map[string]int{"test": 4}},
+			{2, map[string]int{"test": 8}},
+			{3, map[string]int{"test": 3}},
+		},
+		Output: []Datapoint{
+			{1, 4},
+			{3, 3},
+		},
+	}.Run(t)
 }
