@@ -6,6 +6,7 @@ import (
 
 	"github.com/connectordb/pipescript"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 // The standard datapoint array to use when testing
@@ -49,4 +50,37 @@ func TestRegister(t *testing.T) {
 			return nil, errors.New("Not a real interpolator")
 		},
 	}.Register())
+}
+
+func TestInterpolationIterator(t *testing.T) {
+	dpi := pipescript.NewDatapointArrayIterator(testDpa)
+	c, err := NewClosestInterpolator(dpi)
+	require.NoError(t, err)
+
+	tr, err := NewUniformRange(0, 11, 2)
+	require.NoError(t, err)
+
+	ii := NewInterpolationIterator(c, tr)
+
+	dp, err := ii.Next()
+	require.NoError(t, err)
+	require.EqualValues(t, dp, &testDpa[0])
+	dp, err = ii.Next()
+	require.NoError(t, err)
+	require.EqualValues(t, dp, &testDpa[1])
+	dp, err = ii.Next()
+	require.NoError(t, err)
+	require.EqualValues(t, dp, &testDpa[3])
+	dp, err = ii.Next()
+	require.NoError(t, err)
+	require.EqualValues(t, dp, &testDpa[6])
+	dp, err = ii.Next()
+	require.NoError(t, err)
+	require.EqualValues(t, dp, &testDpa[8])
+	dp, err = ii.Next()
+	require.NoError(t, err)
+	require.EqualValues(t, dp, &testDpa[8])
+	dp, err = ii.Next()
+	require.NoError(t, err)
+	require.Nil(t, dp)
 }

@@ -1,6 +1,7 @@
 package pipescript
 
 import (
+	"encoding/json"
 	"fmt"
 
 	"github.com/connectordb/duck"
@@ -24,6 +25,12 @@ import (
 type Datapoint struct {
 	Timestamp float64     `json:"t" msgpack:"t,omitempty" duck:"t"` // The time stamp in UNIX seconds for the current point
 	Data      interface{} `json:"d" msgpack:"d,omitempty" duck:"d"` // The data associated with the datapoint.
+}
+
+// JSON returns the entire datapoint as a json string
+func (d *Datapoint) JSON() string {
+	b, _ := json.Marshal(d)
+	return string(b)
 }
 
 // Copy creates a deep copy of the datapoint and its data. Modifying the data of the copied

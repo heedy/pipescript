@@ -70,3 +70,29 @@ func Parse(interpolator string, dpi pipescript.DatapointIterator) (InterpolatorI
 	// Now set up the ScriptInterpolator based on the script
 	return NewScriptInterpolator(s, dpi, nil)
 }
+
+// InterpolationIterator allows turning an InterpolatorInstance into a DatapointIterator
+// by interpolating over a TimeRange object
+type InterpolationIterator struct {
+	ipltr InterpolatorInstance
+	tr    TimeRange
+}
+
+// Next performs the interpolation based upon the given TimeRange and returns
+// the next result in the sequence
+func (ii *InterpolationIterator) Next() (*pipescript.Datapoint, error) {
+	ts, err := ii.tr.Timestamp()
+	if err != nil {
+		if err == ErrEOF {
+			return nil, nil
+		}
+		return nil, err
+	}
+	return ii.ipltr.Interpolate(ts)
+}
+
+// NewInterpolationIterator returns a DatapointIterator based upon the given Interpolator
+// and the TimeRange over which to interpolate
+func NewInterpolationIterator(ipltr InterpolatorInstance, tr TimeRange) *InterpolationIterator {
+	return &InterpolationIterator{ipltr, tr}
+}
