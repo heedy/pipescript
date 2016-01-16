@@ -45,7 +45,7 @@ func (t *reduceTransform) Next(ti *pipescript.TransformIterator) (*pipescript.Da
 	}
 
 	// Convert the key value to string
-	v, err := te.Args[0].String()
+	v, err := te.Args[0].DataString()
 	if err != nil {
 		return nil, err
 	}

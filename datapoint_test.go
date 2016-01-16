@@ -23,7 +23,7 @@ func TestDatapointConversions(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, floatv, 1337.0)
 
-	strv, err := d.String()
+	strv, err := d.DataString()
 	assert.NoError(t, err)
 	assert.Equal(t, strv, "1337")
 
@@ -34,7 +34,7 @@ func TestDatapointConversions(t *testing.T) {
 	assert.Error(t, err)
 	_, err = d.Float()
 	assert.Error(t, err)
-	_, err = d.String()
+	_, err = d.DataString()
 	assert.Error(t, err)
 	_, err = d.Bool()
 	assert.Error(t, err)

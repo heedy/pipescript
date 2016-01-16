@@ -19,7 +19,7 @@ func getTimezone(arg *pipescript.Script) (*time.Location, error) {
 	if err != nil {
 		return nil, err
 	}
-	v, err := dp.String()
+	v, err := dp.DataString()
 	if err != nil {
 		return nil, err
 	}

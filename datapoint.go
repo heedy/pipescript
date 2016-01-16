@@ -27,8 +27,10 @@ type Datapoint struct {
 	Data      interface{} `json:"d" msgpack:"d,omitempty" duck:"d"` // The data associated with the datapoint.
 }
 
-// JSON returns the entire datapoint as a json string
-func (d *Datapoint) JSON() string {
+// String returns the entire datapoint as a json string. Notice that this function conforms to
+// the stringer interface, and as such is not the data string. If you want a function equivalent to Int() or Bool()
+// you can use DataString()
+func (d *Datapoint) String() string {
 	b, _ := json.Marshal(d)
 	return string(b)
 }
@@ -71,8 +73,8 @@ func (d *Datapoint) Bool() (bool, error) {
 	return v, nil
 }
 
-// String attempts to get the Data of a Datapoint as a string. Wrapper for duck.String
-func (d *Datapoint) String() (string, error) {
+// DataString attempts to get the Data of a Datapoint as a string. Wrapper for duck.String
+func (d *Datapoint) DataString() (string, error) {
 	v, ok := duck.String(d.Data)
 	if !ok {
 		return "", fmt.Errorf("Could not convert '%v' to String", d.Data)
