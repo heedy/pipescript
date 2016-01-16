@@ -58,6 +58,27 @@ func TestParserConstant(t *testing.T) {
 func TestParser(t *testing.T) {
 	// Here we perform more advanced pipes to make sure everything works as it should in the parser
 	// We assume all built-in functions are available
+
+	TestCase{
+		Pipescript: "if $ < 5 | $ >= 3",
+		Input: []Datapoint{
+			{1, 1},
+			{2, 10},
+			{3, 7},
+			{4, 1.0},
+			{5, 3},
+			{6, 2.0},
+			{7, 3.14},
+		},
+		Output: []Datapoint{
+			{1, false},
+			{4, false},
+			{5, true},
+			{6, false},
+			{7, true},
+		},
+	}.Run(t)
+
 	TestCase{
 		// This tests order of prescedence: ":" pipes are high prescedence, and will be executed first
 		Pipescript: "if ($['test']:$ < 5) | $['test']",
@@ -71,4 +92,19 @@ func TestParser(t *testing.T) {
 			{3, 3},
 		},
 	}.Run(t)
+
+	TestCase{
+		// This tests order of prescedence: ":" pipes are high prescedence, and will be executed first
+		Pipescript: "if $['test']:$ < 5 | $['test']",
+		Input: []Datapoint{
+			{1, map[string]int{"test": 4}},
+			{2, map[string]int{"test": 8}},
+			{3, map[string]int{"test": 3}},
+		},
+		Output: []Datapoint{
+			{1, 4},
+			{3, 3},
+		},
+	}.Run(t)
+
 }
