@@ -31,7 +31,7 @@ func (nt *nextTransform) Next(ti *pipescript.TransformIterator) (*pipescript.Dat
 	return te2.Datapoint, nil
 }
 
-var next = pipescript.Transform{
+var Next = pipescript.Transform{
 	Name:        "next",
 	Description: "Returns the datapoint that will be next in the sequence. If given an argument, can return the nth datapoint forward.",
 	OneToOne:    true,

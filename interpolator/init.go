@@ -4,10 +4,13 @@ import (
 	"github.com/connectordb/pipescript"
 
 	// transform core is required for datasets to work. In particular, we need "if last"
-	_ "github.com/connectordb/pipescript/transforms/core"
+	"github.com/connectordb/pipescript/transforms/core"
 )
 
 func init() {
+	// We need Last
+	core.Last.Register()
+
 	// In order to initialize
 	var err error
 	iflast, err = pipescript.Parse("if last")

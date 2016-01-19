@@ -20,7 +20,7 @@ func (t *countTransform) Next(ti *pipescript.TransformIterator) (*pipescript.Dat
 	return te.Set(t.i)
 }
 
-var count = pipescript.Transform{
+var Count = pipescript.Transform{
 	Name:         "count",
 	Description:  "Counts the number of datapoints that have been seen. It is equivalent to the i in a loop over the sequence.",
 	OutputSchema: `{"type": "integer","minimum": 0}`,

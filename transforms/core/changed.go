@@ -24,7 +24,7 @@ func (t *changedTransform) Next(ti *pipescript.TransformIterator) (*pipescript.D
 	return te.Set(!(eq && ok))
 }
 
-var changed = pipescript.Transform{
+var Changed = pipescript.Transform{
 	Name:        "changed",
 	Description: "Returns true if the datapoint has a different value from the previous one",
 	OneToOne:    true,

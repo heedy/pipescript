@@ -7,6 +7,7 @@ import (
 )
 
 func TestChanged(t *testing.T) {
+	Register()
 	pipescript.TestCase{
 		Pipescript: "changed",
 		Input: []pipescript.Datapoint{

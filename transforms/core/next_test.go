@@ -7,6 +7,7 @@ import (
 )
 
 func TestNext(t *testing.T) {
+	Register()
 	pipescript.TestCase{
 		Pipescript: "next $",
 		ParseError: true,

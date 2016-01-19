@@ -27,7 +27,7 @@ func (t *meanTransform) Next(ti *pipescript.TransformIterator) (*pipescript.Data
 	return te.Set(t.Sum / float64(t.Tot))
 }
 
-var mean = pipescript.Transform{
+var Mean = pipescript.Transform{
 	Name:        "mean",
 	Description: "Returns the average of all datapoints that have passed through it",
 	OneToOne:    true,

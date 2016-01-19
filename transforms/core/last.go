@@ -21,7 +21,7 @@ func (lt lastTransform) Next(ti *pipescript.TransformIterator) (*pipescript.Data
 	return te.Set(te2.IsFinished())
 }
 
-var last = pipescript.Transform{
+var Last = pipescript.Transform{
 	Name:         "last",
 	Description:  "Returns true if last datapoint of a sequence, and false otherwise",
 	OutputSchema: `{"type": "boolean"}`,

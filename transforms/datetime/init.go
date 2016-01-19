@@ -26,6 +26,6 @@ func getTimezone(arg *pipescript.Script) (*time.Location, error) {
 	return time.LoadLocation(v)
 }
 
-func init() {
+func Register() {
 	weekday.Register()
 }

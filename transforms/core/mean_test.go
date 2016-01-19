@@ -6,7 +6,8 @@ import (
 	"github.com/connectordb/pipescript"
 )
 
-func TestMEan(t *testing.T) {
+func TestMean(t *testing.T) {
+	Register()
 	pipescript.TestCase{
 		Pipescript: "mean",
 		Input: []pipescript.Datapoint{

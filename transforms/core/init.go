@@ -4,21 +4,21 @@ It should be imported by default by basically all users of PipeScript
 */
 package core
 
-func init() {
-	changed.Register()
+func Register() {
+	Changed.Register()
 
-	first.Register()
-	last.Register()
+	First.Register()
+	Last.Register()
 
 	//prev.Register()
-	next.Register()
+	Next.Register()
 
-	count.Register()
-	sum.Register()
-	mean.Register()
+	Count.Register()
+	Sum.Register()
+	Mean.Register()
 
-	tTransform.Register()
-	tshift.Register()
+	T.Register()
+	Tshift.Register()
 
-	reduce.Register()
+	Reduce.Register()
 }

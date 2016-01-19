@@ -16,7 +16,7 @@ func (t tTransformStruct) Next(ti *pipescript.TransformIterator) (*pipescript.Da
 	return te.Set(te.Datapoint.Timestamp)
 }
 
-var tTransform = pipescript.Transform{
+var T = pipescript.Transform{
 	Name:         "t",
 	Description:  "The current datapoint's timestamp in floating point unix seconds",
 	OutputSchema: `{"type": "number"}`,

@@ -7,6 +7,7 @@ import (
 )
 
 func TestReduce(t *testing.T) {
+	Register()
 	pipescript.TestCase{
 		Pipescript: "reduce $ {next}",
 		ParseError: true,

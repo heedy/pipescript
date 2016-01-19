@@ -81,7 +81,7 @@ func (t *reduceTransform) Next(ti *pipescript.TransformIterator) (*pipescript.Da
 	return te.Set(t.datamap)
 }
 
-var reduce = pipescript.Transform{
+var Reduce = pipescript.Transform{
 	Name: "reduce",
 	Description: `Splits the script by the first argument's value, creating new instances of the second argument's script.
 Think of it as a switch statement where each choice has copies of the same code. It can also be thought of as a map reduce which returns intermediate results on the stream.

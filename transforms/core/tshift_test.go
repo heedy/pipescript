@@ -7,6 +7,7 @@ import (
 )
 
 func TestTshift(t *testing.T) {
+	Register()
 	pipescript.TestCase{
 		Pipescript: "tshift $",
 		ParseError: true,

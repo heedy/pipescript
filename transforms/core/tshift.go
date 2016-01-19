@@ -18,7 +18,7 @@ func (t tshiftTransform) Next(ti *pipescript.TransformIterator) (*pipescript.Dat
 	return &pipescript.Datapoint{Timestamp: te.Datapoint.Timestamp + t.shiftby, Data: te.Datapoint.Data}, nil
 }
 
-var tshift = pipescript.Transform{
+var Tshift = pipescript.Transform{
 	Name:        "tshift",
 	Description: "Shift the datapoint timestamp by a constant number of seconds",
 	OneToOne:    true,

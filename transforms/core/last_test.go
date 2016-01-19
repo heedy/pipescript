@@ -7,6 +7,7 @@ import (
 )
 
 func TestLast(t *testing.T) {
+	Register()
 	pipescript.TestCase{
 		Pipescript: "if last",
 		Input: []pipescript.Datapoint{

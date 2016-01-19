@@ -24,7 +24,7 @@ func (t *sumTransform) Next(ti *pipescript.TransformIterator) (*pipescript.Datap
 	return te.Set(t.cursum)
 }
 
-var sum = pipescript.Transform{
+var Sum = pipescript.Transform{
 	Name:        "sum",
 	Description: "Adds all of the values of the datapoints that pass through it",
 	OneToOne:    true,

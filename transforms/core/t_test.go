@@ -7,6 +7,7 @@ import (
 )
 
 func TestT(t *testing.T) {
+	Register()
 	pipescript.TestCase{
 		// This tests order of prescedence: ":" pipes are high prescedence, and will be executed first
 		Pipescript: "t",

@@ -6,6 +6,12 @@ This package imports EVERYTHING
 package transforms
 
 import (
-	_ "github.com/connectordb/pipescript/transforms/core"     // The core transforms
-	_ "github.com/connectordb/pipescript/transforms/datetime" // Manipulating timestamps
+	"github.com/connectordb/pipescript/transforms/core"     // The core transforms
+	"github.com/connectordb/pipescript/transforms/datetime" // Manipulating timestamps
 )
+
+// Registers ALL functions
+func Register() {
+	core.Register()
+	datetime.Register()
+}

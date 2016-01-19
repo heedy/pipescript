@@ -7,6 +7,7 @@ import (
 )
 
 func TestSum(t *testing.T) {
+	Register()
 	pipescript.TestCase{
 		Pipescript: "sum",
 		Input: []pipescript.Datapoint{

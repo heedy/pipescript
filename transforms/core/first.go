@@ -27,7 +27,7 @@ func (ft *firstTransform) Next(ti *pipescript.TransformIterator) (*pipescript.Da
 	return dp, err
 }
 
-var first = pipescript.Transform{
+var First = pipescript.Transform{
 	Name:         "first",
 	Description:  "Returns true if first datapoint of a sequence, and false otherwise",
 	OutputSchema: `{"type": "boolean"}`,

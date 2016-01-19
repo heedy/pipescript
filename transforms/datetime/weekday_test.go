@@ -8,6 +8,8 @@ import (
 )
 
 func TestWeekday(t *testing.T) {
+	Register()
+
 	pipescript.TestCase{
 		Pipescript: "weekday('lol')",
 		ParseError: true,

@@ -7,6 +7,7 @@ import (
 )
 
 func TestFirst(t *testing.T) {
+	Register()
 	pipescript.TestCase{
 		Pipescript: "first",
 		Input: []pipescript.Datapoint{
