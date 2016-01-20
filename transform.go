@@ -1,6 +1,9 @@
 package pipescript
 
-import "fmt"
+import (
+	"fmt"
+	"sync"
+)
 
 // TransformInstance is the interface which underlies each transform. Copy() should return an exact copy
 // of this transform instance as it is right now.
@@ -53,16 +56,29 @@ var (
 	// Do not manually add/remove elements from this map.
 	// Use Transform.Register to insert new transforms.
 	TransformRegistry = make(map[string]Transform)
+
+	// RegistryLock enables adding/deleting transforms during runtime. It is exported, since some
+	// applications (ConnectorDB) might want to print out the registry
+	RegistryLock = &sync.RWMutex{}
 )
 
-// Register registers the transform with the system. Note that it is not threadsafe. Register is
-// assumed to be run once at the startup of the query system. Adding functions during runtime is
-// not supported.
+// Unregister removes the given named trasform from the registry
+func Unregister(name string) {
+	RegistryLock.Lock()
+	delete(TransformRegistry, name)
+	RegistryLock.Unlock()
+}
+
+// Register registers the transform with the system.
 func (t Transform) Register() error {
 	if t.Name == "" || t.Generator == nil {
 		err := fmt.Errorf("Attempted to register invalid transform: '%s'", t.Name)
 		return err
 	}
+
+	RegistryLock.Lock()
+	defer RegistryLock.Unlock()
+
 	_, ok := TransformRegistry[t.Name]
 	if ok {
 		err := fmt.Errorf("A transform with the name '%s' already exists.", t.Name)

@@ -86,7 +86,9 @@ transform: algebraic
 	|
 	function
 		{
+			RegistryLock.RLock()
 			v,ok := TransformRegistry[$1.transform]
+			RegistryLock.RUnlock()
 			if ok {
 				s,err := v.Script($1.args)
 				if err!=nil {
@@ -279,7 +281,9 @@ simplefunction/transform combines script_array and identifier to form function: 
 simpletransform:
 	simplefunction
 		{
+			RegistryLock.RLock()
 			v,ok := TransformRegistry[$1.transform]
+			RegistryLock.RUnlock()
 			if ok {
 				s,err := v.Script($1.args)
 				if err!=nil {

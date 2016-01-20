@@ -2,6 +2,7 @@ package interpolator
 
 import (
 	"fmt"
+	"sync"
 
 	"github.com/connectordb/pipescript"
 )
@@ -18,7 +19,11 @@ type InterpolatorInstance interface {
 
 // InterpolatorRegsitry is a map of the registered interpolators. Only use this structure when displaying documentation, do not manually
 // add interpolators. Instead, use the Interpolator.Register() method.
-var InterpolatorRegistry = make(map[string]Interpolator)
+var (
+	InterpolatorRegistry = make(map[string]Interpolator)
+
+	RegistryLock = &sync.RWMutex{}
+)
 
 // InterpolatorGenerator creates a new InterpolatorInstance.
 type InterpolatorGenerator func(name string, dpi pipescript.DatapointIterator) (i InterpolatorInstance, err error)
@@ -33,6 +38,13 @@ type Interpolator struct {
 	Generator InterpolatorGenerator `json:"-"` // The generator function of the interpolator
 }
 
+// Unregister removes the given named interpolator from the registry
+func Unregister(name string) {
+	RegistryLock.Lock()
+	delete(InterpolatorRegistry, name)
+	RegistryLock.Unlock()
+}
+
 // Regsiter registers the interpolator with the system. See documentation for pipescript.Transform.Regsiter()
 // as the two are implemented in the same way.
 func (i Interpolator) Register() error {
@@ -40,6 +52,10 @@ func (i Interpolator) Register() error {
 		err := fmt.Errorf("Attempted to register invalid interpolator: '%s'", i.Name)
 		return err
 	}
+
+	RegistryLock.Lock()
+	defer RegistryLock.Unlock()
+
 	_, ok := InterpolatorRegistry[i.Name]
 	if ok {
 		err := fmt.Errorf("An Interpolator with the name '%s' already exists.", i.Name)
@@ -55,7 +71,9 @@ func (i Interpolator) Register() error {
 // parsed as an interpolator, it is assumed to be PipeScript, and a ScriptInterpolator is returned based
 // upon the pipescript. If both these methods fail, returns an error.
 func Parse(interpolator string, dpi pipescript.DatapointIterator) (InterpolatorInstance, error) {
+	RegistryLock.RLock()
 	ireg, ok := InterpolatorRegistry[interpolator]
+	RegistryLock.RUnlock()
 	if ok {
 		// The given interpolator was found - return the InterpolatorInstance
 		return ireg.Generator(ireg.Name, dpi)
