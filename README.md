@@ -1,7 +1,5 @@
 [![Build Status](https://travis-ci.org/connectordb/pipescript.svg)](https://travis-ci.org/connectordb/pipescript)[![Coverage Status](https://coveralls.io/repos/connectordb/pipescript/badge.svg?branch=master&service=github)](https://coveralls.io/github/connectordb/pipescript?branch=master)[![GoDoc](https://godoc.org/github.com/connectordb/pipescript?status.svg)](http://godoc.org/github.com/connectordb/pipescript)
 
-**Warning: This is a work in progress - we are still moving code to this repository**
-
 # PipeScript
 
 When writing ConnectorDB, we noticed that our transform and query engine would be useful as a
