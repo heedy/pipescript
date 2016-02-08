@@ -9,13 +9,13 @@ import (
 func TestReduce(t *testing.T) {
 	Register()
 	pipescript.TestCase{
-		Pipescript: "reduce $ {next}",
+		Pipescript: "map $ {next}",
 		ParseError: true,
 	}.Run(t)
 
 	pipescript.TestCase{
 		// This tests order of prescedence: ":" pipes are high prescedence, and will be executed first
-		Pipescript: "reduce $ > 5 {count}",
+		Pipescript: "map $ > 5 {count}",
 		Input: []pipescript.Datapoint{
 			{1, 4},
 			{2, 6},
