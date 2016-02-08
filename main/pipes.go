@@ -6,14 +6,36 @@ Licensed under the MIT license.
 package main
 
 import (
+	"encoding/json"
+	"fmt"
+	"io"
+	"log"
 	"os"
 
 	"github.com/connectordb/pipescript"
+	"github.com/connectordb/pipescript/bytestreams"
+	"github.com/connectordb/pipescript/transforms"
 
 	"github.com/codegangsta/cli"
 )
 
+func getReader(s string) (io.Reader, error) {
+	if s == "STDIN" {
+		return os.Stdin, nil
+	}
+	return os.Open(s)
+}
+
+func getWriter(s string) (io.Writer, error) {
+	if s == "STDOUT" {
+		return os.Stdout, nil
+	}
+	return os.Create(s)
+}
+
 func main() {
+	transforms.Register()
+
 	app := cli.NewApp()
 	app.Name = "pipes"
 	app.Usage = "Run the PipeScript data analysis engine on your given datasets."
@@ -32,6 +54,67 @@ func main() {
 			Value: "STDOUT",
 			Usage: "File to write as output",
 		},
+		cli.BoolFlag{
+			Name:  "pretty,p",
+			Usage: "Whether to indent the json for easy reading",
+		},
+		cli.BoolFlag{
+			Name:  "list,l",
+			Usage: "List the available transforms",
+		},
+	}
+
+	app.Action = func(c *cli.Context) {
+		if c.Bool("list") {
+			b, err := json.MarshalIndent(pipescript.TransformRegistry, "", "\t")
+			if err != nil {
+				log.Fatal(err)
+			}
+			if _, err = os.Stdout.Write(b); err != nil {
+				log.Fatal(err)
+			}
+			return
+		}
+		if c.Args().First() == "" {
+			fmt.Printf("Usage: pipes \"<transform>\"\nFor help, run pipes --help\n")
+			return
+		}
+
+		r, err := getReader(c.String("input"))
+		if err != nil {
+			log.Fatal(err)
+		}
+		w, err := getWriter(c.String("output"))
+		if err != nil {
+			log.Fatal(err)
+		}
+		// Now get the pipescript
+		s, err := pipescript.Parse(c.Args().First())
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		// Now set up the datapoint reader
+		dpr, err := bytestreams.NewDatapointReader(r)
+		if err != nil {
+			log.Fatal(err)
+		}
+		s.SetInput(dpr)
+
+		// Now set the output json stream writer
+		var jr io.Reader
+		if c.Bool("pretty") {
+			jr, err = bytestreams.NewJsonReader(s, "[\n", ",\n", "\n]", "\t", "\t")
+		} else {
+			jr, err = bytestreams.NewJsonArrayReader(s)
+		}
+		if err != nil {
+			log.Fatal(err)
+		}
+		if _, err = io.Copy(w, jr); err != nil {
+			log.Fatal(err)
+		}
+
 	}
 
 	app.Run(os.Args)
