@@ -24,4 +24,5 @@ func Register() {
 	Tshift.Register()
 
 	Map.Register()
+	Reduce.Register()
 }

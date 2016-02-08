@@ -89,13 +89,13 @@ Think of it as a switch statement where each choice has copies of the same code.
 It is very useful for splitting by time. For example:
 "split weekday {count} | if last" will return {"monday": ...,"tuesday":...} with the number of datapoints that happened in each day.`,
 	OneToOne: true,
-	Hijack:   true, // Map does hijack its arguments
 	Args: []pipescript.TransformArg{
 		{
 			Description: "The value to split on. This must be something that can be converted to string.",
 		},
 		{
 			Description: "The script to instantiate for each different value of the first argument.",
+			Hijacked:    true,
 		},
 	},
 	Generator: func(name string, args []*pipescript.Script) (*pipescript.TransformInitializer, error) {

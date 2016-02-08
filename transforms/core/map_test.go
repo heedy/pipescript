@@ -6,7 +6,7 @@ import (
 	"github.com/connectordb/pipescript"
 )
 
-func TestReduce(t *testing.T) {
+func TestMap(t *testing.T) {
 	Register()
 	pipescript.TestCase{
 		Pipescript: "map $ {next}",
