@@ -4,7 +4,10 @@ functions. It is the core data processing method used in ConnectorDB.
 */
 package pipescript
 
-import "errors"
+import (
+	"errors"
+	"fmt"
+)
 
 const (
 	// Version is the PipeScript version
@@ -161,9 +164,9 @@ func Parse(script string) (*Script, error) {
 
 	if parserParse(&lexer) != 0 {
 		if lexer.errorString != "" {
-			return nil, errors.New(lexer.errorString)
+			return nil, fmt.Errorf("Script '%s': %s", script, lexer.errorString)
 		}
-		return nil, errors.New("Unknown error")
+		return nil, fmt.Errorf("Script '%s': Unknown error", script)
 	}
 
 	return lexer.output, nil

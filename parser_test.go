@@ -67,6 +67,16 @@ func TestParser(t *testing.T) {
 	// We assume all built-in functions are available
 
 	pipescript.TestCase{
+		Pipescript: "$!=1",
+		Input: []pipescript.Datapoint{
+			{1, 1},
+		},
+		Output: []pipescript.Datapoint{
+			{1, false},
+		},
+	}.Run(t)
+
+	pipescript.TestCase{
 		Pipescript: "if $ < 5 | $ >= 3",
 		Input: []pipescript.Datapoint{
 			{1, 1},

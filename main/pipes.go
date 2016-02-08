@@ -46,7 +46,7 @@ func runner(c *cli.Context, str string) {
 	// Now get the pipescript
 	s, err := pipescript.Parse(str)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal(fmt.Errorf("%s\nIf using bash, make sure that '$' has spaces around it so that it is not mistaken for a bash variable.\n", err.Error()))
 	}
 
 	// Now set up the datapoint reader

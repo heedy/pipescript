@@ -6,3 +6,4 @@ before_install:
     - go get github.com/mattn/goveralls
 script:
     - ./coverage_test.sh
+    - go build main/pipes.go
