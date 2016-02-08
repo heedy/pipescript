@@ -47,6 +47,7 @@ type Transform struct {
 	OneToOne     bool           `json:"one_to_one"`        //Whether or not the transform is one to one
 	Stateless    bool           `json:"stateless"`         // Whether the transform only uses current datapoint's info (always returns same output given input)
 	Peek         bool           `json:"peek"`              // Whether the transform peeks at future values
+	Hijack       bool           `json:"hijacks_arg"`       // Whether the transform hijacks one of its args
 
 	Generator TransformGenerator `json:"-"` // The generator function of the transform
 }

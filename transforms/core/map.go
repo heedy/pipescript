@@ -81,6 +81,7 @@ func (t *mapTransform) Next(ti *pipescript.TransformIterator) (*pipescript.Datap
 	return te.Set(t.datamap)
 }
 
+// Map splits the dtaapoints by its first argument
 var Map = pipescript.Transform{
 	Name: "map",
 	Description: `Splits the script by the first argument's value, creating new instances of the second argument's script.
@@ -88,6 +89,7 @@ Think of it as a switch statement where each choice has copies of the same code.
 It is very useful for splitting by time. For example:
 "split weekday {count} | if last" will return {"monday": ...,"tuesday":...} with the number of datapoints that happened in each day.`,
 	OneToOne: true,
+	Hijack:   true, // Map does hijack its arguments
 	Args: []pipescript.TransformArg{
 		{
 			Description: "The value to split on. This must be something that can be converted to string.",
