@@ -29,10 +29,13 @@ type scriptFunc struct {
 %type <script> script pipescript constant algebraic simpletransform transform statement parensvalue
 %type <sfunc> function simplefunction
 %type <scriptArray> script_array
-%token <strVal> pNUMBER  pSTRING  pBOOL pIDENTIFIER
+%token <strVal> pNUMBER  pSTRING  pBOOL pIDENTIFIER pIDENTIFIER_SPACE
 %token <strVal> pAND pOR pNOT pCOMPARISON pPLUS pMINUS pMULTIPLY pDIVIDE pMODULO pPOW pCOMMA
 %token <strVal> pRPARENS pLPARENS pRSQUARE pLSQUARE pRBRACKET pLBRACKET pPIPE pCOLON
 
+%nonassoc pNOARGS
+%nonassoc pLPARENS pLBRACKET pLSQUARE
+%nonassoc pARGS
 %left pCOMMA
 
 /* Order of operations for algebraic expressions */
@@ -45,6 +48,10 @@ type scriptFunc struct {
 %left pMODULO pPOW
 %left pUMINUS      /*  supplies  precedence  for  unary  minus  */
 %left pCOLON
+
+
+
+
 
 %%
 
@@ -82,35 +89,28 @@ pipescript: transform
  	Input: statement
 	Output: algebraic
 *************************************************************************************/
-transform: algebraic
+transform: algebraic;
 	|
 	function
 		{
-			RegistryLock.RLock()
-			v,ok := TransformRegistry[$1.transform]
-			RegistryLock.RUnlock()
-			if ok {
-				s,err := v.Script($1.args)
-				if err!=nil {
-					parserlex.Error(err.Error())
-					goto ret1
-				}
-				$$ = s
-			} else {
-				parserlex.Error(fmt.Sprintf("Transform %s not found",$1.transform))
+			s,err := parserGetScript($1)
+			if err!=nil {
+				parserlex.Error(err.Error())
 				goto ret1
 			}
+
+			$$ = s
 		}
 	;
 
 function:
-	function algebraic
+	function algebraic %prec pARGS
 		{
 			$$.transform = $1.transform
 			$$.args = append($1.args,$2)
 		}
 	|
-	pIDENTIFIER algebraic
+	pIDENTIFIER_SPACE algebraic %prec pARGS
 		{
 			$$.transform = $1
 			$$.args = []*Script{$2}
@@ -229,7 +229,7 @@ algebraic: statement
 			$$ = s
 		}
 	|
-	algebraic pMINUS algebraic
+	algebraic pMINUS algebraic %prec pMINUS
 		{
 			s,err := subtractScript($1,$3)
 			if err!=nil {
@@ -281,64 +281,54 @@ simplefunction/transform combines script_array and identifier to form function: 
 simpletransform:
 	simplefunction
 		{
-			RegistryLock.RLock()
-			v,ok := TransformRegistry[$1.transform]
-			RegistryLock.RUnlock()
-			if ok {
-				s,err := v.Script($1.args)
-				if err!=nil {
-					parserlex.Error(err.Error())
-					goto ret1
-				}
-				$$ = s
-			} else {
-				parserlex.Error(fmt.Sprintf("Transform %s not found",$1.transform))
+			s,err := parserGetScript($1)
+			if err!=nil {
+				parserlex.Error(err.Error())
 				goto ret1
 			}
+
+			$$ = s
+
 		}
 	;
 
 simplefunction:
-	/* Set up the handlers of parentheses - we need to match correct type of parens */
-	pIDENTIFIER pLPARENS script_array pRPARENS
+/* Set up the handlers of parentheses - we need to match correct type of parens */
+	pIDENTIFIER pLPARENS script_array pRPARENS //%prec pARGS
 		{
 			$$.transform = $1
 			$$.args = $3
 		}
 	|
-	pIDENTIFIER pLBRACKET script_array pRBRACKET
-		{
-			$$.transform = $1
-			$$.args = $3
-		}
-	|
-	pIDENTIFIER pLSQUARE script_array pRSQUARE
-		{
-			$$.transform = $1
-			$$.args = $3
-		}
 
-	|
-	pIDENTIFIER pLPARENS algebraic pRPARENS
+	pIDENTIFIER pLSQUARE script_array pRSQUARE //%prec pARGS
 		{
 			$$.transform = $1
-			$$.args = []*Script{$3}
+			$$.args = $3
 		}
 	|
-	pIDENTIFIER pLBRACKET algebraic pRBRACKET
-		{
-			$$.transform = $1
-			$$.args = []*Script{$3}
-		}
-	|
-	pIDENTIFIER pLSQUARE algebraic pRSQUARE
-		{
-			$$.transform = $1
-			$$.args = []*Script{$3}
-		}
 
+
+	pIDENTIFIER pLPARENS algebraic pRPARENS //%prec pARGS
+		{
+			$$.transform = $1
+			$$.args = []*Script{$3}
+		}
 	|
-	pIDENTIFIER
+	pIDENTIFIER pLSQUARE algebraic pRSQUARE //%prec pARGS
+		{
+			$$.transform = $1
+			$$.args = []*Script{$3}
+		}
+	|
+
+	pIDENTIFIER %prec pNOARGS
+		{
+			$$.transform = $1
+			$$.args = []*Script{}
+		}
+	|
+	pIDENTIFIER_SPACE %prec pNOARGS
 		{
 			$$.transform = $1
 			$$.args = []*Script{}
@@ -346,10 +336,10 @@ simplefunction:
 	;
 
 
-
 /*************************************************************************************
 script_array allows us to prepare the args of a function f(a,b,c,d)
 *************************************************************************************/
+
 script_array:
 	script_array pCOMMA algebraic
 		{
@@ -361,6 +351,7 @@ script_array:
 			$$ = []*Script{$1,$3}
 		}
 	;
+
 
 /*************************************************************************************
 Prepare constant values. The lexed values are all strings, so convert to correct type
@@ -395,3 +386,17 @@ constant:
 	;
 
 %%
+
+func parserGetScript(sf scriptFunc) (*Script,error) {
+	RegistryLock.RLock()
+	v,ok := TransformRegistry[sf.transform]
+	RegistryLock.RUnlock()
+	if ok {
+		s,err := v.Script(sf.args)
+		if err!=nil {
+			return nil, err
+		}
+		return s,nil
+	}
+	return nil, fmt.Errorf("Transform %s not found",sf.transform)
+}

@@ -3,6 +3,7 @@ package pipescript
 import (
 	"regexp"
 	"strings"
+	"unicode"
 )
 
 /*
@@ -23,7 +24,7 @@ const (
 	mathoperators = `\-|\*|/|\+|%|\^`
 	idents        = `([a-zA-Z_\$][a-zA-Z_0-9\$]*)`
 	allregex      = logicals + "|" + numbers + "|" + comparisons + "|" + booleans + "|" +
-		stringregex + "|" + pipes + "|" + mathoperators + "|" + idents + "|" + brackets
+		stringregex + "|" + pipes + "|" + mathoperators + "|" + idents + "|" + brackets + "|,"
 )
 
 var (
@@ -53,7 +54,7 @@ func (l *parserLex) Next() string {
 	var c rune = ' '
 
 	// skip whitespace
-	for c == ' ' || c == '\t' || c == '\n' || c == '\r' {
+	for unicode.IsSpace(c) {
 		if l.AtEOF() {
 			return eofString
 		}
@@ -82,7 +83,6 @@ func (l *parserLex) Error(s string) {
 func (l *parserLex) Lex(lval *parserSymType) int {
 	token := l.Next()
 	lval.strVal = token
-
 	switch token {
 	case eofString:
 		return 0
@@ -150,6 +150,10 @@ func (l *parserLex) Lex(lval *parserSymType) int {
 			return pSTRING
 
 		default:
+			// If there is a space after the identifier, it isn't being called as f(x)
+			if l.position < len(l.input) && unicode.IsSpace(rune(l.input[l.position])) {
+				return pIDENTIFIER_SPACE
+			}
 			return pIDENTIFIER
 
 		}

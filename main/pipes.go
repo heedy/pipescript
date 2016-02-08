@@ -6,8 +6,6 @@ Licensed under the MIT license.
 package main
 
 import (
-	"encoding/json"
-	"fmt"
 	"io"
 	"log"
 	"os"
@@ -64,21 +62,7 @@ func main() {
 		},
 	}
 
-	app.Action = func(c *cli.Context) {
-		if c.Bool("list") {
-			b, err := json.MarshalIndent(pipescript.TransformRegistry, "", "\t")
-			if err != nil {
-				log.Fatal(err)
-			}
-			if _, err = os.Stdout.Write(b); err != nil {
-				log.Fatal(err)
-			}
-			return
-		}
-		if c.Args().First() == "" {
-			fmt.Printf("Usage: pipes \"<transform>\"\nFor help, run pipes --help\n")
-			return
-		}
+	app.CommandNotFound = func(c *cli.Context, str string) {
 
 		r, err := getReader(c.String("input"))
 		if err != nil {
@@ -89,7 +73,7 @@ func main() {
 			log.Fatal(err)
 		}
 		// Now get the pipescript
-		s, err := pipescript.Parse(c.Args().First())
+		s, err := pipescript.Parse(str)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -104,7 +88,7 @@ func main() {
 		// Now set the output json stream writer
 		var jr io.Reader
 		if c.Bool("pretty") {
-			jr, err = bytestreams.NewJsonReader(s, "[\n", ",\n", "\n]", "\t", "\t")
+			jr, err = bytestreams.NewJsonReader(s, "[\n", ",\n", "\n]", "", "\t")
 		} else {
 			jr, err = bytestreams.NewJsonArrayReader(s)
 		}

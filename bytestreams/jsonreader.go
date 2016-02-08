@@ -64,7 +64,13 @@ func (r *JsonReader) Read(p []byte) (n int, err error) {
 				r.currentbuffer = r.Ender
 				r.data = nil
 			} else {
-				v, err := json.MarshalIndent(dp, r.preindent, r.indent)
+				var v []byte
+				if r.preindent != "" || r.indent != "" {
+					v, err = json.MarshalIndent(dp, r.preindent, r.indent)
+				} else {
+					v, err = json.Marshal(dp)
+				}
+
 				if err != nil {
 					return n, err
 				}
@@ -85,7 +91,13 @@ func NewJsonReader(data pipescript.DatapointIterator, starter, separator, footer
 	if dp == nil {
 		return nil, io.EOF
 	}
-	v, err := json.MarshalIndent(dp, preindent, indent)
+	var v []byte
+	if preindent != "" || indent != "" {
+		v, err = json.MarshalIndent(dp, preindent, indent)
+	} else {
+		v, err = json.Marshal(dp)
+	}
+
 	if err != nil {
 		return nil, err
 	}
