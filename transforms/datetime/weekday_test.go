@@ -15,7 +15,7 @@ func TestWeekday(t *testing.T) {
 		ParseError: true,
 	}.Run(t)
 	pipescript.TestCase{
-		Pipescript: "weekday",
+		Pipescript: "weekday('UTC')",
 		Input: []pipescript.Datapoint{
 			{float64(time.Now().Unix()), 1},
 		},

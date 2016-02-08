@@ -14,14 +14,14 @@ func TestDay(t *testing.T) {
 		ParseError: true,
 	}.Run(t)
 	pipescript.TestCase{
-		Pipescript: "day",
+		Pipescript: "day('UTC')",
 		Input: []pipescript.Datapoint{
 			{float64(1454907600), 1},
 			{1454821200, 1},
 		},
 		Output: []pipescript.Datapoint{
-			{1454907600, int64(16838)},
-			{1454821200, int64(16837)},
+			{1454907600, int64(16839)},
+			{1454821200, int64(16838)},
 		},
 	}.Run(t)
 }

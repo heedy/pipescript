@@ -14,7 +14,7 @@ func TestYear(t *testing.T) {
 		ParseError: true,
 	}.Run(t)
 	pipescript.TestCase{
-		Pipescript: "year",
+		Pipescript: "year('UTC')",
 		Input: []pipescript.Datapoint{
 			{1454821200, 1},
 		},

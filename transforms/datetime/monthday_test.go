@@ -15,7 +15,7 @@ func TestMonthday(t *testing.T) {
 		ParseError: true,
 	}.Run(t)
 	pipescript.TestCase{
-		Pipescript: "monthday",
+		Pipescript: "monthday('UTC')",
 		Input: []pipescript.Datapoint{
 			{float64(time.Now().Unix()), 1},
 		},

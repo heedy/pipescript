@@ -15,7 +15,7 @@ func TestYearday(t *testing.T) {
 		ParseError: true,
 	}.Run(t)
 	pipescript.TestCase{
-		Pipescript: "yearday",
+		Pipescript: "yearday('UTC')",
 		Input: []pipescript.Datapoint{
 			{float64(time.Now().Unix()), 1},
 		},
