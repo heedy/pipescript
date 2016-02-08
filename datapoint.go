@@ -3,6 +3,7 @@ package pipescript
 import (
 	"encoding/json"
 	"fmt"
+	"time"
 
 	"github.com/connectordb/duck"
 )
@@ -25,6 +26,11 @@ import (
 type Datapoint struct {
 	Timestamp float64     `json:"t" msgpack:"t,omitempty" duck:"t"` // The time stamp in UNIX seconds for the current point
 	Data      interface{} `json:"d" msgpack:"d,omitempty" duck:"d"` // The data associated with the datapoint.
+}
+
+// Time returns the unix time object
+func (d *Datapoint) Time() time.Time {
+	return time.Unix(0, int64(1e9*d.Timestamp))
 }
 
 // String returns the entire datapoint as a json string. Notice that this function conforms to

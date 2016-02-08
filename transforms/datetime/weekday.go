@@ -19,11 +19,11 @@ func (t weekdayTransform) Next(ti *pipescript.TransformIterator) (*pipescript.Da
 	if te.IsFinished() {
 		return te.Get()
 	}
-	tval := time.Unix(0, int64(1e9*te.Datapoint.Timestamp)).In(t.timezone)
+	tval := te.Datapoint.Time().In(t.timezone)
 	return te.Set(tval.Weekday().String())
 }
 
-var weekday = pipescript.Transform{
+var Weekday = pipescript.Transform{
 	Name:        "weekday",
 	Description: "Returns the weekday during which the datapoint happened ('Monday','Tuesday'...)",
 	OneToOne:    true,

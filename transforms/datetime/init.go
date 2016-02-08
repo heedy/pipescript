@@ -27,5 +27,17 @@ func getTimezone(arg *pipescript.Script) (*time.Location, error) {
 }
 
 func Register() {
-	weekday.Register()
+	Hour.Register()
+	Day.Register()
+	Week.Register()
+	Month.Register()
+	Year.Register()
+
+	Dayhour.Register()
+
+	Weekday.Register()
+	Monthday.Register()
+	Yearday.Register()
+
+	Yearmonth.Register()
 }
