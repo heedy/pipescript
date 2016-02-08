@@ -1,4 +1,8 @@
-[![Build Status](https://travis-ci.org/connectordb/pipescript.svg)](https://travis-ci.org/connectordb/pipescript)[![Coverage Status](https://coveralls.io/repos/connectordb/pipescript/badge.svg?branch=master&service=github)](https://coveralls.io/github/connectordb/pipescript?branch=master)[![GoDoc](https://godoc.org/github.com/connectordb/pipescript?status.svg)](http://godoc.org/github.com/connectordb/pipescript)
+[![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/connectordb/pipescript/blob/master/LICENSE)
+[![ReportCard](http://goreportcard.com/badge/connectordb/pipescript)](http://goreportcard.com/report/connectordb/pipescript)
+[![Build Status](https://travis-ci.org/connectordb/pipescript.svg)](https://travis-ci.org/connectordb/pipescript)
+[![Coverage Status](https://coveralls.io/repos/connectordb/pipescript/badge.svg?branch=master&service=github)](https://coveralls.io/github/connectordb/pipescript?branch=master)
+[![GoDoc](https://godoc.org/github.com/connectordb/pipescript?status.svg)](http://godoc.org/github.com/connectordb/pipescript)
 
 # PipeScript
 
