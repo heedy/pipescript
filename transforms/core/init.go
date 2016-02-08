@@ -8,6 +8,8 @@ func Register() {
 	If.Register()
 	IdentityTransform.Register()
 
+	Ifelse.Register()
+
 	Changed.Register()
 
 	First.Register()
