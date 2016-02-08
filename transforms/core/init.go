@@ -23,6 +23,7 @@ func Register() {
 	T.Register()
 	Tshift.Register()
 
+	IMap.Register()
 	Map.Register()
 	Reduce.Register()
 }
