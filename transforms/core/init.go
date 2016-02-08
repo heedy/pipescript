@@ -5,6 +5,9 @@ It should be imported by default by basically all users of PipeScript
 package core
 
 func Register() {
+	If.Register()
+	IdentityTransform.Register()
+
 	Changed.Register()
 
 	First.Register()

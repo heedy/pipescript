@@ -1,22 +1,29 @@
-package pipescript
+package pipescript_test
 
 import (
 	"testing"
 
+	"github.com/connectordb/pipescript"
+	"github.com/connectordb/pipescript/transforms/core"
 	"github.com/stretchr/testify/require"
 )
 
+func init() {
+	// Register the core
+	core.Register()
+}
+
 func TestSyntax(t *testing.T) {
-	_, err := Parse("-")
+	_, err := pipescript.Parse("-")
 	require.Error(t, err)
-	_, err = Parse("'")
+	_, err = pipescript.Parse("'")
 	require.Error(t, err)
-	_, err = Parse("this_transform_DNE")
+	_, err = pipescript.Parse("this_transform_DNE")
 	require.Error(t, err)
 }
 
 func TestParserConstant(t *testing.T) {
-	ConstantTestCases{
+	pipescript.ConstantTestCases{
 		// Check builtins
 		{"true", true},
 		{"false", false},
@@ -59,9 +66,9 @@ func TestParser(t *testing.T) {
 	// Here we perform more advanced pipes to make sure everything works as it should in the parser
 	// We assume all built-in functions are available
 
-	TestCase{
+	pipescript.TestCase{
 		Pipescript: "if $ < 5 | $ >= 3",
-		Input: []Datapoint{
+		Input: []pipescript.Datapoint{
 			{1, 1},
 			{2, 10},
 			{3, 7},
@@ -70,7 +77,7 @@ func TestParser(t *testing.T) {
 			{6, 2.0},
 			{7, 3.14},
 		},
-		Output: []Datapoint{
+		Output: []pipescript.Datapoint{
 			{1, false},
 			{4, false},
 			{5, true},
@@ -79,9 +86,9 @@ func TestParser(t *testing.T) {
 		},
 	}.Run(t)
 
-	TestCase{
+	pipescript.TestCase{
 		Pipescript: "if($ < 5):($ >= 3)",
-		Input: []Datapoint{
+		Input: []pipescript.Datapoint{
 			{1, 1},
 			{2, 10},
 			{3, 7},
@@ -90,7 +97,7 @@ func TestParser(t *testing.T) {
 			{6, 2.0},
 			{7, 3.14},
 		},
-		Output: []Datapoint{
+		Output: []pipescript.Datapoint{
 			{1, false},
 			{4, false},
 			{5, true},
@@ -99,43 +106,43 @@ func TestParser(t *testing.T) {
 		},
 	}.Run(t)
 
-	TestCase{
+	pipescript.TestCase{
 		// This tests order of prescedence: ":" pipes are high prescedence, and will be executed first
 		Pipescript: "if ($['test']:$ < 5) | $['test']",
-		Input: []Datapoint{
+		Input: []pipescript.Datapoint{
 			{1, map[string]int{"test": 4}},
 			{2, map[string]int{"test": 8}},
 			{3, map[string]int{"test": 3}},
 		},
-		Output: []Datapoint{
+		Output: []pipescript.Datapoint{
 			{1, 4},
 			{3, 3},
 		},
 	}.Run(t)
 
-	TestCase{
+	pipescript.TestCase{
 		// This tests order of prescedence: ":" pipes are high prescedence, and will be executed first
 		Pipescript: "if $['test']:$ < 5 | $['test']",
-		Input: []Datapoint{
+		Input: []pipescript.Datapoint{
 			{1, map[string]int{"test": 4}},
 			{2, map[string]int{"test": 8}},
 			{3, map[string]int{"test": 3}},
 		},
-		Output: []Datapoint{
+		Output: []pipescript.Datapoint{
 			{1, 4},
 			{3, 3},
 		},
 	}.Run(t)
 
-	TestCase{
+	pipescript.TestCase{
 		// This tests order of prescedence: ":" pipes are high prescedence, and will be executed first
 		Pipescript: "if $:5 > $['test']:$:$:$ | $['test']:$",
-		Input: []Datapoint{
+		Input: []pipescript.Datapoint{
 			{1, map[string]int{"test": 4}},
 			{2, map[string]int{"test": 8}},
 			{3, map[string]int{"test": 3}},
 		},
-		Output: []Datapoint{
+		Output: []pipescript.Datapoint{
 			{1, 4},
 			{3, 3},
 		},

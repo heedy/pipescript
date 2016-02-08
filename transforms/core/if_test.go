@@ -1,22 +1,26 @@
-package pipescript
+package core
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/connectordb/pipescript"
+)
 
 func TestIf(t *testing.T) {
-	TestCase{
+	pipescript.TestCase{
 		Pipescript: "if",
 		ParseError: true,
 	}.Run(t)
 
-	TestCase{
+	pipescript.TestCase{
 		Pipescript: "if($)",
-		Input: []Datapoint{
+		Input: []pipescript.Datapoint{
 			{1, 1},
 			{2, 8},
 			{3, "false"},
 			{4, "hi"},
 		},
-		Output: []Datapoint{
+		Output: []pipescript.Datapoint{
 			{1, 1},
 			{2, 8},
 		},
@@ -24,15 +28,15 @@ func TestIf(t *testing.T) {
 		OutputError: true,
 	}.Run(t)
 
-	TestCase{
+	pipescript.TestCase{
 		Pipescript: "if $",
-		Input: []Datapoint{
+		Input: []pipescript.Datapoint{
 			{1, 1},
 			{2, 8},
 			{3, "false"},
 			{4, "hi"},
 		},
-		Output: []Datapoint{
+		Output: []pipescript.Datapoint{
 			{1, 1},
 			{2, 8},
 		},
@@ -40,22 +44,22 @@ func TestIf(t *testing.T) {
 		OutputError: true,
 	}.Run(t)
 
-	TestCase{
+	pipescript.TestCase{
 		Pipescript: "if $ < 5",
-		Input: []Datapoint{
+		Input: []pipescript.Datapoint{
 			{1, 1},
 			{2, 8},
 			{3, "false"},
 		},
-		Output: []Datapoint{
+		Output: []pipescript.Datapoint{
 			{1, 1},
 			{3, "false"},
 		},
-		SecondaryInput: []Datapoint{
+		SecondaryInput: []pipescript.Datapoint{
 			{4, 4},
 			{5, "hi"},
 		},
-		SecondaryOutput: []Datapoint{
+		SecondaryOutput: []pipescript.Datapoint{
 			{4, 4},
 		},
 		OutputError: true,

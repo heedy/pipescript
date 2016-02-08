@@ -8,7 +8,9 @@ import (
 )
 
 func init() {
-	// We need Last
+	// We need Last, if, and identity for good measure
+	core.IdentityTransform.Register()
+	core.If.Register()
 	core.Last.Register()
 
 	// In order to initialize

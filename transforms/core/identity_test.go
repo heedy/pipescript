@@ -1,87 +1,88 @@
-package pipescript
+package core
 
 import (
 	"testing"
 
+	"github.com/connectordb/pipescript"
 	"github.com/stretchr/testify/require"
 )
 
 func TestIdentityError(t *testing.T) {
-	c := ConstantScript("hi")
+	c := pipescript.ConstantScript("hi")
 	c.Constant = false
-	_, err := identityTransform.Generator("$", []*Script{c})
+	_, err := IdentityTransform.Generator("$", []*pipescript.Script{c})
 	require.Error(t, err)
 }
 
 func TestIdentity(t *testing.T) {
-	TestCase{
+	pipescript.TestCase{
 		Pipescript: "$ | $",
-		Input: []Datapoint{
+		Input: []pipescript.Datapoint{
 			{1, 1},
 			{2, true},
 			{3, "hi"},
 		},
-		Output: []Datapoint{
+		Output: []pipescript.Datapoint{
 			{1, 1},
 			{2, true},
 			{3, "hi"},
 		},
-		SecondaryInput: []Datapoint{
+		SecondaryInput: []pipescript.Datapoint{
 			{4, 4},
 			{5, 5},
 		},
-		SecondaryOutput: []Datapoint{
+		SecondaryOutput: []pipescript.Datapoint{
 			{4, 4},
 			{5, 5},
 		},
 	}.Run(t)
 
-	TestCase{
+	pipescript.TestCase{
 		Pipescript:  "$[1]",
 		OutputError: true,
-		Input: []Datapoint{
+		Input: []pipescript.Datapoint{
 			{1, []string{"hi", "ho"}},
 			{2, map[string]string{"hello": "world", "1": "bar"}},
 		},
-		Output: []Datapoint{
+		Output: []pipescript.Datapoint{
 			{1, "ho"},
 			{2, "bar"},
 		},
-		SecondaryInput: []Datapoint{
+		SecondaryInput: []pipescript.Datapoint{
 			{4, map[string]string{"hello": "world", "1": "bar"}},
 			{5, 5}, // This should give an error
 		},
-		SecondaryOutput: []Datapoint{
+		SecondaryOutput: []pipescript.Datapoint{
 			{4, "bar"},
 		},
 	}.Run(t)
 
-	TestCase{
+	pipescript.TestCase{
 		Pipescript: "$[$]", // The transform requries a constant
 		ParseError: true,
 	}.Run(t)
 
-	TestCase{
+	pipescript.TestCase{
 		Pipescript: "$[1,2]", // Identity only accepts one arg
 		ParseError: true,
 	}.Run(t)
 
-	TestCase{
+	pipescript.TestCase{
 		Pipescript:  "$ 1", // Bash-like usage
 		OutputError: true,
-		Input: []Datapoint{
+		Input: []pipescript.Datapoint{
 			{1, []string{"hi", "ho"}},
 			{2, map[string]string{"hello": "world", "1": "bar"}},
 		},
-		Output: []Datapoint{
+		Output: []pipescript.Datapoint{
 			{1, "ho"},
 			{2, "bar"},
 		},
-		SecondaryInput: []Datapoint{
+		SecondaryInput: []pipescript.Datapoint{
 			{4, map[string]string{"hello": "world", "1": "bar"}},
 			{5, 5}, // This should give an error
 		},
-		SecondaryOutput: []Datapoint{
+		SecondaryOutput: []pipescript.Datapoint{
 			{4, "bar"},
 		},
 	}.Run(t)
