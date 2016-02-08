@@ -151,7 +151,7 @@ func TestParser(t *testing.T) {
 	// Test multiple arguments
 	pipescript.TestCase{
 		// This tests order of prescedence: ":" pipes are high prescedence, and will be executed first
-		Pipescript: "map($>5,count)",
+		Pipescript: "map($ > 5, count)",
 		Input: []pipescript.Datapoint{
 			{1, 4},
 			{2, 6},
