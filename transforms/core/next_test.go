@@ -17,7 +17,7 @@ func TestNext(t *testing.T) {
 		ParseError: true,
 	}.Run(t)
 	pipescript.TestCase{
-		Pipescript: "next -1",
+		Pipescript: "next (-1)",
 		ParseError: true,
 	}.Run(t)
 	pipescript.TestCase{
