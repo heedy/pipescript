@@ -57,4 +57,8 @@ func Register() {
 	Reduce.Register()
 
 	Remember.Register()
+
+	Reset.Register()
+
+	Rand.Register()
 }
