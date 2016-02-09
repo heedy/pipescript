@@ -60,8 +60,9 @@ func TestComparison(t *testing.T) {
 		},
 		SecondaryOutput: []Datapoint{
 			{4, false},
+			{5, false},
 		},
-		OutputError: true,
+		OutputError: false,
 	}.Run(t)
 
 	TestCase{
@@ -104,8 +105,8 @@ func TestComparison(t *testing.T) {
 		},
 		SecondaryOutput: []Datapoint{
 			{4, true},
+			{5, true},
 		},
-		OutputError: true,
 	}.Run(t)
 
 	TestCase{
