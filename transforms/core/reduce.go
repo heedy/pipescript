@@ -7,21 +7,6 @@ import (
 	"github.com/connectordb/pipescript"
 )
 
-var iflast *pipescript.Script
-
-func init() {
-	// Manually generate the if last script
-	var err error
-	last, err := Last.Script(nil)
-	if err != nil {
-		panic("Could not generate script for 'if last' for Reduce Transform " + err.Error())
-	}
-	iflast, err = If.Script([]*pipescript.Script{last})
-	if err != nil {
-		panic("Could not generate script for 'if last' for Reduce Transform " + err.Error())
-	}
-}
-
 type reduceTransform struct {
 	script *pipescript.Script
 }
@@ -55,8 +40,6 @@ func (t *reduceTransform) Next(ti *pipescript.TransformIterator) (*pipescript.Da
 	if err != nil {
 		return nil, err
 	}
-	ifl, _ := iflast.Copy() // Shouldn't error
-	s.Append(ifl)
 	s.SetInput(dpi)
 
 	// And now return the resutl!
@@ -80,6 +63,8 @@ It is mainly useful as a companion to the map transform, with which it is possib
 		},
 	},
 	Generator: func(name string, args []*pipescript.Script) (*pipescript.TransformInitializer, error) {
+		ifl, _ := iflast.Copy() // Shouldn't error
+		args[0].Append(ifl)
 		return &pipescript.TransformInitializer{Transform: &reduceTransform{args[0]}}, nil
 	},
 }

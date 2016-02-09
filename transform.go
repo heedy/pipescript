@@ -116,10 +116,24 @@ func (t *Transform) Script(args []*Script) (*Script, error) {
 				return nil, fmt.Errorf("Argument %d of transform '%s' is required (got %d args).", i+1, t.Name, len(args))
 			}
 
-			// The argument was optional and was NOT passed in. We set it up using a ConstantScript using the default value
-			// given in the transform config. Note that we assume that all previous arguments MUST exist. This means that there can't
-			// be optional arguments in between required arguments.
-			args = append(args, ConstantScript(t.Args[i].Default))
+			// The argument was optional and was NOT passed in.
+			if s, ok := t.Args[i].Default.(*Script); ok {
+				if s == nil {
+					panic("DEFAULT SCRIPT WAS NULL")
+				}
+				// If the default is given as a script, we copy it and send it in as an argument
+				copiedscript, err := s.Copy()
+				if err != nil {
+					return nil, err
+				}
+				args = append(args, copiedscript)
+			} else {
+				// We set it up using a ConstantScript using the default value
+				// given in the transform config. Note that we assume that all previous arguments MUST exist. This means that there can't
+				// be optional arguments in between required arguments.
+				args = append(args, ConstantScript(t.Args[i].Default))
+			}
+
 		}
 	}
 

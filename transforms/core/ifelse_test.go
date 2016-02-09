@@ -4,9 +4,11 @@ import (
 	"testing"
 
 	"github.com/connectordb/pipescript"
+	"github.com/stretchr/testify/require"
 )
 
 func TestIfelse(t *testing.T) {
+	require.NotNil(t, identity)
 	// This needs much more testing
 	pipescript.TestCase{
 		Pipescript: "ifelse($>1,0)",

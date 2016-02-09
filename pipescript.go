@@ -24,6 +24,16 @@ type Script struct {
 	Peek      bool // Whether the script peeks at future values.
 }
 
+func (s *Script) String() string {
+	return fmt.Sprintf("<SCRIPT onetoone=%v constant=%v stateless=%v peek=%v >", s.OneToOne, s.Constant, s.Stateless, s.Peek)
+}
+
+// MarshalJSON allows us to implement the marshaller interface when using scripts as default args. It returns null,
+// so that it seems empty to json
+func (s *Script) MarshalJSON() ([]byte, error) {
+	return []byte("null"), nil
+}
+
 // Append takes a Script and appends another script to the end of its command chain. That is,
 // if
 //	s = (a | b | c)
