@@ -49,7 +49,7 @@ type scriptFunc struct {
 %left pUMINUS      /*  supplies  precedence  for  unary  minus  */
 %left pCOLON
 
-
+//%nonassoc pSUPER
 
 
 
@@ -89,7 +89,7 @@ pipescript: transform
  	Input: statement
 	Output: algebraic
 *************************************************************************************/
-transform: algebraic;
+transform: algebraic	// Algebraic HAS to be first
 	|
 	function
 		{
@@ -229,6 +229,30 @@ algebraic: statement
 			$$ = s
 		}
 	|
+	/* The parser has difficulty handling subtraction of IDENTIFIER_SPACE, since we have conflict with bash/function style transforms.
+	pIDENTIFIER_SPACE pMINUS algebraic -> pIDENTIFIER_SPACE (pMINUS algebraic) by default (unary minus)
+	We want it to work as normal subtraction. Resolve this here. */
+	pIDENTIFIER_SPACE pMINUS algebraic //%prec pSUPER
+	{
+		// First get the script of this function
+		sf := scriptFunc{
+			transform: $1,
+			args: []*Script{},
+		}
+		s,err := parserGetScript(sf)
+		if err!=nil {
+			parserlex.Error(err.Error())
+			goto ret1
+		}
+		// Now subtract the two
+		s,err = subtractScript(s,$3)
+		if err!=nil {
+			parserlex.Error(err.Error())
+			goto ret1
+		}
+		$$ = s
+	}
+	|
 	algebraic pMINUS algebraic %prec pMINUS
 		{
 			s,err := subtractScript($1,$3)
@@ -293,7 +317,8 @@ simpletransform:
 	;
 
 simplefunction:
-/* Set up the handlers of parentheses - we need to match correct type of parens */
+
+	/* Set up the handlers of parentheses - we need to match correct type of parens */
 	pIDENTIFIER pLPARENS script_array pRPARENS //%prec pARGS
 		{
 			$$.transform = $1
@@ -321,7 +346,13 @@ simplefunction:
 			$$.args = []*Script{$3}
 		}
 	|
-
+	pIDENTIFIER pLPARENS pRPARENS
+		{
+			// Allows calling as a function
+			$$.transform = $1
+			$$.args = []*Script{}
+		}
+	|
 	pIDENTIFIER %prec pNOARGS
 		{
 			$$.transform = $1

@@ -4,13 +4,13 @@ import (
 	"testing"
 
 	"github.com/connectordb/pipescript"
-	"github.com/connectordb/pipescript/transforms/core"
+	"github.com/connectordb/pipescript/transforms"
 	"github.com/stretchr/testify/require"
 )
 
 func init() {
 	// Register the core
-	core.Register()
+	transforms.Register()
 }
 
 func TestSyntax(t *testing.T) {
@@ -179,4 +179,44 @@ func TestParser(t *testing.T) {
 			{6, map[string]interface{}{"false": int64(1), "true": int64(2)}},
 		},
 	}.Run(t)
+}
+
+func TestIdentifierSubtract(t *testing.T) {
+	// Test multiple arguments
+	pipescript.TestCase{
+		// This is a weird parser issue I got
+		Pipescript: "month() - remember(first, month)",
+		Input: []pipescript.Datapoint{
+			{1, 4},
+		},
+		Output: []pipescript.Datapoint{
+			{1, float64(0)},
+		},
+	}.Run(t)
+	pipescript.TestCase{
+		// This is a weird parser issue I got
+		Pipescript: "month (- remember(first, month))",
+		ParseError: true,
+	}.Run(t)
+	pipescript.TestCase{
+		// This is a weird parser issue I got
+		Pipescript: "month-remember(first, month)",
+		Input: []pipescript.Datapoint{
+			{1, 4},
+		},
+		Output: []pipescript.Datapoint{
+			{1, float64(0)},
+		},
+	}.Run(t)
+	pipescript.TestCase{
+		// This is a weird parser issue I got
+		Pipescript: "month - remember(first, month)",
+		Input: []pipescript.Datapoint{
+			{1, 4},
+		},
+		Output: []pipescript.Datapoint{
+			{1, float64(0)},
+		},
+	}.Run(t)
+
 }
