@@ -1,0 +1,32 @@
+{
+    "name": "pipescript",
+    "version": "0.1.1",
+    "description": "PipeScript javascript port",
+    "main": "pipescript.js",
+    "author": "ConnectorDB <support@connectordb.com> (https://connectordb.com)",
+    "scripts": {
+        "test": "mocha --recursive",
+        "build": "gopherjs build pipescript.go -m"
+    },
+    "contributors": [{
+        "name": "Daniel Kumor",
+        "email": "daniel@dkumor.com"
+    }, {
+        "name": "Joseph Lewis",
+        "email": "joseph@josephlewis.net"
+    }],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/connectordb/pipescript"
+    },
+    "homepage": "https://connectordb.github.io/pipescript",
+    "bugs": {
+        "url": "https://github.com/connectordb/pipescript/issues"
+    },
+    "license": "MIT",
+    "devDependencies": {
+        "chai": "^3.5.0",
+        "mocha": "^2.2.5"
+    },
+    "dependencies": {}
+}
