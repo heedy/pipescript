@@ -1,13 +1,17 @@
-package pipescript
+package interpolator
 
-import "math"
+import (
+	"math"
+
+	"github.com/connectordb/pipescript"
+)
 
 type mergeIterator struct {
-	iterator  []DatapointIterator
-	datapoint []*Datapoint
+	iterator  []pipescript.DatapointIterator
+	datapoint []*pipescript.Datapoint
 }
 
-func (m *mergeIterator) Next() (dp *Datapoint, err error) {
+func (m *mergeIterator) Next() (dp *pipescript.Datapoint, err error) {
 	//TODO: There are several inefficiencies in this implementation: First off, it is O(n), where
 	//it can be made O(logn) by using a tree. Second, I just keep nulls in the array, which is
 	//totally BS, the array could be made shorter when one iterator empties. But I just want to get this
@@ -38,8 +42,8 @@ func (m *mergeIterator) Next() (dp *Datapoint, err error) {
 // Merge takes multiple DatapointIterators and merges them into one DatapointIterator based upon
 // increasing timestamp. Remember that everywhere in PipeScript, it is assumed that datapoints have
 // increasing timestamp, that is, they are ordered by time.
-func Merge(da []DatapointIterator) (DatapointIterator, error) {
-	dpa := make([]*Datapoint, 0, len(da))
+func Merge(da []pipescript.DatapointIterator) (pipescript.DatapointIterator, error) {
+	dpa := make([]*pipescript.Datapoint, 0, len(da))
 
 	for i := range da {
 		dp, err := da[i].Next()
