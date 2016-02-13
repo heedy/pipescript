@@ -15,6 +15,7 @@ type scriptFunc struct {
 	args []*Script
 }
 
+
 %}
 
 
@@ -23,12 +24,14 @@ type scriptFunc struct {
 	script *Script
 	sfunc scriptFunc
 	scriptArray []*Script
+	objBuilder map[string]*Script
 	strVal string	// This is how variables are passed in: by their string value
 }
 
 %type <script> script pipescript constant algebraic simpletransform transform statement parensvalue
 %type <sfunc> function simplefunction
 %type <scriptArray> script_array
+%type <objBuilder> object_builder
 %token <strVal> pNUMBER  pSTRING  pBOOL pIDENTIFIER pIDENTIFIER_SPACE
 %token <strVal> pAND pOR pNOT pCOMPARISON pPLUS pMINUS pMULTIPLY pDIVIDE pMODULO pPOW pCOMMA
 %token <strVal> pRPARENS pLPARENS pRSQUARE pLSQUARE pRBRACKET pLBRACKET pPIPE pCOLON
@@ -293,8 +296,6 @@ parensvalue:
 	/* Set up the handlers of parentheses */
 	pLPARENS pipescript pRPARENS { $$ = $2 }
 	|
-	pLBRACKET pipescript pRBRACKET { $$ = $2 }
-	|
 	pLSQUARE pipescript pRSQUARE { $$ = $2 }
 	;
 
@@ -313,6 +314,24 @@ simpletransform:
 
 			$$ = s
 
+		}
+	|
+	object_builder pSTRING pCOLON algebraic pRBRACKET
+		{
+			if _,ok := $1[$2]; ok {
+				parserlex.Error(fmt.Sprintf("Key %s found multiple times in json object",$2))
+				goto ret1
+			}
+			$1[$2] = $4
+
+			// Now generate the objectScript
+			s,err := newObjectTransform($1)
+			if err!=nil {
+				parserlex.Error(err.Error())
+				goto ret1
+			}
+
+			$$ = s
 		}
 	;
 
@@ -383,6 +402,27 @@ script_array:
 		}
 	;
 
+
+/*************************************************************************************
+object_builder allows us to read in a json-formatted object whic includes transforms as values
+*************************************************************************************/
+
+object_builder:
+	pLBRACKET
+		{
+			$$ = make(map[string]*Script)
+		}
+	|
+	object_builder pSTRING pCOLON algebraic pCOMMA
+		{
+			if _,ok := $1[$2]; ok {
+				parserlex.Error(fmt.Sprintf("Key %s found multiple times in json object",$2))
+				goto ret1
+			}
+			$1[$2] = $4
+			$$ = $1
+		}
+	;
 
 /*************************************************************************************
 Prepare constant values. The lexed values are all strings, so convert to correct type
