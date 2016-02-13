@@ -9,13 +9,13 @@ import (
 func TestIMap(t *testing.T) {
 	Register()
 	pipescript.TestCase{
-		Pipescript: "imap $ {next}",
+		Pipescript: "imap $ next",
 		ParseError: true,
 	}.Run(t)
 
 	pipescript.TestCase{
 		// This tests order of prescedence: ":" pipes are high prescedence, and will be executed first
-		Pipescript: "imap $ > 5 {count}",
+		Pipescript: "imap $ > 5 count",
 		Input: []pipescript.Datapoint{
 			{1, 4},
 			{2, 6},

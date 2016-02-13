@@ -32,7 +32,10 @@ func init() {
 }
 
 func Register() {
+	Set.Register()
+
 	If.Register()
+
 	IdentityTransform.Register()
 
 	Ifelse.Register()
