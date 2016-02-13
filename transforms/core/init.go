@@ -47,7 +47,6 @@ func Register() {
 
 	Count.Register()
 	Sum.Register()
-	Mean.Register()
 
 	T.Register()
 	Tshift.Register()

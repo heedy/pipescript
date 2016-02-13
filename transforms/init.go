@@ -8,10 +8,12 @@ package transforms
 import (
 	"github.com/connectordb/pipescript/transforms/core"     // The core transforms
 	"github.com/connectordb/pipescript/transforms/datetime" // Manipulating timestamps
+	"github.com/connectordb/pipescript/transforms/stats"    // Statistical transforms
 )
 
 // Registers ALL functions
 func Register() {
 	core.Register()
+	stats.Register()
 	datetime.Register()
 }
