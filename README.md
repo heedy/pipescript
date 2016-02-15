@@ -4,6 +4,10 @@
 [![Coverage Status](https://coveralls.io/repos/connectordb/pipescript/badge.svg?branch=master&service=github)](https://coveralls.io/github/connectordb/pipescript?branch=master)
 [![GoDoc](https://godoc.org/github.com/connectordb/pipescript?status.svg)](http://godoc.org/github.com/connectordb/pipescript)
 
+##  [Try It](https://connectordb.github.io/pipescript)
+
+
+
 # PipeScript
 
 When writing ConnectorDB, we noticed that our transform and query engine would be useful as a
@@ -29,8 +33,8 @@ TL;DR: PipeScript is a small-scale spark.
 
 ## Tutorial
 
-A general PipeScript tutorial [can be found here](https://github.com/connectordb/pipescript/wiki/Basics).
-Instructions for embedding and extending PipeScript with your own transforms and interpolators can be found [on the wiki](https://github.com/connectordb/pipescript/wiki).
+A general PipeScript tutorial [can be found here](https://connectordb.github.io/pipescript/docs/basics.html).
+Instructions for embedding and extending PipeScript with your own transforms and interpolators can be found [here](https://connectordb.github.io/pipescript/docs/embedding.html).
 
 ## Compiling
 
