@@ -34,7 +34,7 @@ TL;DR: PipeScript is a small-scale spark.
 ## Tutorial
 
 A general PipeScript tutorial [can be found here](https://connectordb.github.io/pipescript/docs/basics.html).
-Instructions for embedding and extending PipeScript with your own transforms and interpolators can be found here](https://connectordb.github.io/pipescript/docs/embedding.html).
+Instructions for embedding and extending PipeScript with your own transforms and interpolators can be found [here](https://connectordb.github.io/pipescript/docs/embedding.html).
 
 ## Compiling
 
