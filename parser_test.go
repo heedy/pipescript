@@ -27,6 +27,9 @@ func TestParserConstant(t *testing.T) {
 		// Check builtins
 		{"true", true},
 		{"false", false},
+		{"not (0.1 < 1)", false},
+		{"not 0.1 < 1", false},
+		{"(not 0.1) < 1", true},
 
 		// Check operator prescedence
 		{"5+5/10", float64(5.5)},
@@ -41,6 +44,7 @@ func TestParserConstant(t *testing.T) {
 		{"(false or 1) - 1", float64(0)},
 		{"true and 5==5", true},
 		{"-1 + 2", float64(1)},
+		{"-(1 + 2)", float64(-3)},
 		{"-(1 + 2)", float64(-3)},
 
 		// Test strings

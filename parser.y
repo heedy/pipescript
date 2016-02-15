@@ -44,8 +44,8 @@ type scriptFunc struct {
 /* Order of operations for algebraic expressions */
 %left pOR
 %left pAND
-%left pCOMPARISON
 %left pNOT
+%left pCOMPARISON
 %left pPLUS pMINUS
 %left pMULTIPLY pDIVIDE
 %left pMODULO pPOW
