@@ -36,15 +36,27 @@ TL;DR: PipeScript is a small-scale spark.
 A general PipeScript tutorial [can be found here](https://connectordb.github.io/pipescript/docs/basics.html).
 Instructions for embedding and extending PipeScript with your own transforms and interpolators can be found [here](https://connectordb.github.io/pipescript/docs/embedding.html).
 
-## Compiling
+## Standalone
+
+### Compiling
 
 ```
 go get github.com/connectordb/pipescript
-cd "$(GOPATH)
+cd $(GOPATH)
 go test ./...
 cd main
-go build
+go build pipes.go
 ```
+
+### Usage
+
+The standalone can be used to run PipeScript queries on datapoint, json, and csv formatted data. The following will count the number of datapoints in a csv file:
+
+```
+pipes run -i myfile.csv -ifmt csv --notimestamp "count | if last"
+```
+
+Remember that you need to escape the identity transform ($) in bash (\$)
 
 #### SQL
 If you want to perform SQL queries on files, please look at [q](https://github.com/harelba/q).

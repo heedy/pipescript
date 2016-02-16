@@ -36,7 +36,7 @@ type Script struct {
 
 // IsValid returns whether the script parsed correctly
 func (s *Script) IsValid() bool {
-	return s.script != nil
+	return s.script != nil && s.errorMessage == ""
 }
 
 // Returns the error message
