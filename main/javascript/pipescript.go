@@ -50,18 +50,44 @@ func (s *Script) Error() string {
 // "json" - general json document
 // "csv" - general csv document
 // The same script can ONLY be run twice if it did not have an error.
-func (s *Script) Run(input string, inputType string, outputType string) string {
+func (s *Script) Run(input string, inputType string, outputType string, timestamphint string, notimestamp bool) string {
 	if s.script == nil || s.errorMessage != "" {
 		return ""
+	}
+	if inputType == "undefined" {
+		inputType = "dp"
+	}
+	if timestamphint == "undefined" {
+		timestamphint = ""
 	}
 
 	// Read in the input as the correct type
 	// TODO: currently only datapoint is supported
 	r := strings.NewReader(input)
 
-	dpr, err := bytestreams.NewDatapointReader(r)
-	if err != nil {
-		s.errorMessage = err.Error()
+	var dpr pipescript.DatapointIterator
+	var err error
+	switch inputType {
+	case "dp":
+		dpr, err = bytestreams.NewDatapointReader(r)
+		if err != nil {
+			s.errorMessage = err.Error()
+			return ""
+		}
+	case "json":
+		dpr, err = bytestreams.NewJSONDatapointReader(r, timestamphint, notimestamp)
+		if err != nil {
+			s.errorMessage = err.Error()
+			return ""
+		}
+	case "csv":
+		dpr, err = bytestreams.NewCSVDatapointReader(r, timestamphint, notimestamp)
+		if err != nil {
+			s.errorMessage = err.Error()
+			return ""
+		}
+	default:
+		s.errorMessage = "Unrecognized input format"
 		return ""
 	}
 	s.script.SetInput(dpr)

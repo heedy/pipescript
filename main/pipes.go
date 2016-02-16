@@ -50,10 +50,28 @@ func runner(c *cli.Context, str string) {
 	}
 
 	// Now set up the datapoint reader
-	dpr, err := bytestreams.NewDatapointReader(r)
-	if err != nil {
-		log.Fatal(err)
+	var dpr pipescript.DatapointIterator
+	switch c.String("ifmt") {
+	case "dp":
+
+		dpr, err = bytestreams.NewDatapointReader(r)
+		if err != nil {
+			log.Fatal(err)
+		}
+	case "json":
+		dpr, err = bytestreams.NewJSONDatapointReader(r, c.String("timestamp"), c.Bool("notimestamp"))
+		if err != nil {
+			log.Fatal(err)
+		}
+	case "csv":
+		dpr, err = bytestreams.NewCSVDatapointReader(r, c.String("timestamp"), c.Bool("notimestamp"))
+		if err != nil {
+			log.Fatal(err)
+		}
+	default:
+		log.Fatal("Unrecognized input format")
 	}
+
 	s.SetInput(dpr)
 
 	// Now set the output json stream writer
@@ -138,6 +156,20 @@ func main() {
 				cli.BoolFlag{
 					Name:  "minify,m",
 					Usage: "Whether to indent the json for easy reading",
+				},
+				cli.BoolFlag{
+					Name:  "notimestamp",
+					Usage: "If set, does not look for a timestamp field in input",
+				},
+				cli.StringFlag{
+					Name:  "ifmt",
+					Value: "dp",
+					Usage: "The data format to use for input data (dp,csv,json)",
+				},
+				cli.StringFlag{
+					Name:  "timestamp",
+					Value: "",
+					Usage: "Allows to explicitly set the field name to use for timestamp values",
 				},
 			},
 		},

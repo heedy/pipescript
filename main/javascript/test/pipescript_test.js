@@ -32,8 +32,16 @@ describe("PipeScript Javascript", function() {
                 d: 6
             }]);
     });
+    it("should have correct not prescendence", function() {
+        expect(JSON.parse(pipescript.Script("$ < 0 or not $ < 1")
+                .Run('[{"t": 1, "d": 0.1}')))
+            .to.deep.equal([{
+                t: 1.0,
+                d: false
+            }]);
+    });
     it("should correctly handle activity example", function() {
-        expect(JSON.parse(pipescript.Script('map($["activity"],$("steps"):sum) | if last')
+        expect(JSON.parse(pipescript.Script('map($["activity"],$("steps"):sum)')
                 .Run('[{ \
                         "t": 1,\
                         "d": {\
@@ -78,4 +86,50 @@ describe("PipeScript Javascript", function() {
                 d: "January"
             }]);
     });
-})
+    it("should be able to parse JSON", function() {
+        expect(JSON.parse(pipescript.Script('map($["activity"],$("steps"):sum)')
+                .Run('[\
+              {\
+                "t": "1974-08-11T01:37:45+00:00",\
+                "steps": 14,\
+                "activity": "walking"\
+            },\
+              {\
+                "t": "1974-08-12T03:44:25+00:00",\
+                "steps": 10,\
+                "activity": "running"\
+            },\
+              {\
+                "t": "1974-08-12T04:17:45+00:00",\
+                "steps": 12,\
+                "activity": "walking"\
+            },\
+              {\
+                "t": "1974-08-12T05:24:25+00:00",\
+                "steps": 5,\
+                "activity": "running"\
+            }]', "json")))
+            .to.deep.equal([{
+                t: 145517065.0,
+                d: {
+                    walking: 26,
+                    running: 15
+                }
+            }]);
+    });
+    it("should be able to parse CSV", function() {
+        expect(JSON.parse(pipescript.Script('map($["activity"],$("steps"):sum)')
+                .Run('time,steps,activity\n\
+1974-08-11T01:37:45+00:00,14,walking\n\
+1974-08-12T03:44:25+00:00,10,running\n\
+1974-08-12T04:17:45+00:00, 12,walking\n\
+1974-08-12T05:24:25+00:00,5,running', "csv")))
+            .to.deep.equal([{
+                t: 145517065.0,
+                d: {
+                    walking: 26,
+                    running: 15
+                }
+            }]);
+    });
+});
