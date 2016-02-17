@@ -8,6 +8,7 @@ import (
 
 	"github.com/connectordb/pipescript"
 	"github.com/connectordb/pipescript/bytestreams"
+	"github.com/connectordb/pipescript/interpolator"
 	"github.com/connectordb/pipescript/transforms"
 	"github.com/gopherjs/gopherjs/js"
 )
@@ -18,14 +19,16 @@ func main() {
 
 	// Make it usable in script tags
 	js.Global.Set("pipescript", map[string]interface{}{
-		"Script":     New,
-		"Transforms": Transforms,
+		"Script":        New,
+		"Transforms":    Transforms,
+		"Interpolators": Interpolators,
 	})
 
 	// Make it usable in node. Note that the above makes it register in global
 	// context also, which can't really be avoided easily
 	js.Module.Get("exports").Set("Script", New)
-	js.Module.Get("exports").Set("Transforms", New)
+	js.Module.Get("exports").Set("Transforms", Transforms)
+	js.Module.Get("exports").Set("Interpolators", Interpolators)
 
 }
 
@@ -122,6 +125,13 @@ func New(scriptstring string) *js.Object {
 // Returns a string json object of the documentation
 func Transforms() string {
 	b, _ := json.Marshal(pipescript.TransformRegistry)
+
+	return string(b)
+}
+
+// Returns a string json object of the documentation
+func Interpolators() string {
+	b, _ := json.Marshal(interpolator.InterpolatorRegistry)
 
 	return string(b)
 }
