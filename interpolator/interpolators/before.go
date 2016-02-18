@@ -1,6 +1,9 @@
-package interpolator
+package interpolators
 
-import "github.com/connectordb/pipescript"
+import (
+	"github.com/connectordb/pipescript"
+	"github.com/connectordb/pipescript/interpolator"
+)
 
 // BeforeInterpolator returns the closest datapoint /before (or equal) to the given timestamp
 type BeforeInterpolator struct {
@@ -36,10 +39,10 @@ func NewBeforeInterpolator(dpi pipescript.DatapointIterator) (*BeforeInterpolato
 	return &BeforeInterpolator{dpi, pd, cd}, err
 }
 
-var before = Interpolator{
+var before = interpolator.Interpolator{
 	Name:        "before",
 	Description: "Uses the closest datapoint before the interpolation timestamp",
-	Generator: func(name string, dpi pipescript.DatapointIterator) (i InterpolatorInstance, err error) {
+	Generator: func(name string, dpi pipescript.DatapointIterator) (i interpolator.InterpolatorInstance, err error) {
 		return NewBeforeInterpolator(dpi)
 	},
 }

@@ -1,21 +1,23 @@
-package interpolator
+package interpolator_test
 
 import (
 	"testing"
 
 	"github.com/connectordb/pipescript"
+	"github.com/connectordb/pipescript/interpolator"
+	"github.com/connectordb/pipescript/interpolator/interpolators"
 	"github.com/stretchr/testify/require"
 )
 
 func TestDataset(t *testing.T) {
 	dpi1 := pipescript.NewDatapointArrayIterator(testDpa)
 	dpi2 := pipescript.NewDatapointArrayIterator(testDpa)
-	i1, err := NewClosestInterpolator(dpi1)
+	i1, err := interpolators.NewClosestInterpolator(dpi1)
 	require.NoError(t, err)
-	i2, err := NewAfterInterpolator(dpi2)
+	i2, err := interpolators.NewAfterInterpolator(dpi2)
 	require.NoError(t, err)
 
-	ds := Dataset(map[string]InterpolatorInstance{"foo": i1, "bar": i2})
+	ds := interpolator.Dataset(map[string]interpolator.InterpolatorInstance{"foo": i1, "bar": i2})
 
 	dp, err := ds.Interpolate(1.1)
 	require.NoError(t, err)
@@ -41,15 +43,15 @@ func TestDataset(t *testing.T) {
 func TestXDataset(t *testing.T) {
 	dpi1 := pipescript.NewDatapointArrayIterator(testDpa[0:3])
 	dpi2 := pipescript.NewDatapointArrayIterator(testDpa)
-	i2, err := NewAfterInterpolator(dpi2)
+	i2, err := interpolators.NewAfterInterpolator(dpi2)
 	require.NoError(t, err)
 
-	ds := Dataset(map[string]InterpolatorInstance{"bar": i2})
+	ds := interpolator.Dataset(map[string]interpolator.InterpolatorInstance{"bar": i2})
 
-	_, err = GetXDataset(dpi1, "bar", ds)
+	_, err = interpolator.GetXDataset(dpi1, "bar", ds)
 	require.Error(t, err)
 
-	xd, err := GetXDataset(dpi1, "foo", ds)
+	xd, err := interpolator.GetXDataset(dpi1, "foo", ds)
 	require.NoError(t, err)
 
 	dp, err := xd.Next()
@@ -79,14 +81,14 @@ func TestXDataset(t *testing.T) {
 func TestTDataset(t *testing.T) {
 	dpi1 := pipescript.NewDatapointArrayIterator(testDpa)
 	dpi2 := pipescript.NewDatapointArrayIterator(testDpa)
-	i1, err := NewClosestInterpolator(dpi1)
+	i1, err := interpolators.NewClosestInterpolator(dpi1)
 	require.NoError(t, err)
-	i2, err := NewAfterInterpolator(dpi2)
+	i2, err := interpolators.NewAfterInterpolator(dpi2)
 	require.NoError(t, err)
 
-	ds := Dataset(map[string]InterpolatorInstance{"foo": i1, "bar": i2})
+	ds := interpolator.Dataset(map[string]interpolator.InterpolatorInstance{"foo": i1, "bar": i2})
 
-	td, err := GetTDataset(1, 2, 1, ds)
+	td, err := interpolator.GetTDataset(1, 2, 1, ds)
 	require.NoError(t, err)
 
 	dp, err := td.Next()

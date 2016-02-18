@@ -1,13 +1,18 @@
-package interpolator
+package interpolators
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/connectordb/pipescript/interpolator"
+)
 
 func TestClosest(t *testing.T) {
-	TestCase{
+	Register()
+	interpolator.TestCase{
 		Interpolator: "closest",
 		Input:        testDpa,
 
-		Output: []TestOutput{
+		Output: []interpolator.TestOutput{
 			{0.5, &testDpa[0]},
 			{2.1, &testDpa[1]}, //Make sure it gives closest value less
 			{2.5, &testDpa[1]}, //Make sure that it gives smaller if equal dist

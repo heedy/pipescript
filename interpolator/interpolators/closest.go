@@ -1,9 +1,10 @@
-package interpolator
+package interpolators
 
 import (
 	"math"
 
 	"github.com/connectordb/pipescript"
+	"github.com/connectordb/pipescript/interpolator"
 )
 
 // ClosestInterpolator interpolates an iterator by timestamp - getting the datapoint with the closest timestamp
@@ -47,10 +48,10 @@ func NewClosestInterpolator(dpi pipescript.DatapointIterator) (*ClosestInterpola
 	return &ClosestInterpolator{dpi, pd, cd}, err
 }
 
-var closest = Interpolator{
+var closest = interpolator.Interpolator{
 	Name:        "closest",
 	Description: "Uses the datapoint closest to the interpolation timestamp (both before and after)",
-	Generator: func(name string, dpi pipescript.DatapointIterator) (i InterpolatorInstance, err error) {
+	Generator: func(name string, dpi pipescript.DatapointIterator) (i interpolator.InterpolatorInstance, err error) {
 		return NewClosestInterpolator(dpi)
 	},
 }

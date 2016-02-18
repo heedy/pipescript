@@ -1,13 +1,18 @@
-package interpolator
+package interpolators
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/connectordb/pipescript/interpolator"
+)
 
 func TestBefore(t *testing.T) {
-	TestCase{
+	Register()
+	interpolator.TestCase{
 		Interpolator: "before",
 		Input:        testDpa,
 
-		Output: []TestOutput{
+		Output: []interpolator.TestOutput{
 			{0.5, nil},
 			{2.5, &testDpa[1]},
 			{5.0, &testDpa[4]},

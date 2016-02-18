@@ -1,10 +1,12 @@
-package interpolator
+package interpolator_test
 
 import (
 	"errors"
 	"testing"
 
 	"github.com/connectordb/pipescript"
+	"github.com/connectordb/pipescript/interpolator"
+	"github.com/connectordb/pipescript/interpolator/interpolators"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -25,28 +27,28 @@ var testDpa = []pipescript.Datapoint{
 func TestRegister(t *testing.T) {
 
 	// Make sure empty interpolator is rejected
-	assert.Error(t, Interpolator{}.Register())
+	assert.Error(t, interpolator.Interpolator{}.Register())
 
 	// Regsiter an interpolator
-	assert.NoError(t, Interpolator{
+	assert.NoError(t, interpolator.Interpolator{
 		Name:        "test",
 		Description: "I am testing!",
 
-		Generator: func(name string, dpi pipescript.DatapointIterator) (InterpolatorInstance, error) {
+		Generator: func(name string, dpi pipescript.DatapointIterator) (interpolator.InterpolatorInstance, error) {
 			return nil, errors.New("Not a real interpolator")
 		},
 	}.Register())
 
-	v, ok := InterpolatorRegistry["test"]
+	v, ok := interpolator.InterpolatorRegistry["test"]
 	assert.True(t, ok)
 	assert.Equal(t, "I am testing!", v.Description)
 
 	//Register an interpolator - but it already exists!
-	assert.Error(t, Interpolator{
+	assert.Error(t, interpolator.Interpolator{
 		Name:        "test",
 		Description: "fail",
 
-		Generator: func(name string, dpi pipescript.DatapointIterator) (InterpolatorInstance, error) {
+		Generator: func(name string, dpi pipescript.DatapointIterator) (interpolator.InterpolatorInstance, error) {
 			return nil, errors.New("Not a real interpolator")
 		},
 	}.Register())
@@ -54,13 +56,13 @@ func TestRegister(t *testing.T) {
 
 func TestInterpolationIterator(t *testing.T) {
 	dpi := pipescript.NewDatapointArrayIterator(testDpa)
-	c, err := NewClosestInterpolator(dpi)
+	c, err := interpolators.NewClosestInterpolator(dpi)
 	require.NoError(t, err)
 
-	tr, err := NewUniformRange(0, 11, 2)
+	tr, err := interpolator.NewUniformRange(0, 11, 2)
 	require.NoError(t, err)
 
-	ii := NewInterpolationIterator(c, tr)
+	ii := interpolator.NewInterpolationIterator(c, tr)
 
 	dp, err := ii.Next()
 	require.NoError(t, err)

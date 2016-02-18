@@ -1,6 +1,9 @@
-package interpolator
+package interpolators
 
-import "github.com/connectordb/pipescript"
+import (
+	"github.com/connectordb/pipescript"
+	"github.com/connectordb/pipescript/interpolator"
+)
 
 // AfterInterpolator returns the closest datapoint /after/ the given timestamp
 type AfterInterpolator struct {
@@ -30,10 +33,10 @@ func NewAfterInterpolator(dpi pipescript.DatapointIterator) (*AfterInterpolator,
 	return &AfterInterpolator{Iterator: dpi}, nil
 }
 
-var after = Interpolator{
+var after = interpolator.Interpolator{
 	Name:        "after",
 	Description: "Uses the closest datapoint after the interpolation timestamp",
-	Generator: func(name string, dpi pipescript.DatapointIterator) (i InterpolatorInstance, err error) {
+	Generator: func(name string, dpi pipescript.DatapointIterator) (i interpolator.InterpolatorInstance, err error) {
 		return NewAfterInterpolator(dpi)
 	},
 }
