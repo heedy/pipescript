@@ -5,6 +5,7 @@ import (
 
 	"github.com/connectordb/pipescript"
 	"github.com/connectordb/pipescript/interpolator"
+	"github.com/connectordb/pipescript/interpolator/interpolators"
 	"github.com/connectordb/pipescript/transforms/core"
 	"github.com/stretchr/testify/require"
 )
@@ -39,6 +40,7 @@ func TestConfig(t *testing.T) {
 
 func TestDisable(t *testing.T) {
 	core.Register()
+	interpolators.Register()
 
 	pipescript.TestCase{
 		Pipescript: "sum",
