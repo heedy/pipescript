@@ -33,7 +33,7 @@ func NewAfterInterpolator(dpi pipescript.DatapointIterator) (*AfterInterpolator,
 	return &AfterInterpolator{Iterator: dpi}, nil
 }
 
-var after = interpolator.Interpolator{
+var After = interpolator.Interpolator{
 	Name:        "after",
 	Description: "Uses the closest datapoint after the interpolation timestamp",
 	Generator: func(name string, dpi pipescript.DatapointIterator) (i interpolator.InterpolatorInstance, err error) {

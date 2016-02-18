@@ -48,7 +48,7 @@ func NewClosestInterpolator(dpi pipescript.DatapointIterator) (*ClosestInterpola
 	return &ClosestInterpolator{dpi, pd, cd}, err
 }
 
-var closest = interpolator.Interpolator{
+var Closest = interpolator.Interpolator{
 	Name:        "closest",
 	Description: "Uses the datapoint closest to the interpolation timestamp (both before and after)",
 	Generator: func(name string, dpi pipescript.DatapointIterator) (i interpolator.InterpolatorInstance, err error) {

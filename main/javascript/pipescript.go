@@ -9,13 +9,15 @@ import (
 	"github.com/connectordb/pipescript"
 	"github.com/connectordb/pipescript/bytestreams"
 	"github.com/connectordb/pipescript/interpolator"
+	"github.com/connectordb/pipescript/interpolator/interpolators"
 	"github.com/connectordb/pipescript/transforms"
 	"github.com/gopherjs/gopherjs/js"
 )
 
 func main() {
-	// Register all transforms
+	// Register all transforms & Interpolators
 	transforms.Register()
+	interpolators.Register()
 
 	// Make it usable in script tags
 	js.Global.Set("pipescript", map[string]interface{}{

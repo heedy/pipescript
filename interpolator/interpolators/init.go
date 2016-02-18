@@ -2,7 +2,11 @@ package interpolators
 
 func Register() {
 	// Register built-in interpolators
-	after.Register()
-	before.Register()
-	closest.Register()
+	After.Register()
+	Before.Register()
+	Closest.Register()
+
+	Count.Register()
+	Sum.Register()
+	Mean.Register()
 }

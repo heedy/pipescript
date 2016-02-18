@@ -39,7 +39,7 @@ func NewBeforeInterpolator(dpi pipescript.DatapointIterator) (*BeforeInterpolato
 	return &BeforeInterpolator{dpi, pd, cd}, err
 }
 
-var before = interpolator.Interpolator{
+var Before = interpolator.Interpolator{
 	Name:        "before",
 	Description: "Uses the closest datapoint before the interpolation timestamp",
 	Generator: func(name string, dpi pipescript.DatapointIterator) (i interpolator.InterpolatorInstance, err error) {

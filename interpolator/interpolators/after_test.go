@@ -9,15 +9,15 @@ import (
 
 // The standard datapoint array to use when testing
 var testDpa = []pipescript.Datapoint{
-	{1., "test0"},
-	{2., "test1"},
-	{3., "test2"},
-	{4., "test3"},
-	{5., "test4"},
-	{6., "test5"},
-	{6., "test6"},
-	{7., "test7"},
-	{8., "test8"},
+	{1., 10},
+	{2., 20},
+	{3., 30},
+	{4., 40},
+	{5., 50},
+	{6., 60},
+	{6., 70},
+	{7., 80},
+	{8., 90},
 }
 
 func TestAfter(t *testing.T) {
