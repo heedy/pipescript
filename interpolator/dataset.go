@@ -9,12 +9,18 @@ import (
 // Dataset allows to perform interpolation on multiple interpolators at once
 type Dataset map[string]InterpolatorInstance
 
+// Interpolate generates the dataset
 func (d Dataset) Interpolate(timestamp float64) (dp *pipescript.Datapoint, err error) {
-	res := make(map[string]*pipescript.Datapoint)
+	res := make(map[string]interface{})
 	for key := range d {
-		res[key], err = d[key].Interpolate(timestamp)
+		dp, err = d[key].Interpolate(timestamp)
 		if err != nil {
 			return nil, err
+		}
+		if dp == nil {
+			res[key] = nil
+		} else {
+			res[key] = dp.Data
 		}
 	}
 	return &pipescript.Datapoint{Timestamp: timestamp, Data: res}, nil

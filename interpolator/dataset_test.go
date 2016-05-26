@@ -21,21 +21,21 @@ func TestDataset(t *testing.T) {
 
 	dp, err := ds.Interpolate(1.1)
 	require.NoError(t, err)
-	require.EqualValues(t, dp, &pipescript.Datapoint{Timestamp: 1.1, Data: map[string]*pipescript.Datapoint{
-		"foo": {1, "test0"},
-		"bar": {2, "test1"},
+	require.EqualValues(t, dp, &pipescript.Datapoint{Timestamp: 1.1, Data: map[string]interface{}{
+		"foo": "test0",
+		"bar": "test1",
 	}})
 	dp, err = ds.Interpolate(5)
 	require.NoError(t, err)
-	require.EqualValues(t, dp, &pipescript.Datapoint{Timestamp: 5, Data: map[string]*pipescript.Datapoint{
-		"foo": {5, "test4"},
-		"bar": {6, "test5"},
+	require.EqualValues(t, dp, &pipescript.Datapoint{Timestamp: 5, Data: map[string]interface{}{
+		"foo": "test4",
+		"bar": "test5",
 	}})
 
 	dp, err = ds.Interpolate(10)
 	require.NoError(t, err)
-	require.EqualValues(t, dp, &pipescript.Datapoint{Timestamp: 10, Data: map[string]*pipescript.Datapoint{
-		"foo": {8, "test8"},
+	require.EqualValues(t, dp, &pipescript.Datapoint{Timestamp: 10, Data: map[string]interface{}{
+		"foo": "test8",
 		"bar": nil,
 	}})
 }
@@ -56,21 +56,21 @@ func TestXDataset(t *testing.T) {
 
 	dp, err := xd.Next()
 	require.NoError(t, err)
-	require.EqualValues(t, dp, &pipescript.Datapoint{Timestamp: 1, Data: map[string]*pipescript.Datapoint{
-		"foo": {1, "test0"},
-		"bar": {2, "test1"},
+	require.EqualValues(t, dp, &pipescript.Datapoint{Timestamp: 1, Data: map[string]interface{}{
+		"foo": "test0",
+		"bar": "test1",
 	}})
 	dp, err = xd.Next()
 	require.NoError(t, err)
-	require.EqualValues(t, dp, &pipescript.Datapoint{Timestamp: 2, Data: map[string]*pipescript.Datapoint{
-		"foo": {2, "test1"},
-		"bar": {3, "test2"},
+	require.EqualValues(t, dp, &pipescript.Datapoint{Timestamp: 2, Data: map[string]interface{}{
+		"foo": "test1",
+		"bar": "test2",
 	}})
 	dp, err = xd.Next()
 	require.NoError(t, err)
-	require.EqualValues(t, dp, &pipescript.Datapoint{Timestamp: 3, Data: map[string]*pipescript.Datapoint{
-		"foo": {3, "test2"},
-		"bar": {4, "test3"},
+	require.EqualValues(t, dp, &pipescript.Datapoint{Timestamp: 3, Data: map[string]interface{}{
+		"foo": "test2",
+		"bar": "test3",
 	}})
 
 	dp, err = xd.Next()
@@ -93,9 +93,9 @@ func TestTDataset(t *testing.T) {
 
 	dp, err := td.Next()
 	require.NoError(t, err)
-	require.EqualValues(t, dp, &pipescript.Datapoint{Timestamp: 1, Data: map[string]*pipescript.Datapoint{
-		"foo": {1, "test0"},
-		"bar": {2, "test1"},
+	require.EqualValues(t, dp, &pipescript.Datapoint{Timestamp: 1, Data: map[string]interface{}{
+		"foo": "test0",
+		"bar": "test1",
 	}})
 	dp, err = td.Next()
 	require.NoError(t, err)
