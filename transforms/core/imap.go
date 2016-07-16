@@ -25,7 +25,7 @@ func (t *imapTransform) Copy() (pipescript.TransformInstance, error) {
 	}
 	datamap := make(map[string]interface{})
 	for i, val := range t.datamap {
-		datamap[i] = val // No need to worry abotu copying datapoints
+		datamap[i] = val // No need to worry about copying datapoints
 	}
 	return &imapTransform{t.script, &pipescript.SingleDatapointIterator{}, scriptmap, datamap}, nil
 }

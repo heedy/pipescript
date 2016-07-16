@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/connectordb/pipescript"
+	"github.com/jinzhu/now"
 )
 
 func getTimestamp(data interface{}) (float64, error) {
@@ -14,7 +15,11 @@ func getTimestamp(data interface{}) (float64, error) {
 	}
 	t, err := time.Parse(time.RFC3339, s)
 	if err != nil {
-		return 0, err
+		t, err = now.Parse(s)
+		if err != nil {
+			return 0, err
+		}
+
 	}
 	return float64(t.UnixNano()) * 1e-9, nil
 }
