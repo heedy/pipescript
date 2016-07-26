@@ -9,7 +9,7 @@ import (
 func TestReset(t *testing.T) {
 	// This needs much more testing
 	pipescript.TestCase{
-		Pipescript: "reset($==1,sum)",
+		Pipescript: "while $!=1 sum",
 		Input: []pipescript.Datapoint{
 			{1, 5},
 			{2, 2},
@@ -41,7 +41,7 @@ func TestReset(t *testing.T) {
 	}.Run(t)
 
 	pipescript.TestCase{
-		Pipescript: "reset(count%3==1, sum)",
+		Pipescript: "while(count%3!=1, sum)",
 		Input: []pipescript.Datapoint{
 			{1, 5},
 			{2, 2},

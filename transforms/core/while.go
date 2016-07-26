@@ -6,22 +6,22 @@ import (
 	"github.com/connectordb/pipescript"
 )
 
-type resetTransformStruct struct {
+type whileTransformStruct struct {
 	script *pipescript.Script
 	iter   *pipescript.SingleDatapointIterator
 }
 
-func (t resetTransformStruct) Copy() (pipescript.TransformInstance, error) {
+func (t whileTransformStruct) Copy() (pipescript.TransformInstance, error) {
 	news, err := t.script.Copy()
 	if err != nil {
 		return nil, err
 	}
 	iter := &pipescript.SingleDatapointIterator{}
 	news.SetInput(iter)
-	return resetTransformStruct{news, iter}, nil
+	return whileTransformStruct{news, iter}, nil
 }
 
-func (t resetTransformStruct) Next(ti *pipescript.TransformIterator) (dp *pipescript.Datapoint, err error) {
+func (t whileTransformStruct) Next(ti *pipescript.TransformIterator) (dp *pipescript.Datapoint, err error) {
 	te := ti.Next()
 	if te.IsFinished() {
 		// Clear the internal script
@@ -34,7 +34,7 @@ func (t resetTransformStruct) Next(ti *pipescript.TransformIterator) (dp *pipesc
 	if err != nil {
 		return nil, err
 	}
-	if v {
+	if !v {
 		// Reset the script
 		t.iter.Set(nil, nil)
 		t.script.Next()
@@ -44,26 +44,26 @@ func (t resetTransformStruct) Next(ti *pipescript.TransformIterator) (dp *pipesc
 
 }
 
-var Reset = pipescript.Transform{
-	Name:        "reset",
-	Description: "Resets the internal state of its second argument when its first argument is true. Returns value of second argument.",
+var While = pipescript.Transform{
+	Name:        "while",
+	Description: "Equivalent to a while loop that runs while the first argument is true. Restarts the loop when the argument is false.",
 	OneToOne:    true,
 	Args: []pipescript.TransformArg{
 		{
 			Description: "The statement to check for truth",
 		},
 		{
-			Description: "pipe to run, and to reset when the first arg is true",
+			Description: "pipe to run, and to reset when the first arg is false",
 			Hijacked:    true,
 		},
 	},
 	Generator: func(name string, args []*pipescript.Script) (*pipescript.TransformInitializer, error) {
 		if args[1].Peek {
-			return nil, errors.New("reset cannot be used with transforms that peek")
+			return nil, errors.New("while cannot be used with transforms that peek")
 		}
 
 		iter := &pipescript.SingleDatapointIterator{}
 		args[1].SetInput(iter)
-		return &pipescript.TransformInitializer{Args: args[0:1], Transform: resetTransformStruct{args[1], iter}}, nil
+		return &pipescript.TransformInitializer{Args: args[0:1], Transform: whileTransformStruct{args[1], iter}}, nil
 	},
 }

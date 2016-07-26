@@ -60,7 +60,7 @@ func Register() {
 
 	Remember.Register()
 
-	Reset.Register()
+	While.Register()
 
 	Rand.Register()
 }
