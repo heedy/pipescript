@@ -74,11 +74,17 @@ func (t *imapTransform) Next(ti *pipescript.TransformIterator) (*pipescript.Data
 	// Set the data in our map
 	t.datamap[v] = dp.Data
 
+	// We must copy the internal map, since we might be comparing previous values to now!
+	datamap := make(map[string]interface{})
+	for i, val := range t.datamap {
+		datamap[i] = val // No need to worry about copying datapoints
+	}
+
 	//Return the map
-	return te.Set(t.datamap)
+	return te.Set(datamap)
 }
 
-// Map splits the dtaapoints by its first argument
+// Map splits the datapoints by its first argument
 var IMap = pipescript.Transform{
 	Name:        "imap",
 	Description: `Same as map, but returns all intermediate values (is one to one)`,
