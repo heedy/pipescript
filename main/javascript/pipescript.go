@@ -2,7 +2,6 @@ package main
 
 import (
 	"bytes"
-	"encoding/json"
 	"io"
 	"strings"
 
@@ -21,16 +20,16 @@ func main() {
 
 	// Make it usable in script tags
 	js.Global.Set("pipescript", map[string]interface{}{
-		"Script":        New,
-		"Transforms":    Transforms,
-		"Interpolators": Interpolators,
+		"script":        New,
+		"transforms":    pipescript.TransformRegistry,
+		"interpolators": interpolator.InterpolatorRegistry,
 	})
 
 	// Make it usable in node. Note that the above makes it register in global
 	// context also, which can't really be avoided easily
-	js.Module.Get("exports").Set("Script", New)
-	js.Module.Get("exports").Set("Transforms", Transforms)
-	js.Module.Get("exports").Set("Interpolators", Interpolators)
+	js.Module.Get("exports").Set("script", New)
+	js.Module.Get("exports").Set("transforms", pipescript.TransformRegistry)
+	js.Module.Get("exports").Set("interpolators", interpolator.InterpolatorRegistry)
 
 }
 
@@ -124,16 +123,9 @@ func New(scriptstring string) *js.Object {
 	return js.MakeWrapper(&Script{s, errorstring})
 }
 
-// Returns a string json object of the documentation
-func Transforms() string {
-	b, _ := json.Marshal(pipescript.TransformRegistry)
-
-	return string(b)
-}
-
-// Returns a string json object of the documentation
-func Interpolators() string {
-	b, _ := json.Marshal(interpolator.InterpolatorRegistry)
-
-	return string(b)
+// The special datapoint type used for interacting with javascript
+type Datapoint struct {
+	*js.Object
+	Data      interface{} `js:"d"`
+	Timestamp float64     `js:"t"`
 }

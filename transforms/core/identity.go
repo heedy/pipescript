@@ -1,6 +1,9 @@
 package core
 
-import "github.com/connectordb/pipescript"
+import (
+	"github.com/connectordb/pipescript"
+	"github.com/connectordb/pipescript/resources"
+)
 
 // The Identity ($)
 type iTransform struct{}
@@ -37,10 +40,11 @@ func (t *subobjectTransform) Next(ti *pipescript.TransformIterator) (*pipescript
 }
 
 var IdentityTransform = pipescript.Transform{
-	Name:        "$",
-	Description: "Identity transform - gives the current datapoint in sequence (or if given argument, a sub-object). Useful when performing comparisons ($ < 5)",
-	OneToOne:    true,
-	Stateless:   true,
+	Name:          "$",
+	Description:   "Identity transform - gives the current datapoint in sequence (or if given argument, a sub-object). Useful when performing comparisons ($ < 5)",
+	Documentation: string(resources.MustAsset("docs/transforms/$.md")),
+	OneToOne:      true,
+	Stateless:     true,
 	Args: []pipescript.TransformArg{
 		{
 			Description: "The subobject to return. For use in json-object type data.",

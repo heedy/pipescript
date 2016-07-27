@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/connectordb/pipescript"
+	"github.com/connectordb/pipescript/resources"
 )
 
 type ifTransformStruct struct{}
@@ -33,8 +34,9 @@ func (t ifTransformStruct) Next(ti *pipescript.TransformIterator) (dp *pipescrip
 }
 
 var If = pipescript.Transform{
-	Name:        "if",
-	Description: "A datapoint filter - filters the datapoints where its argument is false. This is PipeScript's if statement.",
+	Name:          "if",
+	Description:   "A datapoint filter - filters the datapoints where its argument is false.",
+	Documentation: string(resources.MustAsset("docs/transforms/if.md")),
 	Args: []pipescript.TransformArg{
 		{
 			Description: "The statement to check for truth",

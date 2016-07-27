@@ -40,14 +40,15 @@ type TransformArg struct {
 
 // Transform is the struct which holds the name, docstring, and generator for a transform function
 type Transform struct {
-	Name         string         `json:"name"`              // The name of the transform
-	Description  string         `json:"description"`       // The description of the transform - a docstring
-	InputSchema  string         `json:"ischema,omitempty"` // The schema of the input datapoint that the given transform expects (optional)
-	OutputSchema string         `json:"oschema,omitempty"` // The schema of the output data that this transform gives (optional).
-	Args         []TransformArg `json:"args"`              // The arguments that the transform accepts
-	OneToOne     bool           `json:"one_to_one"`        //Whether or not the transform is one to one
-	Stateless    bool           `json:"stateless"`         // Whether the transform only uses current datapoint's info (always returns same output given input)
-	Peek         bool           `json:"peek"`              // Whether the transform peeks at future values
+	Name          string         `json:"name"`              // The name of the transform
+	Description   string         `json:"description"`       // A single line description of the transform
+	Documentation string         `json:"documentation"`     // Full markdown documentation of the transform
+	InputSchema   string         `json:"ischema,omitempty"` // The schema of the input datapoint that the given transform expects (optional)
+	OutputSchema  string         `json:"oschema,omitempty"` // The schema of the output data that this transform gives (optional).
+	Args          []TransformArg `json:"args"`              // The arguments that the transform accepts
+	OneToOne      bool           `json:"one_to_one"`        //Whether or not the transform is one to one
+	Stateless     bool           `json:"stateless"`         // Whether the transform only uses current datapoint's info (always returns same output given input)
+	Peek          bool           `json:"peek"`              // Whether the transform peeks at future values
 
 	Generator TransformGenerator `json:"-"` // The generator function of the transform
 }

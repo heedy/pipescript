@@ -67,6 +67,12 @@ of those sections to manage the look and feel of the site. */
 				border: 1px solid black;
 			}
 
+			.docs {
+				text-align: left;
+				background: #fff;
+				padding: 10px;
+			}
+
 		</style>
 
 		<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -319,11 +325,12 @@ of those sections to manage the look and feel of the site. */
 		</section>
 
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/list.js/1.1.1/list.min.js"></script>
+		<script type="text/javascript" src="https://cdn.rawgit.com/showdownjs/showdown/1.4.2/dist/showdown.min.js"></script>
 		<script type="text/javascript" src="pipescript.js"></script>
 		<script>
 			function runScript() {
 				output.setValue("Running...");
-				s = pipescript.Script($("#script").val());
+				s = pipescript.script($("#script").val());
 				if (!s.IsValid()) {
 					output.setValue(s.Error());
 				}
@@ -342,9 +349,11 @@ of those sections to manage the look and feel of the site. */
 				runScript();
 			});
 
+			var converter = new showdown.Converter();
+
 
 			// Now set up the transform list
-			data = JSON.parse(pipescript.Transforms())
+			data = pipescript.transforms
 
 			// http://stackoverflow.com/questions/684672/loop-through-javascript-object
 			for (var key in data) {
@@ -352,14 +361,14 @@ of those sections to manage the look and feel of the site. */
 					console.log(key);
 					var v = data[key];
 
-					var fdata = "<tr><td class='fname'>" + key + "</td><td class='fdesc'>" + v.description + "</td><td class='farg'><ol>";
-					for (d in v.args) {
-						var cv = v.args[d];
+					var fdata = "<tr><td class='fname'>" + key + "</td><td class='fdesc'>" + v.Description + "<br/><div class='docs'>"+ converter.makeHtml(v.Documentation)+"</div></td><td class='farg'><ol>";
+					for (d in v.Args) {
+						var cv = v.Args[d];
 						fdata += "<li>";
-						if (cv.optional) {
+						if (cv.Optional) {
 							fdata += "<i>(optional)</i> - ";
 						}
-						fdata += cv.description + "</li>";
+						fdata += cv.Description + "</li>";
 					}
 					fdata += "</ol>";
 

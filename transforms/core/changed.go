@@ -3,6 +3,7 @@ package core
 import (
 	"github.com/connectordb/duck"
 	"github.com/connectordb/pipescript"
+	"github.com/connectordb/pipescript/resources"
 )
 
 type changedTransform struct {
@@ -25,9 +26,10 @@ func (t *changedTransform) Next(ti *pipescript.TransformIterator) (*pipescript.D
 }
 
 var Changed = pipescript.Transform{
-	Name:        "changed",
-	Description: "Returns true if the datapoint has a different value from the previous one",
-	OneToOne:    true,
+	Name:          "changed",
+	Description:   "Returns true if the datapoint has a different value from the previous one",
+	Documentation: string(resources.MustAsset("docs/transforms/changed.md")),
+	OneToOne:      true,
 	Generator: func(name string, args []*pipescript.Script) (*pipescript.TransformInitializer, error) {
 		return &pipescript.TransformInitializer{Transform: &changedTransform{nil}}, nil
 	},

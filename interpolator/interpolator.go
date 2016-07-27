@@ -30,10 +30,11 @@ type InterpolatorGenerator func(name string, dpi pipescript.DatapointIterator) (
 
 // Interpolator is the struct which holds documentation and generator for an Interpolation method.
 type Interpolator struct {
-	Name         string `json:"name"`        // The name of the interpolator
-	Description  string `json:"description"` // The docstring of the interpolator
-	InputSchema  string `json:"ischema"`     // The schema of datapoints that are expected (optional)
-	OutputSchema string `json:"oschema"`     // The schema of datapoints that are output (optional)
+	Name          string `json:"name"`          // The name of the interpolator
+	Description   string `json:"description"`   // The docstring of the interpolator
+	Documentation string `json:"documentation"` // The full documentation for the interpolator in markdown
+	InputSchema   string `json:"ischema"`       // The schema of datapoints that are expected (optional)
+	OutputSchema  string `json:"oschema"`       // The schema of datapoints that are output (optional)
 
 	Generator InterpolatorGenerator `json:"-"` // The generator function of the interpolator
 }
