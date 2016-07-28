@@ -4,6 +4,7 @@ import (
 	"errors"
 
 	"github.com/connectordb/pipescript"
+	"github.com/connectordb/pipescript/resources"
 )
 
 type whileTransformStruct struct {
@@ -45,9 +46,10 @@ func (t whileTransformStruct) Next(ti *pipescript.TransformIterator) (dp *pipesc
 }
 
 var While = pipescript.Transform{
-	Name:        "while",
-	Description: "Equivalent to a while loop that runs while the first argument is true. Restarts the loop when the argument is false.",
-	OneToOne:    true,
+	Name:          "while",
+	Description:   "Equivalent to a while loop that runs while the first argument is true. Restarts the loop when the argument is false.",
+	Documentation: string(resources.MustAsset("docs/transforms/while.md")),
+	OneToOne:      true,
 	Args: []pipescript.TransformArg{
 		{
 			Description: "The statement to check for truth",

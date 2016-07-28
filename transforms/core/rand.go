@@ -4,6 +4,7 @@ import (
 	"math/rand"
 
 	"github.com/connectordb/pipescript"
+	"github.com/connectordb/pipescript/resources"
 )
 
 type randTransform struct{}
@@ -22,10 +23,11 @@ func (t randTransform) Next(ti *pipescript.TransformIterator) (*pipescript.Datap
 }
 
 var Rand = pipescript.Transform{
-	Name:         "rand",
-	Description:  "Returns a random float in [0.0,1.0)",
-	OutputSchema: `{"type": "number","minimum": 0, "exclusiveMaximum": 1}`,
-	OneToOne:     true,
+	Name:          "rand",
+	Description:   "Returns a random float in [0.0,1.0)",
+	Documentation: string(resources.MustAsset("docs/transforms/rand.md")),
+	OutputSchema:  `{"type": "number","minimum": 0, "exclusiveMaximum": 1}`,
+	OneToOne:      true,
 	// while it does not depend on datapoints, it is not stateless, since it does not return same result
 
 	Generator: func(name string, args []*pipescript.Script) (*pipescript.TransformInitializer, error) {

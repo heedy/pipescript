@@ -1,6 +1,9 @@
 package core
 
-import "github.com/connectordb/pipescript"
+import (
+	"github.com/connectordb/pipescript"
+	"github.com/connectordb/pipescript/resources"
+)
 
 type tshiftTransform struct {
 	shiftby float64
@@ -19,10 +22,11 @@ func (t tshiftTransform) Next(ti *pipescript.TransformIterator) (*pipescript.Dat
 }
 
 var Tshift = pipescript.Transform{
-	Name:        "tshift",
-	Description: "Shift the datapoint timestamp by a constant number of seconds",
-	OneToOne:    true,
-	Stateless:   true,
+	Name:          "tshift",
+	Description:   "Shift the datapoint timestamp by a constant number of seconds",
+	Documentation: string(resources.MustAsset("docs/transforms/tshift.md")),
+	OneToOne:      true,
+	Stateless:     true,
 	Args: []pipescript.TransformArg{
 		{
 			Description: "The number of seconds to shift the timestamp",

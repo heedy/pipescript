@@ -330,15 +330,12 @@ of those sections to manage the look and feel of the site. */
 		<script>
 			function runScript() {
 				output.setValue("Running...");
-				s = pipescript.script($("#script").val());
-				if (!s.IsValid()) {
-					output.setValue(s.Error());
-				}
-				result = s.Run(input.getValue(),$("input[name=optradio]:checked").val());
-				if (!s.IsValid()) {
-					output.setValue(s.Error());
-				} else {
+				try {
+					s = pipescript.Script($("#script").val());
+					result = s.Run(input.getValue(),$("input[name=optradio]:checked").val());
 					output.setValue(result);
+				} catch (e) {
+					output.setValue(e.toString());
 				}
 			}
 

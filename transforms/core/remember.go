@@ -1,6 +1,9 @@
 package core
 
-import "github.com/connectordb/pipescript"
+import (
+	"github.com/connectordb/pipescript"
+	"github.com/connectordb/pipescript/resources"
+)
 
 type rememberTransform struct {
 	remembered *pipescript.Datapoint
@@ -27,9 +30,10 @@ func (t *rememberTransform) Next(ti *pipescript.TransformIterator) (*pipescript.
 }
 
 var Remember = pipescript.Transform{
-	Name:        "remember",
-	Description: "Behaves as a single-datapoint memory cell, which is reset when its first argument is true.",
-	OneToOne:    true,
+	Name:          "remember",
+	Description:   "Behaves as a single-datapoint memory cell, which is reset when its first argument is true.",
+	Documentation: string(resources.MustAsset("docs/transforms/remember.md")),
+	OneToOne:      true,
 	Args: []pipescript.TransformArg{
 		{
 			Description: "The statement to check for truth. If true, it will remember the current datapoint",

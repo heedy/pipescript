@@ -4,6 +4,7 @@ import (
 	"errors"
 
 	"github.com/connectordb/pipescript"
+	"github.com/connectordb/pipescript/resources"
 )
 
 type ifelseTransformStruct struct {
@@ -51,8 +52,9 @@ func (t ifelseTransformStruct) Next(ti *pipescript.TransformIterator) (dp *pipes
 }
 
 var Ifelse = pipescript.Transform{
-	Name:        "ifelse",
-	Description: "A conditional. This is what an if statement would be in other languages.",
+	Name:          "ifelse",
+	Description:   "A conditional. This is what an if statement would be in other languages.",
+	Documentation: string(resources.MustAsset("docs/transforms/ifelse.md")),
 	Args: []pipescript.TransformArg{
 		{
 			Description: "The statement to check for truth",

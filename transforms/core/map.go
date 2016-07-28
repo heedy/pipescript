@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/connectordb/pipescript"
+	"github.com/connectordb/pipescript/resources"
 )
 
 // The maximum number of elements in a map
@@ -75,11 +76,9 @@ func (t *mapTransform) Next(ti *pipescript.TransformIterator) (*pipescript.Datap
 
 // Map splits the dtaapoints by its first argument
 var Map = pipescript.Transform{
-	Name: "map",
-	Description: `Splits the script by the first argument's value, creating new instances of the second argument's script.
-Think of it as a switch statement where each choice has copies of the same code.
-It is very useful for splitting by time. For example:
-"split(weekday,count)" will return {"Monday": ...,"Tuesday":...} with the number of datapoints that happened in each day.`,
+	Name:          "map",
+	Description:   `Splits the script by the first argument's value, creating new instances of the second argument's script.`,
+	Documentation: string(resources.MustAsset("docs/transforms/map.md")),
 	Args: []pipescript.TransformArg{
 		{
 			Description: "The value to split on. This must be something that can be converted to string.",

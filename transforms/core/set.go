@@ -5,6 +5,7 @@ import (
 
 	"github.com/connectordb/duck"
 	"github.com/connectordb/pipescript"
+	"github.com/connectordb/pipescript/resources"
 )
 
 // A transform that sets values in objects
@@ -43,10 +44,11 @@ func (t *setTransform) Next(ti *pipescript.TransformIterator) (*pipescript.Datap
 }
 
 var Set = pipescript.Transform{
-	Name:        "set",
-	Description: "Allows setting object values",
-	OneToOne:    true,
-	Stateless:   true,
+	Name:          "set",
+	Description:   "Allows setting object values",
+	Documentation: string(resources.MustAsset("docs/transforms/set.md")),
+	OneToOne:      true,
+	Stateless:     true,
 	Args: []pipescript.TransformArg{
 		{
 			Description: "The name of field to set",

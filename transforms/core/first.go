@@ -1,6 +1,9 @@
 package core
 
-import "github.com/connectordb/pipescript"
+import (
+	"github.com/connectordb/pipescript"
+	"github.com/connectordb/pipescript/resources"
+)
 
 type firstTransform struct {
 	isfirst bool
@@ -28,10 +31,11 @@ func (ft *firstTransform) Next(ti *pipescript.TransformIterator) (*pipescript.Da
 }
 
 var First = pipescript.Transform{
-	Name:         "first",
-	Description:  "Returns true if first datapoint of a sequence, and false otherwise",
-	OutputSchema: `{"type": "boolean"}`,
-	OneToOne:     true,
+	Name:          "first",
+	Description:   "Returns true if first datapoint of a sequence, and false otherwise",
+	Documentation: string(resources.MustAsset("docs/transforms/first.md")),
+	OutputSchema:  `{"type": "boolean"}`,
+	OneToOne:      true,
 	Generator: func(name string, args []*pipescript.Script) (*pipescript.TransformInitializer, error) {
 		return &pipescript.TransformInitializer{Transform: &firstTransform{true}}, nil
 	},

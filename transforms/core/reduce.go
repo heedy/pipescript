@@ -5,6 +5,7 @@ import (
 	"reflect"
 
 	"github.com/connectordb/pipescript"
+	"github.com/connectordb/pipescript/resources"
 )
 
 type reduceTransform struct {
@@ -53,9 +54,9 @@ func (t *reduceTransform) Next(ti *pipescript.TransformIterator) (*pipescript.Da
 var Reduce = pipescript.Transform{
 	Name: "reduce",
 	Description: `Takes a json object, and considers each field to be a separate datapoint's data.
-It then hijacks its argument, and performs the given transform on all of the fields, returning the result.
-It is mainly useful as a companion to the map transform, with which it is possible to create a simple map/reduce pipeline`,
-	OneToOne: true,
+It then hijacks its argument, and performs the given transform on all of the fields, returning the result.`,
+	Documentation: string(resources.MustAsset("docs/transforms/reduce.md")),
+	OneToOne:      true,
 	Args: []pipescript.TransformArg{
 		{
 			Description: "The script to instantiate to perform on all elements of input",

@@ -11,10 +11,12 @@
 // resources/docs/transforms/map.md
 // resources/docs/transforms/next.md
 // resources/docs/transforms/prev.md
+// resources/docs/transforms/rand.md
 // resources/docs/transforms/reduce.md
 // resources/docs/transforms/remember.md
 // resources/docs/transforms/sentiment.md
 // resources/docs/transforms/set.md
+// resources/docs/transforms/sum.md
 // resources/docs/transforms/t.md
 // resources/docs/transforms/tshift.md
 // resources/docs/transforms/wc.md
@@ -440,6 +442,23 @@ func docsTransformsPrevMd() (*asset, error) {
 	return a, nil
 }
 
+var _docsTransformsRandMd = []byte(``)
+
+func docsTransformsRandMdBytes() ([]byte, error) {
+	return _docsTransformsRandMd, nil
+}
+
+func docsTransformsRandMd() (*asset, error) {
+	bytes, err := docsTransformsRandMdBytes()
+	if err != nil {
+		return nil, err
+	}
+
+	info := bindataFileInfo{name: "docs/transforms/rand.md", size: 0, mode: os.FileMode(0), modTime: time.Unix(0, 0)}
+	a := &asset{bytes: bytes, info: info}
+	return a, nil
+}
+
 var _docsTransformsReduceMd = []byte(``)
 
 func docsTransformsReduceMdBytes() ([]byte, error) {
@@ -532,6 +551,23 @@ func docsTransformsSetMd() (*asset, error) {
 	}
 
 	info := bindataFileInfo{name: "docs/transforms/set.md", size: 0, mode: os.FileMode(0), modTime: time.Unix(0, 0)}
+	a := &asset{bytes: bytes, info: info}
+	return a, nil
+}
+
+var _docsTransformsSumMd = []byte(``)
+
+func docsTransformsSumMdBytes() ([]byte, error) {
+	return _docsTransformsSumMd, nil
+}
+
+func docsTransformsSumMd() (*asset, error) {
+	bytes, err := docsTransformsSumMdBytes()
+	if err != nil {
+		return nil, err
+	}
+
+	info := bindataFileInfo{name: "docs/transforms/sum.md", size: 0, mode: os.FileMode(0), modTime: time.Unix(0, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -684,10 +720,12 @@ var _bindata = map[string]func() (*asset, error){
 	"docs/transforms/map.md": docsTransformsMapMd,
 	"docs/transforms/next.md": docsTransformsNextMd,
 	"docs/transforms/prev.md": docsTransformsPrevMd,
+	"docs/transforms/rand.md": docsTransformsRandMd,
 	"docs/transforms/reduce.md": docsTransformsReduceMd,
 	"docs/transforms/remember.md": docsTransformsRememberMd,
 	"docs/transforms/sentiment.md": docsTransformsSentimentMd,
 	"docs/transforms/set.md": docsTransformsSetMd,
+	"docs/transforms/sum.md": docsTransformsSumMd,
 	"docs/transforms/t.md": docsTransformsTMd,
 	"docs/transforms/tshift.md": docsTransformsTshiftMd,
 	"docs/transforms/wc.md": docsTransformsWcMd,
@@ -753,10 +791,12 @@ var _bintree = &bintree{nil, map[string]*bintree{
 			"map.md": &bintree{docsTransformsMapMd, map[string]*bintree{}},
 			"next.md": &bintree{docsTransformsNextMd, map[string]*bintree{}},
 			"prev.md": &bintree{docsTransformsPrevMd, map[string]*bintree{}},
+			"rand.md": &bintree{docsTransformsRandMd, map[string]*bintree{}},
 			"reduce.md": &bintree{docsTransformsReduceMd, map[string]*bintree{}},
 			"remember.md": &bintree{docsTransformsRememberMd, map[string]*bintree{}},
 			"sentiment.md": &bintree{docsTransformsSentimentMd, map[string]*bintree{}},
 			"set.md": &bintree{docsTransformsSetMd, map[string]*bintree{}},
+			"sum.md": &bintree{docsTransformsSumMd, map[string]*bintree{}},
 			"t.md": &bintree{docsTransformsTMd, map[string]*bintree{}},
 			"tshift.md": &bintree{docsTransformsTshiftMd, map[string]*bintree{}},
 			"wc.md": &bintree{docsTransformsWcMd, map[string]*bintree{}},

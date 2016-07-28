@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/connectordb/pipescript"
+	"github.com/connectordb/pipescript/resources"
 )
 
 // NextMax is the maximum number of datapoints forward to permit looking
@@ -32,10 +33,11 @@ func (nt *nextTransform) Next(ti *pipescript.TransformIterator) (*pipescript.Dat
 }
 
 var Next = pipescript.Transform{
-	Name:        "next",
-	Description: "Returns the datapoint that will be next in the sequence. If given an argument, can return the nth datapoint forward.",
-	OneToOne:    true,
-	Peek:        true,
+	Name:          "next",
+	Description:   "Returns the datapoint that will be next in the sequence. If given an argument, can return the nth datapoint forward.",
+	Documentation: string(resources.MustAsset("docs/transforms/next.md")),
+	OneToOne:      true,
+	Peek:          true,
 	Args: []pipescript.TransformArg{
 		{
 			Description: "The number of datapoints forward to look. Starts at 1.",
