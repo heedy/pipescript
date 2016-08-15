@@ -11,7 +11,7 @@ import (
 
 const (
 	// Version is the PipeScript version
-	Version = "0.1"
+	Version = "0.2"
 )
 
 // Script is the main type used in PipeScript

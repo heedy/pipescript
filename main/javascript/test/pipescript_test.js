@@ -7,10 +7,14 @@ var expect = (expect === undefined
 
 describe("PipeScript Javascript", function() {
     it("should give parse error on invalid script", function() {
-        expect(() => pipescript.Script("blah blah")).to.throw();
+        expect(function() {
+            pipescript.Script("blah blah")
+        }).to.throw();
     });
     it("should give no parse error on valid script", function() {
-        expect(() => pipescript.Script("$")).to.not.throw()
+        expect(function() {
+            pipescript.Script("$")
+        }).to.not.throw()
     });
     it("should run identity script successfully", function() {
         expect(JSON.parse(pipescript.Script("$").Run('[{"t": 1, "d": 5},{"t": 2, "d": 6}'))).to.deep.equal([
