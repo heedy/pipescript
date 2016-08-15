@@ -9,7 +9,7 @@ import (
 )
 
 // The maximum number of elements in a map
-var SplitMax = 1000
+var SplitMax = 10000
 
 type mapTransform struct {
 	script *pipescript.Script // The uninitialized script to be used for splitting

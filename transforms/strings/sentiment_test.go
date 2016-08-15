@@ -1,4 +1,4 @@
-package text
+package strings
 
 import (
 	"testing"
@@ -6,29 +6,29 @@ import (
 	"github.com/connectordb/pipescript"
 )
 
-func TestWc(t *testing.T) {
+func TestSentiment(t *testing.T) {
 	Register()
 	pipescript.TestCase{
-		Pipescript: "wc",
+		Pipescript: "sentiment",
 		Input: []pipescript.Datapoint{
 			{1, "Hello World!"},
-			{2, ""},
+			{2, "I hate this fucking place"},
 			{3, "foo, I like to eat"},
 		},
 		Output: []pipescript.Datapoint{
-			{1, 2},
-			{2, 0},
-			{3, 5},
+			{1, float32(0)},
+			{2, float32(-0.28)},
+			{3, float32(0.08)},
 		},
 		SecondaryInput: []pipescript.Datapoint{
 			{4, "carbon fiber car"},
 			{5, "I like traaains"},
-			{6, "english mother*****, do you speak it?"},
+			{6, "I am dismayed"},
 		},
 		SecondaryOutput: []pipescript.Datapoint{
-			{4, 3},
-			{5, 3},
-			{6, 6},
+			{4, float32(0)},
+			{5, float32(0.13333334)},
+			{6, float32(-0.13333334)},
 		},
 	}.Run(t)
 }

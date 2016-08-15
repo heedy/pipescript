@@ -1,4 +1,4 @@
-package text
+package strings
 
 import (
 	"encoding/json"

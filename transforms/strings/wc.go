@@ -1,4 +1,4 @@
-package text
+package strings
 
 import (
 	"github.com/connectordb/pipescript"

@@ -64,4 +64,6 @@ func Register() {
 	While.Register()
 
 	Rand.Register()
+
+	New.Register()
 }

@@ -1,4 +1,4 @@
-package stats
+package strings
 
 import (
 	"testing"
@@ -6,29 +6,29 @@ import (
 	"github.com/connectordb/pipescript"
 )
 
-func TestMean(t *testing.T) {
+func TestCount(t *testing.T) {
 	Register()
 	pipescript.TestCase{
-		Pipescript: "mean",
+		Pipescript: "append",
 		Input: []pipescript.Datapoint{
-			{1, 1},
-			{2, 3},
-			{3, 5},
+			{1, 2},
+			{2, " "},
+			{3, "Hello!"},
 		},
 		Output: []pipescript.Datapoint{
-			{1, float64(1)},
-			{2, float64(2)},
-			{3, float64(3)},
+			{1, "2"},
+			{2, "2 "},
+			{3, "2 Hello!"},
 		},
 		SecondaryInput: []pipescript.Datapoint{
-			{4, 4},
-			{5, 5},
-			{6, 6},
+			{1, 2},
+			{2, " "},
+			{3, "Hello!"},
 		},
 		SecondaryOutput: []pipescript.Datapoint{
-			{4, float64(4)},
-			{5, float64(4.5)},
-			{6, float64(5)},
+			{1, "2"},
+			{2, "2 "},
+			{3, "2 Hello!"},
 		},
 	}.Run(t)
 }

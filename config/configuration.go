@@ -15,13 +15,15 @@ import (
 	"github.com/connectordb/pipescript"
 	"github.com/connectordb/pipescript/interpolator"
 	"github.com/connectordb/pipescript/transforms/core"
+	"github.com/connectordb/pipescript/transforms/strings"
 	"github.com/tdewolff/minify"
 	"github.com/tdewolff/minify/js"
 )
 
 var (
-	defaultSplitMax = core.SplitMax
-	defaultNextMax  = core.NextMax
+	defaultSplitMax  = core.SplitMax
+	defaultPeekMax   = core.NextMax
+	defaultStringMax = strings.StringMax
 
 	configHeader = fmt.Sprintf("// PipeScript v%s Configuration\n", pipescript.Version)
 
@@ -32,10 +34,12 @@ var (
 
 // Configuration contains all of the things that can be modified in PipeScript.
 type Configuration struct {
-	// The maximum number of elements in a reduce
-	ReduceSplitMax int `json:"reduce_split_max"`
-	// The maximum depth of a next call
-	NextMax int64 `json:"next_max"`
+	// The maximum number of elements in a transform that splits
+	SplitMax int `json:"split_max"`
+	// The maximum size of a string that can be processed
+	StringMax int `json:"string_max"`
+	// The maximum depth of a peeking call
+	PeekMax int64 `json:"peek_max"`
 
 	// An array of transform names to disable
 	DisableTransforms []string `json:"disable_transforms"`
@@ -46,8 +50,9 @@ type Configuration struct {
 // Default uses the built-in values to set up a default "good enough" configuration
 func Default() *Configuration {
 	return &Configuration{
-		ReduceSplitMax:       defaultSplitMax,
-		NextMax:              defaultNextMax,
+		SplitMax:             defaultSplitMax,
+		PeekMax:              defaultPeekMax,
+		StringMax:            defaultStringMax,
 		DisableTransforms:    []string{},
 		DisableInterpolators: []string{},
 	}
@@ -55,8 +60,21 @@ func Default() *Configuration {
 
 // Set writes the PipeScript settings to the global PipeScript instance
 func (c *Configuration) Set() error {
-	core.SplitMax = c.ReduceSplitMax
-	core.NextMax = c.NextMax
+	if c.SplitMax == 0 {
+		core.SplitMax = defaultSplitMax
+	} else {
+		core.SplitMax = c.SplitMax
+	}
+	if c.PeekMax == 0 {
+		core.NextMax = defaultPeekMax
+	} else {
+		core.NextMax = c.PeekMax
+	}
+	if c.StringMax == 0 {
+		strings.StringMax = defaultStringMax
+	} else {
+		strings.StringMax = c.StringMax
+	}
 
 	// First, reenable all interpolators and transforms
 	for k := range disabledInterpolators {
@@ -98,12 +116,16 @@ func (c *Configuration) Set() error {
 
 // Validate makes sure that the configuration is OK
 func (c *Configuration) Validate() error {
-	if c.NextMax <= 1 {
-		return errors.New("The maximum peek depth for PipeScript must be > 1")
+	if c.PeekMax < 0 {
+		return errors.New("The maximum peek depth for PipeScript must be > 0")
 	}
-	if c.ReduceSplitMax <= 1 {
-		return errors.New("The maximum reduce split size in PipeScript must be >= 1")
+	if c.SplitMax < 0 {
+		return errors.New("The maximum data split size in PipeScript must be > 0")
 	}
+	if c.StringMax < 0 {
+		return errors.New("The maximum string size in PipeScript must be > 0")
+	}
+
 	return nil
 }
 

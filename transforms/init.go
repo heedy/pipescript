@@ -8,14 +8,14 @@ package transforms
 import (
 	"github.com/connectordb/pipescript/transforms/core"     // The core transforms
 	"github.com/connectordb/pipescript/transforms/datetime" // Manipulating timestamps
-	"github.com/connectordb/pipescript/transforms/stats"    // Statistical transforms
-	"github.com/connectordb/pipescript/transforms/text"     // Text-based transforms
+	"github.com/connectordb/pipescript/transforms/math"     // Statistical transforms
+	"github.com/connectordb/pipescript/transforms/strings"  // Text-based transforms
 )
 
-// Registers ALL functions
+// Register ALL functions
 func Register() {
 	core.Register()
-	stats.Register()
+	math.Register()
 	datetime.Register()
-	text.Register()
+	strings.Register()
 }

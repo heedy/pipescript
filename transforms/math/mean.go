@@ -1,4 +1,4 @@
-package stats
+package math
 
 import "github.com/connectordb/pipescript"
 

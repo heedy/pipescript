@@ -25,14 +25,14 @@ var testDpa = []pipescript.Datapoint{
 
 func TestConfig(t *testing.T) {
 	d := Default()
-	d.NextMax = 45
+	d.PeekMax = 45
 
 	d.Save("test_default.conf")
 	require.NoError(t, d.Validate())
 
 	d2, err := Load("test_default.conf")
 	require.NoError(t, err)
-	require.Equal(t, d.NextMax, d2.NextMax)
+	require.Equal(t, d.PeekMax, d2.PeekMax)
 
 	require.NoError(t, d2.Set())
 
