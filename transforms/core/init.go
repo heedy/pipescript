@@ -51,6 +51,8 @@ func Register() {
 	Count.Register()
 	Sum.Register()
 
+	Length.Register()
+
 	T.Register()
 	Tshift.Register()
 
