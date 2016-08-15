@@ -1,7 +1,7 @@
 # Javascript PipeScript
 [![npm version](https://badge.fury.io/js/pipescript.svg)](https://badge.fury.io/js/pipescript)
 
-This package requires golang 1.5. It uses gopherjs to create a javascript version.
+This package requires golang 1.6. It uses gopherjs to create a javascript version of PipeScript
 
 To build:
 
@@ -19,3 +19,10 @@ npm run test
 This will create the pipescript.js file.
 
 You can then try it in the browser by opening `tryme.html`
+
+
+Usage:
+
+```
+pipescript.Script('$ > 5').Transform([{t: 123.34, d: 4},{t: 123.35, d: 6}])
+```

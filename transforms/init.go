@@ -9,6 +9,7 @@ import (
 	"github.com/connectordb/pipescript/transforms/core"     // The core transforms
 	"github.com/connectordb/pipescript/transforms/datetime" // Manipulating timestamps
 	"github.com/connectordb/pipescript/transforms/math"     // Statistical transforms
+	"github.com/connectordb/pipescript/transforms/misc"     // Miscellaneous transforms
 	"github.com/connectordb/pipescript/transforms/strings"  // Text-based transforms
 )
 
@@ -18,4 +19,5 @@ func Register() {
 	math.Register()
 	datetime.Register()
 	strings.Register()
+	misc.Register()
 }
