@@ -6,10 +6,10 @@ import (
 	"github.com/connectordb/pipescript"
 )
 
-func TestWhile(t *testing.T) {
+func TestIwhile(t *testing.T) {
 	// This needs much more testing
 	pipescript.TestCase{
-		Pipescript: "while $!=1 sum",
+		Pipescript: "iwhile $!=1 sum",
 		Input: []pipescript.Datapoint{
 			{1, 5},
 			{2, 2},
@@ -18,7 +18,10 @@ func TestWhile(t *testing.T) {
 			{5, 2},
 		},
 		Output: []pipescript.Datapoint{
+			{1, float64(5)},
+			{2, float64(7)},
 			{3, float64(10)},
+			{4, float64(1)},
 			{5, float64(3)},
 		},
 		SecondaryInput: []pipescript.Datapoint{
@@ -29,13 +32,16 @@ func TestWhile(t *testing.T) {
 			{5, 2},
 		},
 		SecondaryOutput: []pipescript.Datapoint{
+			{1, float64(5)},
+			{2, float64(7)},
 			{3, float64(10)},
+			{4, float64(1)},
 			{5, float64(3)},
 		},
 	}.Run(t)
 
 	pipescript.TestCase{
-		Pipescript: "while(count%3!=1, sum)",
+		Pipescript: "iwhile(count%3!=1, sum)",
 		Input: []pipescript.Datapoint{
 			{1, 5},
 			{2, 2},
@@ -44,7 +50,10 @@ func TestWhile(t *testing.T) {
 			{5, 2},
 		},
 		Output: []pipescript.Datapoint{
+			{1, float64(5)},
+			{2, float64(7)},
 			{3, float64(10)},
+			{4, float64(1)},
 			{5, float64(3)},
 		},
 		SecondaryInput: []pipescript.Datapoint{
@@ -55,7 +64,10 @@ func TestWhile(t *testing.T) {
 			{5, 2},
 		},
 		SecondaryOutput: []pipescript.Datapoint{
+			{1, float64(5)},
+			{2, float64(7)},
 			{3, float64(10)},
+			{4, float64(1)},
 			{5, float64(3)},
 		},
 	}.Run(t)

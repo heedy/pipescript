@@ -22,29 +22,46 @@ func (t whileTransformStruct) Copy() (pipescript.TransformInstance, error) {
 	return whileTransformStruct{news, iter}, nil
 }
 
+// Next in the whileTransform works by peeking forward one datapoint. If the *next* argument is false, it means
+// that we return the result of the current datapoint. If not,
 func (t whileTransformStruct) Next(ti *pipescript.TransformIterator) (dp *pipescript.Datapoint, err error) {
-	te := ti.Next()
-	if te.IsFinished() {
-		// Clear the internal script
-		t.iter.Set(nil, nil)
-		t.script.Next()
-		return te.Get()
-	}
+	// Reset the internal script
+	t.iter.Set(nil, nil)
+	t.script.Next()
 
-	v, err := te.Args[0].Bool()
-	if err != nil {
-		return nil, err
+	// When the code gets here, at all times we are either on the first datapoint or on a false, or at the end of the stream
+	for {
+
+		te := ti.Next()
+		if te.IsFinished() {
+			return te.Get()
+		}
+		// Add the current datapoint to the script.
+		t.iter.Set(te.Datapoint, nil)
+		dp, err = t.script.Next()
+		if err != nil {
+			return dp, err
+		}
+
+		// Check the next datapoint. If it is false, or the end of the stream, return the value
+		te = ti.Peek(0)
+		if te.IsFinished() {
+			return dp, nil
+		}
+
+		v, err := te.Args[0].Bool()
+		if err != nil {
+			return nil, err
+		}
+
+		if !v {
+			return dp, nil
+		}
 	}
-	if !v {
-		// Reset the script
-		t.iter.Set(nil, nil)
-		t.script.Next()
-	}
-	t.iter.Set(te.Datapoint, nil)
-	return t.script.Next()
 
 }
 
+// While performs a while loop
 var While = pipescript.Transform{
 	Name:          "while",
 	Description:   "Equivalent to a while loop that runs while the first argument is true. Restarts the loop when the argument is false.",

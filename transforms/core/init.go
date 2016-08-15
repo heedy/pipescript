@@ -60,6 +60,7 @@ func Register() {
 
 	Remember.Register()
 
+	IWhile.Register()
 	While.Register()
 
 	Rand.Register()
