@@ -123,7 +123,12 @@ func main() {
 			os.MkdirAll(p, 0777)
 			for key := range pipescript.TransformRegistry {
 				t := pipescript.TransformRegistry[key]
-				err = ioutil.WriteFile(filepath.Join(p, key+".md"), []byte(t.Documentation), 0644)
+				docs := t.Documentation
+				if docs == "" {
+					docs = "*This transform is currently undocumented. You can help out by [adding documentation](https://github.com/connectordb/pipescript/tree/master/resources/docs/transforms)*"
+				}
+				title := "# " + key + "\n\n"
+				err = ioutil.WriteFile(filepath.Join(p, key+".md"), []byte(title+docs), 0644)
 				if err != nil {
 					log.Fatal(err)
 				}
