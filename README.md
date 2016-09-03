@@ -42,10 +42,8 @@ Instructions for embedding and extending PipeScript with your own transforms and
 
 ```
 go get github.com/connectordb/pipescript
-cd $GOPATH/github.com/connectordb/pipescript
-go test ./...
-cd main
-go build pipes.go
+go test github.com/connectordb/pipescript/...
+go install github.com/connectordb/pipescript/pipes
 ```
 
 ### Usage

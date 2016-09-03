@@ -9,8 +9,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"log"
 	"os"
+	"path/filepath"
 
 	"github.com/connectordb/pipescript"
 	"github.com/connectordb/pipescript/bytestreams"
@@ -107,7 +109,29 @@ func main() {
 
 	app.Usage = "pipes <transform or command> [command options]"
 
-	transformArray := make([]cli.Command, 0, len(pipescript.TransformRegistry))
+	transformArray := make([]cli.Command, 0, len(pipescript.TransformRegistry)+1)
+
+	// We add the dump markdown option
+	transformArray = append(transformArray, cli.Command{
+		Name:  "dumpdocs",
+		Usage: "dumpdocs dumps the markdown documentation files for all transforms to the given directory.",
+		Action: func(c *cli.Context) error {
+			p, err := filepath.Abs(c.Args().First())
+			if err != nil {
+				log.Fatal(err)
+			}
+			os.MkdirAll(p, 0777)
+			for key := range pipescript.TransformRegistry {
+				t := pipescript.TransformRegistry[key]
+				err = ioutil.WriteFile(filepath.Join(p, key+".md"), []byte(t.Documentation), 0644)
+				if err != nil {
+					log.Fatal(err)
+				}
+			}
+			return nil
+		},
+	})
+
 	for key := range pipescript.TransformRegistry {
 		t := pipescript.TransformRegistry[key]
 		desc := t.Description
@@ -117,12 +141,13 @@ func main() {
 		transformArray = append(transformArray, cli.Command{
 			Name:  t.Name,
 			Usage: desc,
-			Action: func(c *cli.Context) {
+			Action: func(c *cli.Context) error {
 				b, err := json.MarshalIndent(t, "", "  ")
 				if err != nil {
 					log.Fatal(err)
 				}
 				fmt.Printf("%s\n", string(b))
+				return nil
 			},
 		})
 	}

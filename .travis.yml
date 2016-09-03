@@ -1,11 +1,11 @@
 language: go
 go:
-    - 1.6
+    - 1.7
 before_install:
     - go get github.com/axw/gocov/gocov
     - go get github.com/mattn/goveralls
     - go get github.com/gopherjs/gopherjs
 script:
     - ./coverage_test.sh
-    - go build main/pipes.go
-    - cd main/javascript;npm install;npm run build; npm run test;
+    - go build pipes/pipes.go
+    - cd javascript;npm install;npm run build; npm run test;
