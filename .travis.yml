@@ -7,5 +7,5 @@ before_install:
     - go get github.com/gopherjs/gopherjs
 script:
     - ./coverage_test.sh
-    - go build pipes/pipes.go
+    - cd pipes;go build pipes/pipes.go
     - cd javascript;npm install;npm run build; npm run test;
