@@ -1,4 +1,6 @@
-ifelse is the same type of conditional statement that you might be used to in other programming languages. Pipescript's if statement is a filter, and conditionals are not common in scripts, but ifelse can work:
+`ifelse` is the same type of conditional statement that you might be used to in other programming languages.
+
+Pipescript's `if` statement is a filter, because conditionals are much less common than filters.
 
 ```
 ifelse($ > 5, $-5)
