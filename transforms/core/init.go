@@ -68,4 +68,7 @@ func Register() {
 	Rand.Register()
 
 	New.Register()
+
+	AllTrue.Register()
+	AnyTrue.Register()
 }
