@@ -2,6 +2,8 @@
 // sources:
 // resources/docs/interpolators/closest.md
 // resources/docs/transforms/$.md
+// resources/docs/transforms/alltrue.md
+// resources/docs/transforms/anytrue.md
 // resources/docs/transforms/changed.md
 // resources/docs/transforms/count.md
 // resources/docs/transforms/first.md
@@ -87,52 +89,54 @@ func docsInterpolatorsClosestMd() (*asset, error) {
 	return a, nil
 }
 
-var _docsTransformsMd = []byte(`The identity transform is a placeholder for the "current datapoint".
+var _docsTransformsMd = []byte(`The identity transform is a placeholder for the "current datapoint". It returns whatever is passed from the stream.
 
-Suppose the following is your datapoint:
-`+"`"+``+"`"+``+"`"+`json
-{
-  "t": 435435435.43534,
-  "d": 44
-}
-`+"`"+``+"`"+``+"`"+`
-
-Then the transform:
-`+"`"+``+"`"+``+"`"+`
-$ > 20
-`+"`"+``+"`"+``+"`"+`
-will return:
-`+"`"+``+"`"+``+"`"+`json
-{
-  "t": 435435435.43534,
-  "d": true
-}
-`+"`"+``+"`"+``+"`"+`
-
-When the datapoint is an object, you can query fields:
-
+Suppose your stream has the following data:
 
 `+"`"+``+"`"+``+"`"+`json
-{
-  "t": 435435435.43534,
-  "d": {
-    "hello": "world",
-    "foo": "bar"
-  }
-}
+44,18,20,-35,20.23
 `+"`"+``+"`"+``+"`"+`
 
-`+"`"+``+"`"+``+"`"+`
-$("hello")
-`+"`"+``+"`"+``+"`"+`
-
-will give:
+The `+"`"+`$`+"`"+` transform will simply return your data unchanged:
 `+"`"+``+"`"+``+"`"+`json
-{
-  "t": 435435435.43534,
-  "d": "world"
-}
+44,18,20,-35,20.23
 `+"`"+``+"`"+``+"`"+`
+
+
+### Usage
+
+The identity transform is perhaps the most used transform in all of pipescript.
+It is frequently used in comparisons and `+"`"+`if`+"`"+` filters.
+
+For example, the transform `+"`"+`$ > 20`+"`"+` is a comparison - it checks whether the current datapoint, rpresented by the identity is greater than 20. The result of this transform would be:
+
+`+"`"+``+"`"+``+"`"+`json
+true,false,false,false,true
+`+"`"+``+"`"+``+"`"+`
+
+This is frequently used in filters: `+"`"+`if $ > 20`+"`"+` would return
+`+"`"+``+"`"+``+"`"+`json
+44,20.23
+`+"`"+``+"`"+``+"`"+`
+
+### Objects
+
+The `+"`"+`$`+"`"+` transform accepts an optional argument. Sometimes, a datapoint isn't just your data - it can be an object:
+`+"`"+``+"`"+``+"`"+`json
+{"hi": "hello","foo":"bar"}, {"hi":"world","foo":"baz"}
+`+"`"+``+"`"+``+"`"+`
+
+By passing the object key to `+"`"+`$`+"`"+`, we can get the element:
+`+"`"+``+"`"+``+"`"+`javascript
+$("hi")
+`+"`"+``+"`"+``+"`"+`
+
+gives us:
+`+"`"+``+"`"+``+"`"+`json
+"hello","world"
+`+"`"+``+"`"+``+"`"+`
+
+The `+"`"+`$`+"`"+` transform is the main method for accessing sub-elements of a datapoint. It also works for array indices.
 `)
 
 func docsTransformsMdBytes() ([]byte, error) {
@@ -150,19 +154,115 @@ func docsTransformsMd() (*asset, error) {
 	return a, nil
 }
 
+var _docsTransformsAlltrueMd = []byte(`The `+"`"+`alltrue`+"`"+` transform returns `+"`"+`true`+"`"+` if and only if all of the datapoints seen thus far in the stream have been true:
+
+Given the following data:
+`+"`"+``+"`"+``+"`"+`
+true,true,true,false,true,true
+`+"`"+``+"`"+``+"`"+`
+
+`+"`"+`alltrue`+"`"+` will return:
+`+"`"+``+"`"+``+"`"+`
+true,true,true,false,false,false
+`+"`"+``+"`"+``+"`"+`
+
+### Why It's Useful
+
+Oftentimes you might want to check something in a `+"`"+`while`+"`"+`, or in a `+"`"+`map`+"`"+`. For example,
+the following transform will return true for each day where the entire 24 hours was spent at home:
+
+`+"`"+``+"`"+``+"`"+`
+distance(<latitude>,<longitude>) < 40 | while(day==next:day,alltrue)
+`+"`"+``+"`"+``+"`"+`
+
+The above transform will run a while loop while the current datapoint is part of the same day as the next datapoint, and check whether all location datapoints that day were within 40 meters of your chosen latitude and longitude.
+`)
+
+func docsTransformsAlltrueMdBytes() ([]byte, error) {
+	return _docsTransformsAlltrueMd, nil
+}
+
+func docsTransformsAlltrueMd() (*asset, error) {
+	bytes, err := docsTransformsAlltrueMdBytes()
+	if err != nil {
+		return nil, err
+	}
+
+	info := bindataFileInfo{name: "docs/transforms/alltrue.md", size: 0, mode: os.FileMode(0), modTime: time.Unix(0, 0)}
+	a := &asset{bytes: bytes, info: info}
+	return a, nil
+}
+
+var _docsTransformsAnytrueMd = []byte(`The `+"`"+`anytrue`+"`"+` transform returns `+"`"+`true`+"`"+` if any of the datapoints seen thus far in the stream were true.
+
+Given the following data:
+`+"`"+``+"`"+``+"`"+`
+false,false,false,true,false,false
+`+"`"+``+"`"+``+"`"+`
+
+`+"`"+`anytrue`+"`"+` will return:
+`+"`"+``+"`"+``+"`"+`
+false,false,false,true,true,true
+`+"`"+``+"`"+``+"`"+`
+
+### Why It's Useful
+
+Oftentimes you might want to check something in a `+"`"+`while`+"`"+`, or in a `+"`"+`map`+"`"+`. A great example
+would be to check which days you went to the gym:
+
+`+"`"+``+"`"+``+"`"+`
+distance(<latitude>,<longitude>) < 40 | while(day==next:day,anytrue)
+`+"`"+``+"`"+``+"`"+`
+
+The above transform will run a while loop while the current datapoint is part of the same day as the next datapoint, and check whether any of the GPS coordinates were within 40 meters of your gym.
+`)
+
+func docsTransformsAnytrueMdBytes() ([]byte, error) {
+	return _docsTransformsAnytrueMd, nil
+}
+
+func docsTransformsAnytrueMd() (*asset, error) {
+	bytes, err := docsTransformsAnytrueMdBytes()
+	if err != nil {
+		return nil, err
+	}
+
+	info := bindataFileInfo{name: "docs/transforms/anytrue.md", size: 0, mode: os.FileMode(0), modTime: time.Unix(0, 0)}
+	a := &asset{bytes: bytes, info: info}
+	return a, nil
+}
+
 var _docsTransformsChangedMd = []byte(`The changed transform returns true if the current datapoint's data is different from the previous datapoint.
 
+Given the following data:
 `+"`"+``+"`"+``+"`"+`
 1,2,3,3,4
 `+"`"+``+"`"+``+"`"+`
-
-`+"`"+``+"`"+``+"`"+`
-changed
-`+"`"+``+"`"+``+"`"+`
-
+running the `+"`"+`changed`+"`"+` transform on it will result in:
 `+"`"+``+"`"+``+"`"+`
 true,true,true,false,true
 `+"`"+``+"`"+``+"`"+`
+
+### Usage
+
+The `+"`"+`changed`+"`"+` transform is useful whenever you don't care about the specific datapoints,
+but when they change with respect to a certain metric.
+
+Suppose you have a stream of activities gathered by a phone:
+`+"`"+``+"`"+``+"`"+`
+walking,walking,still,still,still,walking,walking
+`+"`"+``+"`"+``+"`"+`
+
+You usually care about the transitions between activities:
+`+"`"+``+"`"+``+"`"+`
+if changed
+`+"`"+``+"`"+``+"`"+`
+gives:
+`+"`"+``+"`"+``+"`"+`
+walking,still,running
+`+"`"+``+"`"+``+"`"+`
+
+Remember that each datapoint comes with a timestamp, so the length of each activity can be extracted by looking at the timestamp differences.
 `)
 
 func docsTransformsChangedMdBytes() ([]byte, error) {
@@ -187,6 +287,32 @@ No matter what the datapoints, the sequence of data that count returns is:
 `+"`"+``+"`"+``+"`"+`
 1,2,3,4,5...
 `+"`"+``+"`"+``+"`"+`
+
+### Usage
+
+#### Counting Mood
+Suppose you want to count the number of times you were in a great mood:
+`+"`"+``+"`"+``+"`"+`
+if $ >= 8 | count | if last
+`+"`"+``+"`"+``+"`"+`
+
+The above transform will return only the datapoints where your mood rating was 8 or above, it will count them, and only return the last datapoint (which contains the full count).
+
+#### Counting Visits
+Suppose you want to find how many times you visited a friend:
+
+`+"`"+``+"`"+``+"`"+`
+if distance(<latitude>,<longitude>) < 50 | if changed | if $ | count | if last
+`+"`"+``+"`"+``+"`"+`
+
+The above transform finds when you were within 50 meters of the given coordinates (your friend's home), filters these datapoints so only changes remain (so each time you visit, you get one `+"`"+`true`+"`"+`, followed by a `+"`"+`false`+"`"+` when you leave), filter the false values, and count the number of times you visited. Note that `+"`"+`if $ | count`+"`"+` can be replaced with `+"`"+`sum`+"`"+` in this case.
+
+#### Counting Weekdays
+Now you want to see which weekdays you use your computer the most. You can simply count the datapoints in your laptop's stream to see what days have most data:
+
+`+"`"+``+"`"+``+"`"+`
+map(weekday,count)
+`+"`"+``+"`"+``+"`"+`
 `)
 
 func docsTransformsCountMdBytes() ([]byte, error) {
@@ -206,12 +332,28 @@ func docsTransformsCountMd() (*asset, error) {
 
 var _docsTransformsFirstMd = []byte(`This is true when the datapoint is first in a sequence. It is useful mainly for filtering with if:
 
-
 `+"`"+``+"`"+``+"`"+`
 if first or last
 `+"`"+``+"`"+``+"`"+`
 
-will return the first and last datapoint only
+will return the first and last datapoint in your stream:
+
+`+"`"+``+"`"+``+"`"+`
+1,2,3,4,5
+`+"`"+``+"`"+``+"`"+`
+
+`+"`"+``+"`"+``+"`"+`
+1,5
+`+"`"+``+"`"+``+"`"+`
+
+### Usage
+This transform could be finding your wakeup time, based upon the first time you turn on your phone screen in the morning:
+
+`+"`"+``+"`"+``+"`"+`
+if dayhour > 4 | while(day == next:day, first) | t
+`+"`"+``+"`"+``+"`"+`
+
+The above transform removes the datapoints taken from midnight to 4am (to filter out long nights), and then returns the first datapoint of each day, finaally returning only the timestamp.
 `)
 
 func docsTransformsFirstMdBytes() ([]byte, error) {
@@ -229,23 +371,22 @@ func docsTransformsFirstMd() (*asset, error) {
 	return a, nil
 }
 
-var _docsTransformsIfMd = []byte(`# if
+var _docsTransformsIfMd = []byte(`The if transform is used for filtering data. If you are looking for an if statement more akin to other languages (not a filter), you can use the `+"`"+`ifelse`+"`"+` transform.
 
-The if transform is the used for filtering data. Suppose the data portion of your dataset is as follows:
-
+Suppose the data portion of your dataset is as follows:
 `+"`"+``+"`"+``+"`"+`
 1,2,3,4,5,6
 `+"`"+``+"`"+``+"`"+`
-
 The transform:
 `+"`"+``+"`"+``+"`"+`
-if $ >=5
+if $ >= 5
 `+"`"+``+"`"+``+"`"+`
-
 will leave you with:
 `+"`"+``+"`"+``+"`"+`
 5,6
 `+"`"+``+"`"+``+"`"+`
+
+Note that while convention is to use if without parentheses (bash style), `+"`"+`if`+"`"+` is a normal pipescript transform, and can be used as a function: `+"`"+`if($ >= 5)`+"`"+`.
 `)
 
 func docsTransformsIfMdBytes() ([]byte, error) {
@@ -263,7 +404,9 @@ func docsTransformsIfMd() (*asset, error) {
 	return a, nil
 }
 
-var _docsTransformsIfelseMd = []byte(`ifelse is the same type of conditional statement that you might be used to in other programming languages. Pipescript's if statement is a filter, and conditionals are not common in scripts, but ifelse can work:
+var _docsTransformsIfelseMd = []byte(``+"`"+`ifelse`+"`"+` is the same type of conditional statement that you might be used to in other programming languages.
+
+Pipescript's `+"`"+`if`+"`"+` statement is a filter, because conditionals are much less common than filters.
 
 `+"`"+``+"`"+``+"`"+`
 ifelse($ > 5, $-5)
@@ -711,6 +854,8 @@ func AssetNames() []string {
 var _bindata = map[string]func() (*asset, error){
 	"docs/interpolators/closest.md": docsInterpolatorsClosestMd,
 	"docs/transforms/$.md": docsTransformsMd,
+	"docs/transforms/alltrue.md": docsTransformsAlltrueMd,
+	"docs/transforms/anytrue.md": docsTransformsAnytrueMd,
 	"docs/transforms/changed.md": docsTransformsChangedMd,
 	"docs/transforms/count.md": docsTransformsCountMd,
 	"docs/transforms/first.md": docsTransformsFirstMd,
@@ -782,6 +927,8 @@ var _bintree = &bintree{nil, map[string]*bintree{
 		}},
 		"transforms": &bintree{nil, map[string]*bintree{
 			"$.md": &bintree{docsTransformsMd, map[string]*bintree{}},
+			"alltrue.md": &bintree{docsTransformsAlltrueMd, map[string]*bintree{}},
+			"anytrue.md": &bintree{docsTransformsAnytrueMd, map[string]*bintree{}},
 			"changed.md": &bintree{docsTransformsChangedMd, map[string]*bintree{}},
 			"count.md": &bintree{docsTransformsCountMd, map[string]*bintree{}},
 			"first.md": &bintree{docsTransformsFirstMd, map[string]*bintree{}},
