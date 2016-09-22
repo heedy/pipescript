@@ -162,15 +162,20 @@ func main() {
 			Name:    "transforms",
 			Aliases: []string{"t"},
 			Usage:   "Documentation for specific transforms",
-			//Action:  createDatabaseCallback,
+			Action: func(c *cli.Context) error {
+				s, _ := json.Marshal(pipescript.TransformRegistry)
+				fmt.Printf("%s", string(s))
+				return nil
+			},
 			Subcommands: transformArray,
 		},
 		{
 			Name:    "run",
 			Aliases: []string{"r"},
 			Usage:   "Run a transform.",
-			Action: func(c *cli.Context) {
+			Action: func(c *cli.Context) error {
 				runner(c, c.Args().First())
+				return nil
 			},
 			Flags: []cli.Flag{
 				cli.StringFlag{

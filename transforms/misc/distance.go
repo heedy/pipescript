@@ -6,6 +6,7 @@ import (
 
 	"github.com/connectordb/duck"
 	"github.com/connectordb/pipescript"
+	"github.com/connectordb/pipescript/resources"
 )
 
 type distanceTransform struct {
@@ -67,11 +68,12 @@ func (t *distanceTransform) Next(ti *pipescript.TransformIterator) (*pipescript.
 }
 
 var Distance = pipescript.Transform{
-	Name:         "distance",
-	Description:  "Returns distance in meters from given latitude/longitude coordinates to datapoint",
-	OutputSchema: `{"type": "boolean"}`,
-	OneToOne:     true,
-	Stateless:    true,
+	Name:          "distance",
+	Description:   "Returns distance in meters from given latitude/longitude coordinates to datapoint",
+	OutputSchema:  `{"type": "boolean"}`,
+	Documentation: string(resources.MustAsset("docs/transforms/distance.md")),
+	OneToOne:      true,
+	Stateless:     true,
 	Args: []pipescript.TransformArg{
 		{
 			Description: "Latitude",

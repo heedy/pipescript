@@ -4,11 +4,8 @@ performing [sentiment analysis](https://en.wikipedia.org/wiki/Sentiment_analysis
 The code is based upon [github.com/thisandagain/sentiment](https://github.com/thisandagain/sentiment).
 
 
-```
-{
-  "t": 234234234234,
-  "d": "I hate this!"
-}
+```json
+["I hate this!"]
 ```
 
 Using the sentiment transform:
@@ -16,11 +13,8 @@ Using the sentiment transform:
 sentiment
 ```
 
-```
-{
-  "t": 234234234234,
-  "d": -1
-}
+```json
+[-1]
 ```
 
 Negative values represent negative sentiment, whereas positive values represent positive sentiment.

@@ -4,6 +4,7 @@ import (
 	"net/url"
 
 	"github.com/connectordb/pipescript"
+	"github.com/connectordb/pipescript/resources"
 )
 
 type domainTransform struct{}
@@ -32,11 +33,12 @@ func (t *domainTransform) Next(ti *pipescript.TransformIterator) (*pipescript.Da
 }
 
 var Domain = pipescript.Transform{
-	Name:         "domain",
-	Description:  "Returns the domain name/host that is used in the given url",
-	OutputSchema: `{"type": "string"}`,
-	OneToOne:     true,
-	Stateless:    true,
+	Name:          "domain",
+	Description:   "Returns the domain name/host that is used in the given url",
+	OutputSchema:  `{"type": "string"}`,
+	Documentation: string(resources.MustAsset("docs/transforms/domain.md")),
+	OneToOne:      true,
+	Stateless:     true,
 	Generator: func(name string, args []*pipescript.Script) (*pipescript.TransformInitializer, error) {
 		return &pipescript.TransformInitializer{Transform: &domainTransform{}}, nil
 	},

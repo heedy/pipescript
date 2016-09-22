@@ -4,6 +4,7 @@ import (
 	"regexp"
 
 	"github.com/connectordb/pipescript"
+	"github.com/connectordb/pipescript/resources"
 )
 
 type regexTransform struct {
@@ -29,11 +30,12 @@ func (t *regexTransform) Next(ti *pipescript.TransformIterator) (*pipescript.Dat
 }
 
 var Regex = pipescript.Transform{
-	Name:         "regex",
-	Description:  "Returns true if the given regular expression matches the data string",
-	OutputSchema: `{"type": "boolean"}`,
-	OneToOne:     true,
-	Stateless:    true,
+	Name:          "regex",
+	Description:   "Returns true if the given regular expression matches the data string",
+	OutputSchema:  `{"type": "boolean"}`,
+	Documentation: string(resources.MustAsset("docs/transforms/regex.md")),
+	OneToOne:      true,
+	Stateless:     true,
 	Args: []pipescript.TransformArg{
 		{
 			Description: "The regular expression to use",

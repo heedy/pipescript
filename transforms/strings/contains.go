@@ -4,6 +4,7 @@ import (
 	"strings"
 
 	"github.com/connectordb/pipescript"
+	"github.com/connectordb/pipescript/resources"
 )
 
 type containsTransform struct {
@@ -29,11 +30,12 @@ func (t *containsTransform) Next(ti *pipescript.TransformIterator) (*pipescript.
 }
 
 var Contains = pipescript.Transform{
-	Name:         "contains",
-	Description:  "Returns true if the given string is found in the datapoint string",
-	OutputSchema: `{"type": "boolean"}`,
-	OneToOne:     true,
-	Stateless:    true,
+	Name:          "contains",
+	Description:   "Returns true if the given string is found in the datapoint string",
+	OutputSchema:  `{"type": "boolean"}`,
+	Documentation: string(resources.MustAsset("docs/transforms/contains.md")),
+	OneToOne:      true,
+	Stateless:     true,
 	Args: []pipescript.TransformArg{
 		{
 			Description: "The string to search for",

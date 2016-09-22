@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/connectordb/pipescript"
+	"github.com/connectordb/pipescript/resources"
 )
 
 var StringMax = 1000000
@@ -35,10 +36,11 @@ func (t *appendTransform) Next(ti *pipescript.TransformIterator) (*pipescript.Da
 }
 
 var Append = pipescript.Transform{
-	Name:         "append",
-	Description:  "Appends data into one large string",
-	OutputSchema: `{"type": "string"}`,
-	OneToOne:     true,
+	Name:          "append",
+	Description:   "Appends data into one large string",
+	OutputSchema:  `{"type": "string"}`,
+	Documentation: string(resources.MustAsset("docs/transforms/append.md")),
+	OneToOne:      true,
 	Generator: func(name string, args []*pipescript.Script) (*pipescript.TransformInitializer, error) {
 		return &pipescript.TransformInitializer{Transform: &appendTransform{""}}, nil
 	},

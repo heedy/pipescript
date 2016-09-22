@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/connectordb/pipescript"
+	"github.com/connectordb/pipescript/resources"
 )
 
 type newTransform struct {
@@ -48,10 +49,11 @@ func (t *newTransform) Next(ti *pipescript.TransformIterator) (*pipescript.Datap
 
 // New checks if the datapoint was not yet seen
 var New = pipescript.Transform{
-	Name:         "new",
-	Description:  `Returns true only when the given data was not yet seen.`,
-	OutputSchema: `{"type": "boolean"}`,
-	OneToOne:     true,
+	Name:          "new",
+	Description:   `Returns true only when the given data was not yet seen.`,
+	OutputSchema:  `{"type": "boolean"}`,
+	Documentation: string(resources.MustAsset("docs/transforms/new.md")),
+	OneToOne:      true,
 	Generator: func(name string, args []*pipescript.Script) (*pipescript.TransformInitializer, error) {
 		seendata := make(map[string]bool)
 		return &pipescript.TransformInitializer{

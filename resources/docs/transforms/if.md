@@ -14,3 +14,21 @@ will leave you with:
 ```
 
 Note that while convention is to use if without parentheses (bash style), `if` is a normal pipescript transform, and can be used as a function: `if($ >= 5)`.
+
+## and/or
+
+PipeScript supports python-like and/or statements to build up a boolean:
+
+```
+if $ > 5 and $ < 20
+```
+
+The above will only pass through datapoints between 5 and 20. Just like in other languages, you can use parentheses to force an order of operations.
+
+PipeScript also has a built in negation:
+
+```
+if not $ > 5
+```
+
+Combining and/or with not allows building up arbitrary conditions.
