@@ -22,3 +22,11 @@ _testmain.go
 *.exe
 *.test
 *.prof
+
+*.output
+pipes/pipes
+
+javascript/pipescript.js
+javascript/pipescript.js.map
+
+config/test_default.conf

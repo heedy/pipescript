@@ -5,6 +5,7 @@
 // resources/docs/transforms/alltrue.md
 // resources/docs/transforms/anytrue.md
 // resources/docs/transforms/append.md
+// resources/docs/transforms/bucket.md
 // resources/docs/transforms/changed.md
 // resources/docs/transforms/contains.md
 // resources/docs/transforms/count.md
@@ -262,6 +263,59 @@ func docsTransformsAppendMd() (*asset, error) {
 	}
 
 	info := bindataFileInfo{name: "docs/transforms/append.md", size: 0, mode: os.FileMode(0), modTime: time.Unix(0, 0)}
+	a := &asset{bytes: bytes, info: info}
+	return a, nil
+}
+
+var _docsTransformsBucketMd = []byte(`The bucket transform allows you to put numbers into buckets of custom size.
+
+For example, given this data:
+
+`+"`"+``+"`"+``+"`"+`
+2,16,84,-5,1
+`+"`"+``+"`"+``+"`"+`
+We can choose buckets of size `+"`"+`10`+"`"+` (starting from `+"`"+`0`+"`"+` by default)
+`+"`"+``+"`"+``+"`"+`
+bucket(10)
+`+"`"+``+"`"+``+"`"+`
+to get:
+`+"`"+``+"`"+``+"`"+`json
+"[0,10)", "[10,20)", "[80,90)","[-10,0)","[0,10)"
+`+"`"+``+"`"+``+"`"+`
+
+The bucket transform uses [interval notation][1]. To process the range in code, you can manually change the last character from `+"`"+`)`+"`"+` to `+"`"+`]`+"`"+`, and parse the result as a json array.
+
+[1]: https://en.wikipedia.org/wiki/Interval_(mathematics)
+
+### Histograms
+
+Using the `+"`"+`bucket`+"`"+` transform in conjunction with the `+"`"+`map`+"`"+` transform, it is easy to generate histograms:
+
+`+"`"+``+"`"+``+"`"+`
+map(bucket(10),count)
+`+"`"+``+"`"+``+"`"+`
+Running this transform on the above data will give:
+`+"`"+``+"`"+``+"`"+`json
+[{
+  "[-10,0)": 1,
+  "[0,10)": 2,
+  "[10,20)": 1,
+  "[80,90)": 1
+}]
+`+"`"+``+"`"+``+"`"+`
+`)
+
+func docsTransformsBucketMdBytes() ([]byte, error) {
+	return _docsTransformsBucketMd, nil
+}
+
+func docsTransformsBucketMd() (*asset, error) {
+	bytes, err := docsTransformsBucketMdBytes()
+	if err != nil {
+		return nil, err
+	}
+
+	info := bindataFileInfo{name: "docs/transforms/bucket.md", size: 0, mode: os.FileMode(0), modTime: time.Unix(0, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -1245,6 +1299,7 @@ var _bindata = map[string]func() (*asset, error){
 	"docs/transforms/alltrue.md": docsTransformsAlltrueMd,
 	"docs/transforms/anytrue.md": docsTransformsAnytrueMd,
 	"docs/transforms/append.md": docsTransformsAppendMd,
+	"docs/transforms/bucket.md": docsTransformsBucketMd,
 	"docs/transforms/changed.md": docsTransformsChangedMd,
 	"docs/transforms/contains.md": docsTransformsContainsMd,
 	"docs/transforms/count.md": docsTransformsCountMd,
@@ -1324,6 +1379,7 @@ var _bintree = &bintree{nil, map[string]*bintree{
 			"alltrue.md": &bintree{docsTransformsAlltrueMd, map[string]*bintree{}},
 			"anytrue.md": &bintree{docsTransformsAnytrueMd, map[string]*bintree{}},
 			"append.md": &bintree{docsTransformsAppendMd, map[string]*bintree{}},
+			"bucket.md": &bintree{docsTransformsBucketMd, map[string]*bintree{}},
 			"changed.md": &bintree{docsTransformsChangedMd, map[string]*bintree{}},
 			"contains.md": &bintree{docsTransformsContainsMd, map[string]*bintree{}},
 			"count.md": &bintree{docsTransformsCountMd, map[string]*bintree{}},

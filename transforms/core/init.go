@@ -71,4 +71,6 @@ func Register() {
 
 	AllTrue.Register()
 	AnyTrue.Register()
+
+	Bucket.Register()
 }
