@@ -11,6 +11,7 @@
 // resources/docs/transforms/count.md
 // resources/docs/transforms/distance.md
 // resources/docs/transforms/domain.md
+// resources/docs/transforms/filter.md
 // resources/docs/transforms/first.md
 // resources/docs/transforms/if.md
 // resources/docs/transforms/ifelse.md
@@ -509,6 +510,52 @@ func docsTransformsDomainMd() (*asset, error) {
 	}
 
 	info := bindataFileInfo{name: "docs/transforms/domain.md", size: 0, mode: os.FileMode(0), modTime: time.Unix(0, 0)}
+	a := &asset{bytes: bytes, info: info}
+	return a, nil
+}
+
+var _docsTransformsFilterMd = []byte(``+"`"+`filter`+"`"+` allows you to remove values from an object based upon a condition. For example:
+
+`+"`"+``+"`"+``+"`"+`json
+[{
+  "a": 45,
+  "b": 23,
+  "c": -3
+}]
+`+"`"+``+"`"+``+"`"+`
+
+Running the transform `+"`"+`filter($<0)`+"`"+` on the above datapoint, will give an output:
+
+`+"`"+``+"`"+``+"`"+`json
+[{
+  "a": 45,
+  "b": 23
+}]
+`+"`"+``+"`"+``+"`"+`
+
+The transform "filtered" out all values that are less than 0.
+
+## Examples
+
+The main use case of the `+"`"+`filter`+"`"+` transform is in combination with the `+"`"+`map`+"`"+` transform, when `+"`"+`map`+"`"+` returns too many values.
+For example, if looking at browsing history, you might have visited thousands of websites, but only be interested in the ones you visited more than 30 times:
+
+`+"`"+``+"`"+``+"`"+`
+map(domain,count) | filter($<=30)
+`+"`"+``+"`"+``+"`"+`
+`)
+
+func docsTransformsFilterMdBytes() ([]byte, error) {
+	return _docsTransformsFilterMd, nil
+}
+
+func docsTransformsFilterMd() (*asset, error) {
+	bytes, err := docsTransformsFilterMdBytes()
+	if err != nil {
+		return nil, err
+	}
+
+	info := bindataFileInfo{name: "docs/transforms/filter.md", size: 0, mode: os.FileMode(0), modTime: time.Unix(0, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -1305,6 +1352,7 @@ var _bindata = map[string]func() (*asset, error){
 	"docs/transforms/count.md": docsTransformsCountMd,
 	"docs/transforms/distance.md": docsTransformsDistanceMd,
 	"docs/transforms/domain.md": docsTransformsDomainMd,
+	"docs/transforms/filter.md": docsTransformsFilterMd,
 	"docs/transforms/first.md": docsTransformsFirstMd,
 	"docs/transforms/if.md": docsTransformsIfMd,
 	"docs/transforms/ifelse.md": docsTransformsIfelseMd,
@@ -1385,6 +1433,7 @@ var _bintree = &bintree{nil, map[string]*bintree{
 			"count.md": &bintree{docsTransformsCountMd, map[string]*bintree{}},
 			"distance.md": &bintree{docsTransformsDistanceMd, map[string]*bintree{}},
 			"domain.md": &bintree{docsTransformsDomainMd, map[string]*bintree{}},
+			"filter.md": &bintree{docsTransformsFilterMd, map[string]*bintree{}},
 			"first.md": &bintree{docsTransformsFirstMd, map[string]*bintree{}},
 			"if.md": &bintree{docsTransformsIfMd, map[string]*bintree{}},
 			"ifelse.md": &bintree{docsTransformsIfelseMd, map[string]*bintree{}},

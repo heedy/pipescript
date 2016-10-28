@@ -59,6 +59,7 @@ func Register() {
 	IMap.Register()
 	Map.Register()
 	Reduce.Register()
+	Filter.Register()
 
 	Remember.Register()
 
