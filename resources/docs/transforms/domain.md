@@ -4,7 +4,7 @@ For example:
 ```json
 [
   "https://golang.org/pkg/net/url/#URL.EscapedPath",
-  "https://connectordb.github.io",
+  "https://connectordb.io",
   "https://github.com/connectordb/connectordb"
 ]
 ```
@@ -12,7 +12,7 @@ gives:
 ```json
 [
   "golang.org",
-  "connectordb.github.io",
+  "connectordb.io",
   "github.com"
 ]
 ```

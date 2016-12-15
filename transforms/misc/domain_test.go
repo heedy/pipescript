@@ -22,11 +22,11 @@ func TestContains(t *testing.T) {
 		},
 		SecondaryInput: []pipescript.Datapoint{
 			{1, "https://golang.org/pkg/net/url/#URL.EscapedPath"},
-			{2, "https://connectordb.github.io"},
+			{2, "https://connectordb.io"},
 		},
 		SecondaryOutput: []pipescript.Datapoint{
 			{1, "golang.org"},
-			{2, "connectordb.github.io"},
+			{2, "connectordb.io"},
 		},
 	}.Run(t)
 }

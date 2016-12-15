@@ -44,6 +44,7 @@ import (
 	"strings"
 	"time"
 )
+
 type asset struct {
 	bytes []byte
 	info  os.FileInfo
@@ -77,9 +78,9 @@ func (fi bindataFileInfo) Sys() interface{} {
 
 var _docsInterpolatorsClosestMd = []byte(`Woot!
 
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 hello
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 `)
 
 func docsInterpolatorsClosestMdBytes() ([]byte, error) {
@@ -101,50 +102,50 @@ var _docsTransformsMd = []byte(`The identity transform is a placeholder for the 
 
 Suppose your stream has the following data:
 
-`+"`"+``+"`"+``+"`"+`json
+` + "`" + `` + "`" + `` + "`" + `json
 44,18,20,-35,20.23
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 
-The `+"`"+`$`+"`"+` transform will simply return your data unchanged:
-`+"`"+``+"`"+``+"`"+`json
+The ` + "`" + `$` + "`" + ` transform will simply return your data unchanged:
+` + "`" + `` + "`" + `` + "`" + `json
 44,18,20,-35,20.23
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 
 
 ### Usage
 
 The identity transform is perhaps the most used transform in all of pipescript.
-It is frequently used in comparisons and `+"`"+`if`+"`"+` filters.
+It is frequently used in comparisons and ` + "`" + `if` + "`" + ` filters.
 
-For example, the transform `+"`"+`$ > 20`+"`"+` is a comparison - it checks whether the current datapoint, rpresented by the identity is greater than 20. The result of this transform would be:
+For example, the transform ` + "`" + `$ > 20` + "`" + ` is a comparison - it checks whether the current datapoint, rpresented by the identity is greater than 20. The result of this transform would be:
 
-`+"`"+``+"`"+``+"`"+`json
+` + "`" + `` + "`" + `` + "`" + `json
 true,false,false,false,true
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 
-This is frequently used in filters: `+"`"+`if $ > 20`+"`"+` would return
-`+"`"+``+"`"+``+"`"+`json
+This is frequently used in filters: ` + "`" + `if $ > 20` + "`" + ` would return
+` + "`" + `` + "`" + `` + "`" + `json
 44,20.23
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 
 ### Objects
 
-The `+"`"+`$`+"`"+` transform accepts an optional argument. Sometimes, a datapoint isn't just your data - it can be an object:
-`+"`"+``+"`"+``+"`"+`json
+The ` + "`" + `$` + "`" + ` transform accepts an optional argument. Sometimes, a datapoint isn't just your data - it can be an object:
+` + "`" + `` + "`" + `` + "`" + `json
 {"hi": "hello","foo":"bar"}, {"hi":"world","foo":"baz"}
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 
-By passing the object key to `+"`"+`$`+"`"+`, we can get the element:
-`+"`"+``+"`"+``+"`"+`javascript
+By passing the object key to ` + "`" + `$` + "`" + `, we can get the element:
+` + "`" + `` + "`" + `` + "`" + `javascript
 $("hi")
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 
 gives us:
-`+"`"+``+"`"+``+"`"+`json
+` + "`" + `` + "`" + `` + "`" + `json
 "hello","world"
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 
-The `+"`"+`$`+"`"+` transform is the main method for accessing sub-elements of a datapoint. It also works for array indices.
+The ` + "`" + `$` + "`" + ` transform is the main method for accessing sub-elements of a datapoint. It also works for array indices.
 `)
 
 func docsTransformsMdBytes() ([]byte, error) {
@@ -162,26 +163,26 @@ func docsTransformsMd() (*asset, error) {
 	return a, nil
 }
 
-var _docsTransformsAlltrueMd = []byte(`The `+"`"+`alltrue`+"`"+` transform returns `+"`"+`true`+"`"+` if and only if all of the datapoints seen thus far in the stream have been true:
+var _docsTransformsAlltrueMd = []byte(`The ` + "`" + `alltrue` + "`" + ` transform returns ` + "`" + `true` + "`" + ` if and only if all of the datapoints seen thus far in the stream have been true:
 
 Given the following data:
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 true,true,true,false,true,true
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 
-`+"`"+`alltrue`+"`"+` will return:
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `alltrue` + "`" + ` will return:
+` + "`" + `` + "`" + `` + "`" + `
 true,true,true,false,false,false
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 
 ### Why It's Useful
 
-Oftentimes you might want to check something in a `+"`"+`while`+"`"+`, or in a `+"`"+`map`+"`"+`. For example,
+Oftentimes you might want to check something in a ` + "`" + `while` + "`" + `, or in a ` + "`" + `map` + "`" + `. For example,
 the following transform will return true for each day where the entire 24 hours was spent at home:
 
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 distance(<latitude>,<longitude>) < 40 | while(day==next:day,alltrue)
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 
 The above transform will run a while loop while the current datapoint is part of the same day as the next datapoint, and check whether all location datapoints that day were within 40 meters of your chosen latitude and longitude.
 `)
@@ -201,26 +202,26 @@ func docsTransformsAlltrueMd() (*asset, error) {
 	return a, nil
 }
 
-var _docsTransformsAnytrueMd = []byte(`The `+"`"+`anytrue`+"`"+` transform returns `+"`"+`true`+"`"+` if any of the datapoints seen thus far in the stream were true.
+var _docsTransformsAnytrueMd = []byte(`The ` + "`" + `anytrue` + "`" + ` transform returns ` + "`" + `true` + "`" + ` if any of the datapoints seen thus far in the stream were true.
 
 Given the following data:
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 false,false,false,true,false,false
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 
-`+"`"+`anytrue`+"`"+` will return:
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `anytrue` + "`" + ` will return:
+` + "`" + `` + "`" + `` + "`" + `
 false,false,false,true,true,true
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 
 ### Why It's Useful
 
-Oftentimes you might want to check something in a `+"`"+`while`+"`"+`, or in a `+"`"+`map`+"`"+`. A great example
+Oftentimes you might want to check something in a ` + "`" + `while` + "`" + `, or in a ` + "`" + `map` + "`" + `. A great example
 would be to check which days you went to the gym:
 
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 distance(<latitude>,<longitude>) < 40 | while(day==next:day,anytrue)
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 
 The above transform will run a while loop while the current datapoint is part of the same day as the next datapoint, and check whether any of the GPS coordinates were within 40 meters of your gym.
 `)
@@ -240,17 +241,17 @@ func docsTransformsAnytrueMd() (*asset, error) {
 	return a, nil
 }
 
-var _docsTransformsAppendMd = []byte(``+"`"+`append`+"`"+` is a transform made for strings - it appends all of the data it has seen so far into one large string:
+var _docsTransformsAppendMd = []byte(`` + "`" + `append` + "`" + ` is a transform made for strings - it appends all of the data it has seen so far into one large string:
 
 Suppose your stream is:
-`+"`"+``+"`"+``+"`"+`json
+` + "`" + `` + "`" + `` + "`" + `json
 ["hello ","world",24,true]
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 
-Then running the transform `+"`"+`append`+"`"+` on your data will give you:
-`+"`"+``+"`"+``+"`"+`json
+Then running the transform ` + "`" + `append` + "`" + ` on your data will give you:
+` + "`" + `` + "`" + `` + "`" + `json
 ["hello ","hello world","hello world24","hello world24true"]
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 `)
 
 func docsTransformsAppendMdBytes() ([]byte, error) {
@@ -272,38 +273,38 @@ var _docsTransformsBucketMd = []byte(`The bucket transform allows you to put num
 
 For example, given this data:
 
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 2,16,84,-5,1
-`+"`"+``+"`"+``+"`"+`
-We can choose buckets of size `+"`"+`10`+"`"+` (starting from `+"`"+`0`+"`"+` by default)
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
+We can choose buckets of size ` + "`" + `10` + "`" + ` (starting from ` + "`" + `0` + "`" + ` by default)
+` + "`" + `` + "`" + `` + "`" + `
 bucket(10)
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 to get:
-`+"`"+``+"`"+``+"`"+`json
+` + "`" + `` + "`" + `` + "`" + `json
 "[0,10)", "[10,20)", "[80,90)","[-10,0)","[0,10)"
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 
-The bucket transform uses [interval notation][1]. To process the range in code, you can manually change the last character from `+"`"+`)`+"`"+` to `+"`"+`]`+"`"+`, and parse the result as a json array.
+The bucket transform uses [interval notation][1]. To process the range in code, you can manually change the last character from ` + "`" + `)` + "`" + ` to ` + "`" + `]` + "`" + `, and parse the result as a json array.
 
 [1]: https://en.wikipedia.org/wiki/Interval_(mathematics)
 
 ### Histograms
 
-Using the `+"`"+`bucket`+"`"+` transform in conjunction with the `+"`"+`map`+"`"+` transform, it is easy to generate histograms:
+Using the ` + "`" + `bucket` + "`" + ` transform in conjunction with the ` + "`" + `map` + "`" + ` transform, it is easy to generate histograms:
 
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 map(bucket(10),count)
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 Running this transform on the above data will give:
-`+"`"+``+"`"+``+"`"+`json
+` + "`" + `` + "`" + `` + "`" + `json
 [{
   "[-10,0)": 1,
   "[0,10)": 2,
   "[10,20)": 1,
   "[80,90)": 1
 }]
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 `)
 
 func docsTransformsBucketMdBytes() ([]byte, error) {
@@ -324,32 +325,32 @@ func docsTransformsBucketMd() (*asset, error) {
 var _docsTransformsChangedMd = []byte(`The changed transform returns true if the current datapoint's data is different from the previous datapoint.
 
 Given the following data:
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 1,2,3,3,4
-`+"`"+``+"`"+``+"`"+`
-running the `+"`"+`changed`+"`"+` transform on it will result in:
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
+running the ` + "`" + `changed` + "`" + ` transform on it will result in:
+` + "`" + `` + "`" + `` + "`" + `
 true,true,true,false,true
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 
 ### Usage
 
-The `+"`"+`changed`+"`"+` transform is useful whenever you don't care about the specific datapoints,
+The ` + "`" + `changed` + "`" + ` transform is useful whenever you don't care about the specific datapoints,
 but when they change with respect to a certain metric.
 
 Suppose you have a stream of activities gathered by a phone:
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 walking,walking,still,still,still,walking,walking
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 
 You usually care about the transitions between activities:
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 if changed
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 gives:
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 walking,still,running
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 
 Remember that each datapoint comes with a timestamp, so the length of each activity can be extracted by looking at the timestamp differences.
 `)
@@ -369,16 +370,16 @@ func docsTransformsChangedMd() (*asset, error) {
 	return a, nil
 }
 
-var _docsTransformsContainsMd = []byte(``+"`"+`contains`+"`"+` permits you to check if a datapoint with a string data value contains the given substring:
+var _docsTransformsContainsMd = []byte(`` + "`" + `contains` + "`" + ` permits you to check if a datapoint with a string data value contains the given substring:
 
-`+"`"+``+"`"+``+"`"+`json
+` + "`" + `` + "`" + `` + "`" + `json
 ["Hello World!","hello world","hi there"]
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 
-Running the transform `+"`"+`contains("World")`+"`"+` will give:
-`+"`"+``+"`"+``+"`"+`json
+Running the transform ` + "`" + `contains("World")` + "`" + ` will give:
+` + "`" + `` + "`" + `` + "`" + `json
 [true,false,false]
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 `)
 
 func docsTransformsContainsMdBytes() ([]byte, error) {
@@ -396,39 +397,39 @@ func docsTransformsContainsMd() (*asset, error) {
 	return a, nil
 }
 
-var _docsTransformsCountMd = []byte(`Count represents the total number of datapoints passed through the transform. It is equivalent to an `+"`"+`i`+"`"+` used in a loop over an array, with the difference that count starts from 1, rather than 0.
+var _docsTransformsCountMd = []byte(`Count represents the total number of datapoints passed through the transform. It is equivalent to an ` + "`" + `i` + "`" + ` used in a loop over an array, with the difference that count starts from 1, rather than 0.
 
 No matter what the datapoints, the sequence of data that count returns is:
 
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 1,2,3,4,5...
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 
 ### Usage
 
 #### Counting Mood
 Suppose you want to count the number of times you were in a great mood:
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 if $ >= 8 | count | if last
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 
 The above transform will return only the datapoints where your mood rating was 8 or above, it will count them, and only return the last datapoint (which contains the full count).
 
 #### Counting Visits
 Suppose you want to find how many times you visited a friend:
 
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 if distance(<latitude>,<longitude>) < 50 | if changed | if $ | count | if last
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 
-The above transform finds when you were within 50 meters of the given coordinates (your friend's home), filters these datapoints so only changes remain (so each time you visit, you get one `+"`"+`true`+"`"+`, followed by a `+"`"+`false`+"`"+` when you leave), filter the false values, and count the number of times you visited. Note that `+"`"+`if $ | count`+"`"+` can be replaced with `+"`"+`sum`+"`"+` in this case.
+The above transform finds when you were within 50 meters of the given coordinates (your friend's home), filters these datapoints so only changes remain (so each time you visit, you get one ` + "`" + `true` + "`" + `, followed by a ` + "`" + `false` + "`" + ` when you leave), filter the false values, and count the number of times you visited. Note that ` + "`" + `if $ | count` + "`" + ` can be replaced with ` + "`" + `sum` + "`" + ` in this case.
 
 #### Counting Weekdays
 Now you want to see which weekdays you use your computer the most. You can simply count the datapoints in your laptop's stream to see what days have most data:
 
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 map(weekday,count)
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 `)
 
 func docsTransformsCountMdBytes() ([]byte, error) {
@@ -446,20 +447,20 @@ func docsTransformsCountMd() (*asset, error) {
 	return a, nil
 }
 
-var _docsTransformsDistanceMd = []byte(`The `+"`"+`distance`+"`"+` transform computes the distance in meters from the current datapoint to its argument coordinates.
+var _docsTransformsDistanceMd = []byte(`The ` + "`" + `distance` + "`" + ` transform computes the distance in meters from the current datapoint to its argument coordinates.
 
-The datapoint is assumed to have `+"`"+`latitude`+"`"+` and `+"`"+`longitude`+"`"+` fields in decimal coordinates. It returns the distance in meters computed using the [Haversine formula](https://en.wikipedia.org/wiki/Haversine_formula).
+The datapoint is assumed to have ` + "`" + `latitude` + "`" + ` and ` + "`" + `longitude` + "`" + ` fields in decimal coordinates. It returns the distance in meters computed using the [Haversine formula](https://en.wikipedia.org/wiki/Haversine_formula).
 
-`+"`"+``+"`"+``+"`"+`json
+` + "`" + `` + "`" + `` + "`" + `json
 [{
   "latitude": 40.4277304,
   "longitude": -86.9170587
 }]
-`+"`"+``+"`"+``+"`"+`
-Given the above stream, we find its distance to the chosen coordinate: `+"`"+`distance(40.426841,-86.9165106)`+"`"+`:
-`+"`"+``+"`"+``+"`"+`json
+` + "`" + `` + "`" + `` + "`" + `
+Given the above stream, we find its distance to the chosen coordinate: ` + "`" + `distance(40.426841,-86.9165106)` + "`" + `:
+` + "`" + `` + "`" + `` + "`" + `json
 [109.238]
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 
 The two coordinates above are about 109 meters apart.
 `)
@@ -482,21 +483,21 @@ func docsTransformsDistanceMd() (*asset, error) {
 var _docsTransformsDomainMd = []byte(`The domain transform is run on URLs, and returns the domain.
 
 For example:
-`+"`"+``+"`"+``+"`"+`json
+` + "`" + `` + "`" + `` + "`" + `json
 [
   "https://golang.org/pkg/net/url/#URL.EscapedPath",
-  "https://connectordb.github.io",
+  "https://connectordb.io",
   "https://github.com/connectordb/connectordb"
 ]
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 gives:
-`+"`"+``+"`"+``+"`"+`json
+` + "`" + `` + "`" + `` + "`" + `json
 [
   "golang.org",
-  "connectordb.github.io",
+  "connectordb.io",
   "github.com"
 ]
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 `)
 
 func docsTransformsDomainMdBytes() ([]byte, error) {
@@ -514,35 +515,35 @@ func docsTransformsDomainMd() (*asset, error) {
 	return a, nil
 }
 
-var _docsTransformsFilterMd = []byte(``+"`"+`filter`+"`"+` allows you to remove values from an object based upon a condition. For example:
+var _docsTransformsFilterMd = []byte(`` + "`" + `filter` + "`" + ` allows you to remove values from an object based upon a condition. For example:
 
-`+"`"+``+"`"+``+"`"+`json
+` + "`" + `` + "`" + `` + "`" + `json
 [{
   "a": 45,
   "b": 23,
   "c": -3
 }]
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 
-Running the transform `+"`"+`filter($<0)`+"`"+` on the above datapoint, will give an output:
+Running the transform ` + "`" + `filter($<0)` + "`" + ` on the above datapoint, will give an output:
 
-`+"`"+``+"`"+``+"`"+`json
+` + "`" + `` + "`" + `` + "`" + `json
 [{
   "a": 45,
   "b": 23
 }]
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 
 The transform "filtered" out all values that are less than 0.
 
 ## Examples
 
-The main use case of the `+"`"+`filter`+"`"+` transform is in combination with the `+"`"+`map`+"`"+` transform, when `+"`"+`map`+"`"+` returns too many values.
+The main use case of the ` + "`" + `filter` + "`" + ` transform is in combination with the ` + "`" + `map` + "`" + ` transform, when ` + "`" + `map` + "`" + ` returns too many values.
 For example, if looking at browsing history, you might have visited thousands of websites, but only be interested in the ones you visited more than 30 times:
 
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 map(domain,count) | filter($<=30)
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 `)
 
 func docsTransformsFilterMdBytes() ([]byte, error) {
@@ -562,26 +563,26 @@ func docsTransformsFilterMd() (*asset, error) {
 
 var _docsTransformsFirstMd = []byte(`This is true when the datapoint is first in a sequence. It is useful mainly for filtering with if:
 
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 if first or last
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 
 will return the first and last datapoint in your stream:
 
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 1,2,3,4,5
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 1,5
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 
 ### Usage
 This transform could be finding your wakeup time, based upon the first time you turn on your phone screen in the morning:
 
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 if dayhour > 4 | while(day == next:day, first) | t
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 
 The above transform removes the datapoints taken from midnight to 4am (to filter out long nights), and then returns the first datapoint of each day, finaally returning only the timestamp.
 `)
@@ -601,38 +602,38 @@ func docsTransformsFirstMd() (*asset, error) {
 	return a, nil
 }
 
-var _docsTransformsIfMd = []byte(`The if transform is used for filtering data. If you are looking for an if statement more akin to other languages (not a filter), you can use the `+"`"+`ifelse`+"`"+` transform.
+var _docsTransformsIfMd = []byte(`The if transform is used for filtering data. If you are looking for an if statement more akin to other languages (not a filter), you can use the ` + "`" + `ifelse` + "`" + ` transform.
 
 Suppose the data portion of your dataset is as follows:
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 1,2,3,4,5,6
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 The transform:
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 if $ >= 5
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 will leave you with:
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 5,6
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 
-Note that while convention is to use if without parentheses (bash style), `+"`"+`if`+"`"+` is a normal pipescript transform, and can be used as a function: `+"`"+`if($ >= 5)`+"`"+`.
+Note that while convention is to use if without parentheses (bash style), ` + "`" + `if` + "`" + ` is a normal pipescript transform, and can be used as a function: ` + "`" + `if($ >= 5)` + "`" + `.
 
 ## and/or
 
 PipeScript supports python-like and/or statements to build up a boolean:
 
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 if $ > 5 and $ < 20
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 
 The above will only pass through datapoints between 5 and 20. Just like in other languages, you can use parentheses to force an order of operations.
 
 PipeScript also has a built in negation:
 
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 if not $ > 5
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 
 Combining and/or with not allows building up arbitrary conditions.
 `)
@@ -652,19 +653,19 @@ func docsTransformsIfMd() (*asset, error) {
 	return a, nil
 }
 
-var _docsTransformsIfelseMd = []byte(``+"`"+`ifelse`+"`"+` is the same type of conditional statement that you might be used to in other programming languages.
+var _docsTransformsIfelseMd = []byte(`` + "`" + `ifelse` + "`" + ` is the same type of conditional statement that you might be used to in other programming languages.
 
-Pipescript's `+"`"+`if`+"`"+` statement is a filter, because conditionals are much less common than filters.
+Pipescript's ` + "`" + `if` + "`" + ` statement is a filter, because conditionals are much less common than filters.
 
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 ifelse($ > 5, $-5)
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 
-The above will take all datapoints with data greater than 5, and decrease their value by 5. There is also an optional `+"`"+`else`+"`"+`:
+The above will take all datapoints with data greater than 5, and decrease their value by 5. There is also an optional ` + "`" + `else` + "`" + `:
 
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 ifelse($ > 5, $-3,$+2)
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 
 The above will decrease datapoints > 5 by 3, and increase all others by 2.
 
@@ -686,15 +687,15 @@ func docsTransformsIfelseMd() (*asset, error) {
 	return a, nil
 }
 
-var _docsTransformsLastMd = []byte(``+"`"+`last`+"`"+` is true on the last datapoint of a sequence.
+var _docsTransformsLastMd = []byte(`` + "`" + `last` + "`" + ` is true on the last datapoint of a sequence.
 
-It is *very* common in pipescript to end a transform with `+"`"+`if last`+"`"+` to only return the final datapoint, which contains the desired result of computation, without returning intermediate values.
+It is *very* common in pipescript to end a transform with ` + "`" + `if last` + "`" + ` to only return the final datapoint, which contains the desired result of computation, without returning intermediate values.
 
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 sum | if last
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 
-will sum up all datapoints, and return a single datapoint with the full sum. If `+"`"+`if last`+"`"+` were not there, all intermediate values of the sum would be returned.
+will sum up all datapoints, and return a single datapoint with the full sum. If ` + "`" + `if last` + "`" + ` were not there, all intermediate values of the sum would be returned.
 `)
 
 func docsTransformsLastMdBytes() ([]byte, error) {
@@ -716,7 +717,7 @@ var _docsTransformsMapMd = []byte(`The map transform is an example of a transfor
 
 
 Suppose your data stream is the following:
-`+"`"+``+"`"+``+"`"+`json
+` + "`" + `` + "`" + `` + "`" + `json
 [{
   "steps": 14,
   "activity": "walking"
@@ -730,46 +731,46 @@ Suppose your data stream is the following:
   "steps": 5,
   "activity": "running"
 }]
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 
 
 Mapping by activity:
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 map($("activity"), $("steps"):sum )
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 
 gives you
-`+"`"+``+"`"+``+"`"+`json
+` + "`" + `` + "`" + `` + "`" + `json
 [{
   "walking": 26,
   "running": 15
 }]
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 
-The map transform split the dataset by its first argument (`+"`"+`$("activity")`+"`"+`), and performed the second transform (`+"`"+`$("steps"):sum`+"`"+`) on each subset independently. This allows directly returning the sum of datapoints where you were walking and running.
+The map transform split the dataset by its first argument (` + "`" + `$("activity")` + "`" + `), and performed the second transform (` + "`" + `$("steps"):sum` + "`" + `) on each subset independently. This allows directly returning the sum of datapoints where you were walking and running.
 
-The map transform is frequently used in conjunction with the `+"`"+`reduce`+"`"+` transform for quick analysis.
+The map transform is frequently used in conjunction with the ` + "`" + `reduce` + "`" + ` transform for quick analysis.
 
 Very common use for the map transform is splitting by time periods. For example, to get the total number of steps taken per weekday (suppose steps is a number stream, where the data value is number of steps taken)
 
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 map(weekday,sum)
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 
 One issue with the above transform is that it gives a total sum of all datapoints. We
 might want to compute the *average* for a weekday
 
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 map(weekday, imap(day,sum):reduce(mean))
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 
 Note the imap transform within the map. It functions in exactly the same way as map, but returns all intermediate values (which allows it to be embedded in map). The above transform first splits by weekday, then further splits by day. It sums up the steps taken per day and finds their mean. That leaves with daily averages per weekday.
 
 Another way to perform the same calculation is:
 
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 while(day==next:day,sum) | map(weekday,mean)
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 
 This sums up datapoints for each day, and only maps the summed datapoints. This is the recommended method for such computations.
 `)
@@ -789,19 +790,19 @@ func docsTransformsMapMd() (*asset, error) {
 	return a, nil
 }
 
-var _docsTransformsNewMd = []byte(`The `+"`"+`new`+"`"+` transform allows you to check if the given datapoints were seen before in the stream.
+var _docsTransformsNewMd = []byte(`The ` + "`" + `new` + "`" + ` transform allows you to check if the given datapoints were seen before in the stream.
 
-The main use case here is `+"`"+`if new`+"`"+`, which returns all the datapoints with unique data.
+The main use case here is ` + "`" + `if new` + "`" + `, which returns all the datapoints with unique data.
 
 Suppose your data is:
-`+"`"+``+"`"+``+"`"+`json
+` + "`" + `` + "`" + `` + "`" + `json
 ["foo","foo","bar","foo","bar","baz"]
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 
-the transform `+"`"+`new`+"`"+` will return:
-`+"`"+``+"`"+``+"`"+`json
+the transform ` + "`" + `new` + "`" + ` will return:
+` + "`" + `` + "`" + `` + "`" + `json
 [true,false,true,false,false,true]
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 `)
 
 func docsTransformsNewMdBytes() ([]byte, error) {
@@ -819,19 +820,19 @@ func docsTransformsNewMd() (*asset, error) {
 	return a, nil
 }
 
-var _docsTransformsNextMd = []byte(`The `+"`"+`next`+"`"+` transform returns the datapoint *next* in the stream.
+var _docsTransformsNextMd = []byte(`The ` + "`" + `next` + "`" + ` transform returns the datapoint *next* in the stream.
 
-Suppose your data is`+"`"+`1,2,3,3,4`+"`"+`. The transform `+"`"+`$ == next`+"`"+` will return `+"`"+`false,false,true,false,false`+"`"+`.
+Suppose your data is` + "`" + `1,2,3,3,4` + "`" + `. The transform ` + "`" + `$ == next` + "`" + ` will return ` + "`" + `false,false,true,false,false` + "`" + `.
 
 
 The following is a verbose expansion of what is going on:
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 1==2  false
 2==3  false
 3==3  true
 3==4  false
 4==null false
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 
 At the end, the next transform returns null data, since its stream has ended.
 `)
@@ -868,11 +869,11 @@ func docsTransformsPrevMd() (*asset, error) {
 	return a, nil
 }
 
-var _docsTransformsRandMd = []byte(`The `+"`"+`rand`+"`"+` transform returns a random number if [0,1). This is useful when performing random sampling:
+var _docsTransformsRandMd = []byte(`The ` + "`" + `rand` + "`" + ` transform returns a random number if [0,1). This is useful when performing random sampling:
 
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 if rand < 0.7
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 
 will return about 70% of the datapoints randomly chosen.
 `)
@@ -892,10 +893,10 @@ func docsTransformsRandMd() (*asset, error) {
 	return a, nil
 }
 
-var _docsTransformsReduceMd = []byte(``+"`"+`reduce`+"`"+` performs a given transform on all the elements of a multi-element datapoint.
+var _docsTransformsReduceMd = []byte(`` + "`" + `reduce` + "`" + ` performs a given transform on all the elements of a multi-element datapoint.
 
 Suppose you have the following data:
-`+"`"+``+"`"+``+"`"+`json
+` + "`" + `` + "`" + `` + "`" + `json
 [
   {
     "a": 3,
@@ -906,30 +907,30 @@ Suppose you have the following data:
     "z": 23
   }
 ]
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 
-Then the transform `+"`"+`reduce(sum)`+"`"+` will give you:
+Then the transform ` + "`" + `reduce(sum)` + "`" + ` will give you:
 
-`+"`"+``+"`"+``+"`"+`json
+` + "`" + `` + "`" + `` + "`" + `json
 [8,33]
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 
-Reduce took each element in the given datapoint, and applied the transform `+"`"+`sum`+"`"+` to it.
+Reduce took each element in the given datapoint, and applied the transform ` + "`" + `sum` + "`" + ` to it.
 
 ## Usage
 
-The reduce transform is particularly useful in conjunction with the `+"`"+`map`+"`"+` transform.
+The reduce transform is particularly useful in conjunction with the ` + "`" + `map` + "`" + ` transform.
 
 Suppose you want to find the average number of steps taken every weekday.
 
 Running the following transform will give you a map of weekday to average step count:
 
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 while(day==next:day,sum) | map(weekday, mean)
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 
 For example, a possible result of the above transform could be:
-`+"`"+``+"`"+``+"`"+`json
+` + "`" + `` + "`" + `` + "`" + `json
 [
 {
   "Monday": 12243,
@@ -941,13 +942,13 @@ For example, a possible result of the above transform could be:
   "Sunday": 4000
 }
 ]
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 
-You can now find the average per weekday by running `+"`"+`reduce(mean)`+"`"+`, giving a final transform:
+You can now find the average per weekday by running ` + "`" + `reduce(mean)` + "`" + `, giving a final transform:
 
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 while(day==next:day,sum) | map(weekday, mean) | reduce(mean)
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 `)
 
 func docsTransformsReduceMdBytes() ([]byte, error) {
@@ -967,19 +968,19 @@ func docsTransformsReduceMd() (*asset, error) {
 
 var _docsTransformsRegexMd = []byte(`The regex transform checks if the data string matches the given regex.
 
-For example, given a regex to check for valid usernames: `+"`"+`regex('^[a-z0-9_-]{3,16}$')`+"`"+`, we get:
+For example, given a regex to check for valid usernames: ` + "`" + `regex('^[a-z0-9_-]{3,16}$')` + "`" + `, we get:
 
-`+"`"+``+"`"+``+"`"+`json
+` + "`" + `` + "`" + `` + "`" + `json
 [
   "Hello World!",
   "valid_username",
   "1"
 ]
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 
-`+"`"+``+"`"+``+"`"+`json
+` + "`" + `` + "`" + `` + "`" + `json
 [false,true,false]
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 `)
 
 func docsTransformsRegexMdBytes() ([]byte, error) {
@@ -997,19 +998,19 @@ func docsTransformsRegexMd() (*asset, error) {
 	return a, nil
 }
 
-var _docsTransformsRememberMd = []byte(``+"`"+`remember`+"`"+` allows you to save a chosen datapoint. Whenever the argument of `+"`"+`remember`+"`"+` is `+"`"+`true`+"`"+`, it saves the current datapoint, and keeps repeating it while the argument is `+"`"+`false`+"`"+`.
+var _docsTransformsRememberMd = []byte(`` + "`" + `remember` + "`" + ` allows you to save a chosen datapoint. Whenever the argument of ` + "`" + `remember` + "`" + ` is ` + "`" + `true` + "`" + `, it saves the current datapoint, and keeps repeating it while the argument is ` + "`" + `false` + "`" + `.
 
 An example will explain this very nicely. If your data is:
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 20,40,-50,20,-10,3,-9,40,50
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 
-then the transform `+"`"+`remember($ < 0)`+"`"+` will return:
-`+"`"+``+"`"+``+"`"+`
+then the transform ` + "`" + `remember($ < 0)` + "`" + ` will return:
+` + "`" + `` + "`" + `` + "`" + `
 20,20,-50,-50,-10,-10,-9,-9,-9
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 
-The reason the `+"`"+`20`+"`"+` is repeated at the beginning, despite it being positive, is because `+"`"+`remember`+"`"+` is always initialized with your first datapoint.
+The reason the ` + "`" + `20` + "`" + ` is repeated at the beginning, despite it being positive, is because ` + "`" + `remember` + "`" + ` is always initialized with your first datapoint.
 `)
 
 func docsTransformsRememberMdBytes() ([]byte, error) {
@@ -1033,18 +1034,18 @@ performing [sentiment analysis](https://en.wikipedia.org/wiki/Sentiment_analysis
 The code is based upon [github.com/thisandagain/sentiment](https://github.com/thisandagain/sentiment).
 
 
-`+"`"+``+"`"+``+"`"+`json
+` + "`" + `` + "`" + `` + "`" + `json
 ["I hate this!"]
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 
 Using the sentiment transform:
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 sentiment
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 
-`+"`"+``+"`"+``+"`"+`json
+` + "`" + `` + "`" + `` + "`" + `json
 [-1]
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 
 Negative values represent negative sentiment, whereas positive values represent positive sentiment.
 
@@ -1066,29 +1067,29 @@ func docsTransformsSentimentMd() (*asset, error) {
 	return a, nil
 }
 
-var _docsTransformsSetMd = []byte(`The `+"`"+`set`+"`"+` transform allows to add/modify values in an object-formatted datapoint.
+var _docsTransformsSetMd = []byte(`The ` + "`" + `set` + "`" + ` transform allows to add/modify values in an object-formatted datapoint.
 
-`+"`"+``+"`"+``+"`"+`json
+` + "`" + `` + "`" + `` + "`" + `json
 [
   {},
   {"foo": "baz"},
   {"a": 1,"b":2}
 ]
-`+"`"+``+"`"+``+"`"+`
-With the above data, and the transform `+"`"+`set("foo","bar")`+"`"+`, we get:
+` + "`" + `` + "`" + `` + "`" + `
+With the above data, and the transform ` + "`" + `set("foo","bar")` + "`" + `, we get:
 
-`+"`"+``+"`"+``+"`"+`json
+` + "`" + `` + "`" + `` + "`" + `json
 [
   {"foo":"bar"},
   {"foo": "bar"},
   {"a": 1,"b":2,"foo":"bar"}
 ]
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 
 Remember that PipeScript has native support for json-formatted data. You can directly set objects with transforms like the following:
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 {"foo": "bar", "a": $("a")}
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 `)
 
 func docsTransformsSetMdBytes() ([]byte, error) {
@@ -1106,23 +1107,23 @@ func docsTransformsSetMd() (*asset, error) {
 	return a, nil
 }
 
-var _docsTransformsSumMd = []byte(`The `+"`"+`sum`+"`"+` transform sums up numeric values. Given the data:
-`+"`"+``+"`"+``+"`"+`json
+var _docsTransformsSumMd = []byte(`The ` + "`" + `sum` + "`" + ` transform sums up numeric values. Given the data:
+` + "`" + `` + "`" + `` + "`" + `json
 [2,5,1,6]
-`+"`"+``+"`"+``+"`"+`
-running the transform `+"`"+`sum`+"`"+` will give:
-`+"`"+``+"`"+``+"`"+`json
+` + "`" + `` + "`" + `` + "`" + `
+running the transform ` + "`" + `sum` + "`" + ` will give:
+` + "`" + `` + "`" + `` + "`" + `json
 [2,7,8,14]
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 
 Since the transform returns all intermediate values, and usually we only want the total sum,
-`+"`"+`if last`+"`"+` is frequently used to filter all datapoints but the final one:
+` + "`" + `if last` + "`" + ` is frequently used to filter all datapoints but the final one:
 
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 sum | if last
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 
-When run on the above data, this transform returns `+"`"+`[14]`+"`"+`, which is the total sum of all datapoints in the stream.
+When run on the above data, this transform returns ` + "`" + `[14]` + "`" + `, which is the total sum of all datapoints in the stream.
 `)
 
 func docsTransformsSumMdBytes() ([]byte, error) {
@@ -1140,25 +1141,25 @@ func docsTransformsSumMd() (*asset, error) {
 	return a, nil
 }
 
-var _docsTransformsTMd = []byte(`Every datapoint in a stream has a timestamp. This timestamp is hidden when performing operations in PipeScript, since all operations are performed on a datapoint's `+"`"+`data`+"`"+` field. To permit processing based upon timestamps in PipeScript, the `+"`"+`t`+"`"+` transform exposes the datapoint's timestamp.
+var _docsTransformsTMd = []byte(`Every datapoint in a stream has a timestamp. This timestamp is hidden when performing operations in PipeScript, since all operations are performed on a datapoint's ` + "`" + `data` + "`" + ` field. To permit processing based upon timestamps in PipeScript, the ` + "`" + `t` + "`" + ` transform exposes the datapoint's timestamp.
 
 Remember that raw datapoints are in the form:
 
-`+"`"+``+"`"+``+"`"+`json
+` + "`" + `` + "`" + `` + "`" + `json
 [{
   "t": 123456.23,
   "d": 4
 }]
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 
-When performing transforms, `+"`"+`$==4`+"`"+` will return `+"`"+`true`+"`"+`, since we operate on the "d" (data) field. But `+"`"+`t==123456.23`+"`"+`, which corresponds
+When performing transforms, ` + "`" + `$==4` + "`" + ` will return ` + "`" + `true` + "`" + `, since we operate on the "d" (data) field. But ` + "`" + `t==123456.23` + "`" + `, which corresponds
 to the following raw datapoint:
-`+"`"+``+"`"+``+"`"+`json
+` + "`" + `` + "`" + `` + "`" + `json
 [{
   "t": 123456.23,
   "d": 123456.23
 }]
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 `)
 
 func docsTransformsTMdBytes() ([]byte, error) {
@@ -1178,7 +1179,7 @@ func docsTransformsTMd() (*asset, error) {
 
 var _docsTransformsTshiftMd = []byte(`This transform is not particularly useful for PipeScript by itself, but becomes very frequently used in dataset and merge queries.
 
-Every datapoint has a data portion, as well as a timestamp, which is hidden from computations in PipeScript by default. `+"`"+`tshift`+"`"+` shifts the timestamps of a stream by the given amount in seconds. This allows making it seem like the data of a stream came before/after its actual timestamps. This is useful in datasets, since a tshift can allow interpolating between different time ranges - it allows asking questions such as "does exercise today impact my mood a week later?". The datapoints corresponding to mood can be tshifted back by a week to correspond directly to the original datapoints where your exercise data is shown.
+Every datapoint has a data portion, as well as a timestamp, which is hidden from computations in PipeScript by default. ` + "`" + `tshift` + "`" + ` shifts the timestamps of a stream by the given amount in seconds. This allows making it seem like the data of a stream came before/after its actual timestamps. This is useful in datasets, since a tshift can allow interpolating between different time ranges - it allows asking questions such as "does exercise today impact my mood a week later?". The datapoints corresponding to mood can be tshifted back by a week to correspond directly to the original datapoints where your exercise data is shown.
 `)
 
 func docsTransformsTshiftMdBytes() ([]byte, error) {
@@ -1198,14 +1199,14 @@ func docsTransformsTshiftMd() (*asset, error) {
 
 var _docsTransformsWcMd = []byte(`This transform counts the words in a string:
 
-`+"`"+``+"`"+``+"`"+`json
+` + "`" + `` + "`" + `` + "`" + `json
 ["Hello World!"]
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 
-Running `+"`"+`wc`+"`"+` on the above returns:
-`+"`"+``+"`"+``+"`"+`json
+Running ` + "`" + `wc` + "`" + ` on the above returns:
+` + "`" + `` + "`" + `` + "`" + `json
 [2]
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 `)
 
 func docsTransformsWcMdBytes() ([]byte, error) {
@@ -1223,25 +1224,25 @@ func docsTransformsWcMd() (*asset, error) {
 	return a, nil
 }
 
-var _docsTransformsWhileMd = []byte(`Oftentimes, you don't really want all of the raw data from your stream. You are usually interested in timed aggregations or other such things. This is the main use case of the `+"`"+`while`+"`"+` transform.
+var _docsTransformsWhileMd = []byte(`Oftentimes, you don't really want all of the raw data from your stream. You are usually interested in timed aggregations or other such things. This is the main use case of the ` + "`" + `while` + "`" + ` transform.
 
 This transform performs a while loop on its second argument while its first argument is true. When the first argument becomes false, it returns the resulting datapoint, and begins the next loop.
 
-This allows summing up datapoints over specified time periods. For example, `+"`"+`day==next:day`+"`"+` is true if the current datapoint and next datapoint in the stream ave timestamps from the same day.
+This allows summing up datapoints over specified time periods. For example, ` + "`" + `day==next:day` + "`" + ` is true if the current datapoint and next datapoint in the stream ave timestamps from the same day.
 
 This allows you to write a transform performing an aggregation per day:
 
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 while(day==next:day, sum)
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 
 The above transform loops through datapoints while they come from the same day, and sums their values. Once the next datapoint is a different day than the current one, it ends the while loop, and returns the sum, giving the sum of all datapoints that day. It then starts a loop for the next day.
 
 The transform can also be used for smoothing. Suppose you want to smooth your data every three datapoints:
 
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 while(count%3!=0, mean)
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 
 This returns the mean of every consecutive three datapoints, making it easy to do a basic smoothing procedure.
 
@@ -1250,9 +1251,9 @@ This returns the mean of every consecutive three datapoints, making it easy to d
 
 The transform can also be used to implement error bars:
 
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 while(day==next:day, {"max": max, "min": min, "mean": "mean"})
-`+"`"+``+"`"+``+"`"+`
+` + "`" + `` + "`" + `` + "`" + `
 
 This transform returns the mean, max and min datapoint for the day all at once, allowing to plot with error bars.
 `)
@@ -1342,37 +1343,37 @@ func AssetNames() []string {
 // _bindata is a table, holding each asset generator, mapped to its name.
 var _bindata = map[string]func() (*asset, error){
 	"docs/interpolators/closest.md": docsInterpolatorsClosestMd,
-	"docs/transforms/$.md": docsTransformsMd,
-	"docs/transforms/alltrue.md": docsTransformsAlltrueMd,
-	"docs/transforms/anytrue.md": docsTransformsAnytrueMd,
-	"docs/transforms/append.md": docsTransformsAppendMd,
-	"docs/transforms/bucket.md": docsTransformsBucketMd,
-	"docs/transforms/changed.md": docsTransformsChangedMd,
-	"docs/transforms/contains.md": docsTransformsContainsMd,
-	"docs/transforms/count.md": docsTransformsCountMd,
-	"docs/transforms/distance.md": docsTransformsDistanceMd,
-	"docs/transforms/domain.md": docsTransformsDomainMd,
-	"docs/transforms/filter.md": docsTransformsFilterMd,
-	"docs/transforms/first.md": docsTransformsFirstMd,
-	"docs/transforms/if.md": docsTransformsIfMd,
-	"docs/transforms/ifelse.md": docsTransformsIfelseMd,
-	"docs/transforms/last.md": docsTransformsLastMd,
-	"docs/transforms/map.md": docsTransformsMapMd,
-	"docs/transforms/new.md": docsTransformsNewMd,
-	"docs/transforms/next.md": docsTransformsNextMd,
-	"docs/transforms/prev.md": docsTransformsPrevMd,
-	"docs/transforms/rand.md": docsTransformsRandMd,
-	"docs/transforms/reduce.md": docsTransformsReduceMd,
-	"docs/transforms/regex.md": docsTransformsRegexMd,
-	"docs/transforms/remember.md": docsTransformsRememberMd,
-	"docs/transforms/sentiment.md": docsTransformsSentimentMd,
-	"docs/transforms/set.md": docsTransformsSetMd,
-	"docs/transforms/sum.md": docsTransformsSumMd,
-	"docs/transforms/t.md": docsTransformsTMd,
-	"docs/transforms/tshift.md": docsTransformsTshiftMd,
-	"docs/transforms/wc.md": docsTransformsWcMd,
-	"docs/transforms/while.md": docsTransformsWhileMd,
-	"data/AFINN.json": dataAfinnJson,
+	"docs/transforms/$.md":          docsTransformsMd,
+	"docs/transforms/alltrue.md":    docsTransformsAlltrueMd,
+	"docs/transforms/anytrue.md":    docsTransformsAnytrueMd,
+	"docs/transforms/append.md":     docsTransformsAppendMd,
+	"docs/transforms/bucket.md":     docsTransformsBucketMd,
+	"docs/transforms/changed.md":    docsTransformsChangedMd,
+	"docs/transforms/contains.md":   docsTransformsContainsMd,
+	"docs/transforms/count.md":      docsTransformsCountMd,
+	"docs/transforms/distance.md":   docsTransformsDistanceMd,
+	"docs/transforms/domain.md":     docsTransformsDomainMd,
+	"docs/transforms/filter.md":     docsTransformsFilterMd,
+	"docs/transforms/first.md":      docsTransformsFirstMd,
+	"docs/transforms/if.md":         docsTransformsIfMd,
+	"docs/transforms/ifelse.md":     docsTransformsIfelseMd,
+	"docs/transforms/last.md":       docsTransformsLastMd,
+	"docs/transforms/map.md":        docsTransformsMapMd,
+	"docs/transforms/new.md":        docsTransformsNewMd,
+	"docs/transforms/next.md":       docsTransformsNextMd,
+	"docs/transforms/prev.md":       docsTransformsPrevMd,
+	"docs/transforms/rand.md":       docsTransformsRandMd,
+	"docs/transforms/reduce.md":     docsTransformsReduceMd,
+	"docs/transforms/regex.md":      docsTransformsRegexMd,
+	"docs/transforms/remember.md":   docsTransformsRememberMd,
+	"docs/transforms/sentiment.md":  docsTransformsSentimentMd,
+	"docs/transforms/set.md":        docsTransformsSetMd,
+	"docs/transforms/sum.md":        docsTransformsSumMd,
+	"docs/transforms/t.md":          docsTransformsTMd,
+	"docs/transforms/tshift.md":     docsTransformsTshiftMd,
+	"docs/transforms/wc.md":         docsTransformsWcMd,
+	"docs/transforms/while.md":      docsTransformsWhileMd,
+	"data/AFINN.json":               dataAfinnJson,
 }
 
 // AssetDir returns the file names below a certain
@@ -1414,6 +1415,7 @@ type bintree struct {
 	Func     func() (*asset, error)
 	Children map[string]*bintree
 }
+
 var _bintree = &bintree{nil, map[string]*bintree{
 	"data": &bintree{nil, map[string]*bintree{
 		"AFINN.json": &bintree{dataAfinnJson, map[string]*bintree{}},
@@ -1423,36 +1425,36 @@ var _bintree = &bintree{nil, map[string]*bintree{
 			"closest.md": &bintree{docsInterpolatorsClosestMd, map[string]*bintree{}},
 		}},
 		"transforms": &bintree{nil, map[string]*bintree{
-			"$.md": &bintree{docsTransformsMd, map[string]*bintree{}},
-			"alltrue.md": &bintree{docsTransformsAlltrueMd, map[string]*bintree{}},
-			"anytrue.md": &bintree{docsTransformsAnytrueMd, map[string]*bintree{}},
-			"append.md": &bintree{docsTransformsAppendMd, map[string]*bintree{}},
-			"bucket.md": &bintree{docsTransformsBucketMd, map[string]*bintree{}},
-			"changed.md": &bintree{docsTransformsChangedMd, map[string]*bintree{}},
-			"contains.md": &bintree{docsTransformsContainsMd, map[string]*bintree{}},
-			"count.md": &bintree{docsTransformsCountMd, map[string]*bintree{}},
-			"distance.md": &bintree{docsTransformsDistanceMd, map[string]*bintree{}},
-			"domain.md": &bintree{docsTransformsDomainMd, map[string]*bintree{}},
-			"filter.md": &bintree{docsTransformsFilterMd, map[string]*bintree{}},
-			"first.md": &bintree{docsTransformsFirstMd, map[string]*bintree{}},
-			"if.md": &bintree{docsTransformsIfMd, map[string]*bintree{}},
-			"ifelse.md": &bintree{docsTransformsIfelseMd, map[string]*bintree{}},
-			"last.md": &bintree{docsTransformsLastMd, map[string]*bintree{}},
-			"map.md": &bintree{docsTransformsMapMd, map[string]*bintree{}},
-			"new.md": &bintree{docsTransformsNewMd, map[string]*bintree{}},
-			"next.md": &bintree{docsTransformsNextMd, map[string]*bintree{}},
-			"prev.md": &bintree{docsTransformsPrevMd, map[string]*bintree{}},
-			"rand.md": &bintree{docsTransformsRandMd, map[string]*bintree{}},
-			"reduce.md": &bintree{docsTransformsReduceMd, map[string]*bintree{}},
-			"regex.md": &bintree{docsTransformsRegexMd, map[string]*bintree{}},
-			"remember.md": &bintree{docsTransformsRememberMd, map[string]*bintree{}},
+			"$.md":         &bintree{docsTransformsMd, map[string]*bintree{}},
+			"alltrue.md":   &bintree{docsTransformsAlltrueMd, map[string]*bintree{}},
+			"anytrue.md":   &bintree{docsTransformsAnytrueMd, map[string]*bintree{}},
+			"append.md":    &bintree{docsTransformsAppendMd, map[string]*bintree{}},
+			"bucket.md":    &bintree{docsTransformsBucketMd, map[string]*bintree{}},
+			"changed.md":   &bintree{docsTransformsChangedMd, map[string]*bintree{}},
+			"contains.md":  &bintree{docsTransformsContainsMd, map[string]*bintree{}},
+			"count.md":     &bintree{docsTransformsCountMd, map[string]*bintree{}},
+			"distance.md":  &bintree{docsTransformsDistanceMd, map[string]*bintree{}},
+			"domain.md":    &bintree{docsTransformsDomainMd, map[string]*bintree{}},
+			"filter.md":    &bintree{docsTransformsFilterMd, map[string]*bintree{}},
+			"first.md":     &bintree{docsTransformsFirstMd, map[string]*bintree{}},
+			"if.md":        &bintree{docsTransformsIfMd, map[string]*bintree{}},
+			"ifelse.md":    &bintree{docsTransformsIfelseMd, map[string]*bintree{}},
+			"last.md":      &bintree{docsTransformsLastMd, map[string]*bintree{}},
+			"map.md":       &bintree{docsTransformsMapMd, map[string]*bintree{}},
+			"new.md":       &bintree{docsTransformsNewMd, map[string]*bintree{}},
+			"next.md":      &bintree{docsTransformsNextMd, map[string]*bintree{}},
+			"prev.md":      &bintree{docsTransformsPrevMd, map[string]*bintree{}},
+			"rand.md":      &bintree{docsTransformsRandMd, map[string]*bintree{}},
+			"reduce.md":    &bintree{docsTransformsReduceMd, map[string]*bintree{}},
+			"regex.md":     &bintree{docsTransformsRegexMd, map[string]*bintree{}},
+			"remember.md":  &bintree{docsTransformsRememberMd, map[string]*bintree{}},
 			"sentiment.md": &bintree{docsTransformsSentimentMd, map[string]*bintree{}},
-			"set.md": &bintree{docsTransformsSetMd, map[string]*bintree{}},
-			"sum.md": &bintree{docsTransformsSumMd, map[string]*bintree{}},
-			"t.md": &bintree{docsTransformsTMd, map[string]*bintree{}},
-			"tshift.md": &bintree{docsTransformsTshiftMd, map[string]*bintree{}},
-			"wc.md": &bintree{docsTransformsWcMd, map[string]*bintree{}},
-			"while.md": &bintree{docsTransformsWhileMd, map[string]*bintree{}},
+			"set.md":       &bintree{docsTransformsSetMd, map[string]*bintree{}},
+			"sum.md":       &bintree{docsTransformsSumMd, map[string]*bintree{}},
+			"t.md":         &bintree{docsTransformsTMd, map[string]*bintree{}},
+			"tshift.md":    &bintree{docsTransformsTshiftMd, map[string]*bintree{}},
+			"wc.md":        &bintree{docsTransformsWcMd, map[string]*bintree{}},
+			"while.md":     &bintree{docsTransformsWhileMd, map[string]*bintree{}},
 		}},
 	}},
 }}
@@ -1503,4 +1505,3 @@ func _filePath(dir, name string) string {
 	cannonicalName := strings.Replace(name, "\\", "/", -1)
 	return filepath.Join(append([]string{dir}, strings.Split(cannonicalName, "/")...)...)
 }
-

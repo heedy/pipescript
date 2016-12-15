@@ -4,7 +4,7 @@
 [![Coverage Status](https://coveralls.io/repos/connectordb/pipescript/badge.svg?branch=master&service=github)](https://coveralls.io/github/connectordb/pipescript?branch=master)
 [![GoDoc](https://godoc.org/github.com/connectordb/pipescript?status.svg)](http://godoc.org/github.com/connectordb/pipescript)
 
-##  [Try It](https://connectordb.github.io/pipescript)
+##  [Try It](https://connectordb.io/pipescript)
 
 
 
@@ -33,8 +33,8 @@ TL;DR: PipeScript is a small-scale spark.
 
 ## Tutorial
 
-A general PipeScript tutorial [can be found here](https://connectordb.github.io/pipescript/docs/basics.html).
-Instructions for embedding and extending PipeScript with your own transforms and interpolators can be found [here](https://connectordb.github.io/pipescript/docs/embedding.html).
+A general PipeScript tutorial [can be found here](https://connectordb.io/pipescript/docs/basics.html).
+Instructions for embedding and extending PipeScript with your own transforms and interpolators can be found [here](https://connectordb.io/pipescript/docs/embedding.html).
 
 ## Standalone
 

@@ -8,18 +8,21 @@
         "test": "mocha --recursive",
         "build": "gopherjs build pipescript.go -m"
     },
-    "contributors": [{
-        "name": "Daniel Kumor",
-        "email": "daniel@dkumor.com"
-    }, {
-        "name": "Joseph Lewis",
-        "email": "joseph@josephlewis.net"
-    }],
+    "contributors": [
+        {
+            "name": "Daniel Kumor",
+            "email": "daniel@dkumor.com"
+        },
+        {
+            "name": "Joseph Lewis",
+            "email": "joseph@josephlewis.net"
+        }
+    ],
     "repository": {
         "type": "git",
         "url": "https://github.com/connectordb/pipescript"
     },
-    "homepage": "https://connectordb.github.io/pipescript",
+    "homepage": "https://connectordb.io/pipescript",
     "bugs": {
         "url": "https://github.com/connectordb/pipescript/issues"
     },
