@@ -44,6 +44,10 @@ func (t *sentimentTransform) Next(ti *pipescript.TransformIterator) (*pipescript
 		}
 	}
 
+	if len(toks) == 0 {
+		return te.Set(float32(0))
+	}
+
 	// The AFINN dataset has up to +-5
 	return te.Set(float32(sentiment) / float32(5*len(toks)))
 }

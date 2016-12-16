@@ -12,13 +12,15 @@ func TestSentiment(t *testing.T) {
 		Pipescript: "sentiment",
 		Input: []pipescript.Datapoint{
 			{1, "Hello World!"},
-			{2, "I hate this fucking place"},
-			{3, "foo, I like to eat"},
+			{2, ""},
+			{3, "I hate this fucking place"},
+			{4, "foo, I like to eat"},
 		},
 		Output: []pipescript.Datapoint{
 			{1, float32(0)},
-			{2, float32(-0.28)},
-			{3, float32(0.08)},
+			{2, float32(0)},
+			{3, float32(-0.28)},
+			{4, float32(0.08)},
 		},
 		SecondaryInput: []pipescript.Datapoint{
 			{4, "carbon fiber car"},
