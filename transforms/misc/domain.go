@@ -2,6 +2,7 @@ package misc
 
 import (
 	"net/url"
+	"strings"
 
 	"github.com/connectordb/pipescript"
 	"github.com/connectordb/pipescript/resources"
@@ -29,7 +30,7 @@ func (t *domainTransform) Next(ti *pipescript.TransformIterator) (*pipescript.Da
 		return te.Set("")
 	}
 
-	return te.Set(u.Host)
+	return te.Set(strings.TrimPrefix(u.Host, "www."))
 }
 
 var Domain = pipescript.Transform{
