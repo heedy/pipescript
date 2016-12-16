@@ -29,6 +29,8 @@ func init() {
 	// Set up the default args for the transforms which use them
 	Remember.Args[1].Default = identity
 	Ifelse.Args[2].Default = identity
+	Top.Args[1].Default = identity
+	Bottom.Args[1].Default = identity
 }
 
 func Register() {
@@ -74,4 +76,7 @@ func Register() {
 	AnyTrue.Register()
 
 	Bucket.Register()
+
+	Top.Register()
+	Bottom.Register()
 }
