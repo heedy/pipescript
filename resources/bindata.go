@@ -5,6 +5,7 @@
 // resources/docs/transforms/alltrue.md
 // resources/docs/transforms/anytrue.md
 // resources/docs/transforms/append.md
+// resources/docs/transforms/apply.md
 // resources/docs/transforms/bottom.md
 // resources/docs/transforms/bucket.md
 // resources/docs/transforms/changed.md
@@ -267,6 +268,43 @@ func docsTransformsAppendMd() (*asset, error) {
 	}
 
 	info := bindataFileInfo{name: "docs/transforms/append.md", size: 0, mode: os.FileMode(0), modTime: time.Unix(0, 0)}
+	a := &asset{bytes: bytes, info: info}
+	return a, nil
+}
+
+var _docsTransformsApplyMd = []byte(`The `+"`"+`apply`+"`"+` transform allows you to apply a script element-wise to a JSON object. For example:
+
+`+"`"+``+"`"+``+"`"+`json 
+[{
+    "a": 5,
+    "b": -2
+}]
+`+"`"+``+"`"+``+"`"+`
+
+`+"`"+``+"`"+``+"`"+`
+apply($+2)
+`+"`"+``+"`"+``+"`"+`
+
+will return:
+
+`+"`"+``+"`"+``+"`"+`json 
+[{
+    "a": 7,
+    "b": 0
+}]
+`+"`"+``+"`"+``+"`"+``)
+
+func docsTransformsApplyMdBytes() ([]byte, error) {
+	return _docsTransformsApplyMd, nil
+}
+
+func docsTransformsApplyMd() (*asset, error) {
+	bytes, err := docsTransformsApplyMdBytes()
+	if err != nil {
+		return nil, err
+	}
+
+	info := bindataFileInfo{name: "docs/transforms/apply.md", size: 0, mode: os.FileMode(0), modTime: time.Unix(0, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -1464,6 +1502,7 @@ var _bindata = map[string]func() (*asset, error){
 	"docs/transforms/alltrue.md": docsTransformsAlltrueMd,
 	"docs/transforms/anytrue.md": docsTransformsAnytrueMd,
 	"docs/transforms/append.md": docsTransformsAppendMd,
+	"docs/transforms/apply.md": docsTransformsApplyMd,
 	"docs/transforms/bottom.md": docsTransformsBottomMd,
 	"docs/transforms/bucket.md": docsTransformsBucketMd,
 	"docs/transforms/changed.md": docsTransformsChangedMd,
@@ -1548,6 +1587,7 @@ var _bintree = &bintree{nil, map[string]*bintree{
 			"alltrue.md": &bintree{docsTransformsAlltrueMd, map[string]*bintree{}},
 			"anytrue.md": &bintree{docsTransformsAnytrueMd, map[string]*bintree{}},
 			"append.md": &bintree{docsTransformsAppendMd, map[string]*bintree{}},
+			"apply.md": &bintree{docsTransformsApplyMd, map[string]*bintree{}},
 			"bottom.md": &bintree{docsTransformsBottomMd, map[string]*bintree{}},
 			"bucket.md": &bintree{docsTransformsBucketMd, map[string]*bintree{}},
 			"changed.md": &bintree{docsTransformsChangedMd, map[string]*bintree{}},

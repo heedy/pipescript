@@ -101,6 +101,7 @@ var Top = pipescript.Transform{
 	Description:   `Takes a json object, and returns the topn elements`,
 	Documentation: string(resources.MustAsset("docs/transforms/top.md")),
 	OneToOne:      true,
+	Stateless:     true,
 	Args: []pipescript.TransformArg{
 		{
 			Description: "The number of elements to retain of the object",

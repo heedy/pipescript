@@ -92,6 +92,7 @@ var Bottom = pipescript.Transform{
 	Description:   `Takes a json object, and returns the bottom n elements`,
 	Documentation: string(resources.MustAsset("docs/transforms/bottom.md")),
 	OneToOne:      true,
+	Stateless:     true,
 	Args: []pipescript.TransformArg{
 		{
 			Description: "The number of elements to retain of the object",
