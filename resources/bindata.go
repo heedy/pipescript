@@ -20,6 +20,7 @@
 // resources/docs/transforms/map.md
 // resources/docs/transforms/new.md
 // resources/docs/transforms/next.md
+// resources/docs/transforms/percent.md
 // resources/docs/transforms/prev.md
 // resources/docs/transforms/rand.md
 // resources/docs/transforms/reduce.md
@@ -871,6 +872,45 @@ func docsTransformsNextMd() (*asset, error) {
 	return a, nil
 }
 
+var _docsTransformsPercentMd = []byte(`The `+"`"+`percent`+"`"+` transform allows you to get the percentage contribution of each element in an object. Suppose you have the following:
+
+`+"`"+``+"`"+``+"`"+`json
+[{
+    "a": 2,
+    "b": 5,
+    "c": 1,
+    "d": 2
+}]
+`+"`"+``+"`"+``+"`"+`
+
+The `+"`"+`percent`+"`"+` transform will return:
+
+`+"`"+``+"`"+``+"`"+`json
+[{
+    "a": .2,
+    "b": .5,
+    "c": .1,
+    "d": .2
+}]
+`+"`"+``+"`"+``+"`"+`
+
+This allows you to quickly normalize a JSON object's values.`)
+
+func docsTransformsPercentMdBytes() ([]byte, error) {
+	return _docsTransformsPercentMd, nil
+}
+
+func docsTransformsPercentMd() (*asset, error) {
+	bytes, err := docsTransformsPercentMdBytes()
+	if err != nil {
+		return nil, err
+	}
+
+	info := bindataFileInfo{name: "docs/transforms/percent.md", size: 0, mode: os.FileMode(0), modTime: time.Unix(0, 0)}
+	a := &asset{bytes: bytes, info: info}
+	return a, nil
+}
+
 var _docsTransformsPrevMd = []byte(``)
 
 func docsTransformsPrevMdBytes() ([]byte, error) {
@@ -1439,6 +1479,7 @@ var _bindata = map[string]func() (*asset, error){
 	"docs/transforms/map.md": docsTransformsMapMd,
 	"docs/transforms/new.md": docsTransformsNewMd,
 	"docs/transforms/next.md": docsTransformsNextMd,
+	"docs/transforms/percent.md": docsTransformsPercentMd,
 	"docs/transforms/prev.md": docsTransformsPrevMd,
 	"docs/transforms/rand.md": docsTransformsRandMd,
 	"docs/transforms/reduce.md": docsTransformsReduceMd,
@@ -1522,6 +1563,7 @@ var _bintree = &bintree{nil, map[string]*bintree{
 			"map.md": &bintree{docsTransformsMapMd, map[string]*bintree{}},
 			"new.md": &bintree{docsTransformsNewMd, map[string]*bintree{}},
 			"next.md": &bintree{docsTransformsNextMd, map[string]*bintree{}},
+			"percent.md": &bintree{docsTransformsPercentMd, map[string]*bintree{}},
 			"prev.md": &bintree{docsTransformsPrevMd, map[string]*bintree{}},
 			"rand.md": &bintree{docsTransformsRandMd, map[string]*bintree{}},
 			"reduce.md": &bintree{docsTransformsReduceMd, map[string]*bintree{}},

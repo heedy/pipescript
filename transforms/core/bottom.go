@@ -9,17 +9,17 @@ import (
 	"github.com/connectordb/pipescript/resources"
 )
 
-// BottomTransform is same as Top transform with reverse functionality
-type BottomTransform struct {
+// bottomTransform is same as Top transform with reverse functionality
+type bottomTransform struct {
 	number int
 	script *pipescript.Script
 }
 
-func (t *BottomTransform) Copy() (pipescript.TransformInstance, error) {
-	return &BottomTransform{t.number, t.script}, nil
+func (t *bottomTransform) Copy() (pipescript.TransformInstance, error) {
+	return &bottomTransform{t.number, t.script}, nil
 }
 
-func (t *BottomTransform) Next(ti *pipescript.TransformIterator) (*pipescript.Datapoint, error) {
+func (t *bottomTransform) Next(ti *pipescript.TransformIterator) (*pipescript.Datapoint, error) {
 	te := ti.Next()
 	if te.IsFinished() {
 		return te.Get()
@@ -115,6 +115,6 @@ var Bottom = pipescript.Transform{
 		}
 		ifl, _ := iflast.Copy() // Shouldn't error
 		args[1].Append(ifl)
-		return &pipescript.TransformInitializer{Transform: &BottomTransform{int(num), args[1]}}, nil
+		return &pipescript.TransformInitializer{Transform: &bottomTransform{int(num), args[1]}}, nil
 	},
 }

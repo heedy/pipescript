@@ -24,4 +24,6 @@ func Register() {
 
 	Max.Register()
 	Min.Register()
+
+	Percent.Register()
 }
