@@ -11,6 +11,7 @@
 // resources/docs/transforms/changed.md
 // resources/docs/transforms/contains.md
 // resources/docs/transforms/count.md
+// resources/docs/transforms/del.md
 // resources/docs/transforms/distance.md
 // resources/docs/transforms/domain.md
 // resources/docs/transforms/dt.md
@@ -504,6 +505,46 @@ func docsTransformsCountMd() (*asset, error) {
 	}
 
 	info := bindataFileInfo{name: "docs/transforms/count.md", size: 0, mode: os.FileMode(0), modTime: time.Unix(0, 0)}
+	a := &asset{bytes: bytes, info: info}
+	return a, nil
+}
+
+var _docsTransformsDelMd = []byte(`The `+"`"+`del`+"`"+` transform allows to delete values in an object-formatted datapoint.
+
+`+"`"+``+"`"+``+"`"+`json
+[
+  {},
+  {"foo": "baz"},
+  {"a": 1,"b":2,"foo":7}
+]
+`+"`"+``+"`"+``+"`"+`
+With the above data, and the transform `+"`"+`del("foo")`+"`"+`, we get:
+
+`+"`"+``+"`"+``+"`"+`json
+[
+  {},
+  {},
+  {"a": 1,"b":2}
+]
+`+"`"+``+"`"+``+"`"+`
+
+Remember that PipeScript has native support for json-like data. You can directly set objects with transforms like the following:
+`+"`"+``+"`"+``+"`"+`json
+{"foo": "bar", "a": $("a")}
+`+"`"+``+"`"+``+"`"+`
+`)
+
+func docsTransformsDelMdBytes() ([]byte, error) {
+	return _docsTransformsDelMd, nil
+}
+
+func docsTransformsDelMd() (*asset, error) {
+	bytes, err := docsTransformsDelMdBytes()
+	if err != nil {
+		return nil, err
+	}
+
+	info := bindataFileInfo{name: "docs/transforms/del.md", size: 0, mode: os.FileMode(0), modTime: time.Unix(0, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -1642,6 +1683,7 @@ var _bindata = map[string]func() (*asset, error){
 	"docs/transforms/changed.md": docsTransformsChangedMd,
 	"docs/transforms/contains.md": docsTransformsContainsMd,
 	"docs/transforms/count.md": docsTransformsCountMd,
+	"docs/transforms/del.md": docsTransformsDelMd,
 	"docs/transforms/distance.md": docsTransformsDistanceMd,
 	"docs/transforms/domain.md": docsTransformsDomainMd,
 	"docs/transforms/dt.md": docsTransformsDtMd,
@@ -1730,6 +1772,7 @@ var _bintree = &bintree{nil, map[string]*bintree{
 			"changed.md": &bintree{docsTransformsChangedMd, map[string]*bintree{}},
 			"contains.md": &bintree{docsTransformsContainsMd, map[string]*bintree{}},
 			"count.md": &bintree{docsTransformsCountMd, map[string]*bintree{}},
+			"del.md": &bintree{docsTransformsDelMd, map[string]*bintree{}},
 			"distance.md": &bintree{docsTransformsDistanceMd, map[string]*bintree{}},
 			"domain.md": &bintree{docsTransformsDomainMd, map[string]*bintree{}},
 			"dt.md": &bintree{docsTransformsDtMd, map[string]*bintree{}},

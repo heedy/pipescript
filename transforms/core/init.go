@@ -35,6 +35,7 @@ func init() {
 
 func Register() {
 	Set.Register()
+	Del.Register()
 
 	If.Register()
 
@@ -52,7 +53,7 @@ func Register() {
 	Next.Register()
 
 	Count.Register()
-	I.Register()	// Same as count except 1 less
+	I.Register() // Same as count except 1 less
 	Sum.Register()
 
 	Length.Register()
