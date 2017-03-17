@@ -13,6 +13,7 @@
 // resources/docs/transforms/count.md
 // resources/docs/transforms/distance.md
 // resources/docs/transforms/domain.md
+// resources/docs/transforms/dt.md
 // resources/docs/transforms/filter.md
 // resources/docs/transforms/first.md
 // resources/docs/transforms/if.md
@@ -571,6 +572,43 @@ func docsTransformsDomainMd() (*asset, error) {
 	}
 
 	info := bindataFileInfo{name: "docs/transforms/domain.md", size: 0, mode: os.FileMode(0), modTime: time.Unix(0, 0)}
+	a := &asset{bytes: bytes, info: info}
+	return a, nil
+}
+
+var _docsTransformsDtMd = []byte(`The `+"`"+`dt`+"`"+` transform allows you to quickly find the time difference between the previous and this datapoint:
+
+`+"`"+``+"`"+``+"`"+`json
+[
+    {"t": 4, "d": 4},
+	{"t": 20, "d": 5},
+	{"t": 50, "d": 6}
+]
+`+"`"+``+"`"+``+"`"+`
+
+`+"`"+``+"`"+``+"`"+`
+dt
+`+"`"+``+"`"+``+"`"+`
+
+`+"`"+``+"`"+``+"`"+`json
+[
+    {"t": 4, 0)},
+	{"t": 20, "d": 16},
+	{"t": 50, "d":30}
+]
+`+"`"+``+"`"+``+"`"+``)
+
+func docsTransformsDtMdBytes() ([]byte, error) {
+	return _docsTransformsDtMd, nil
+}
+
+func docsTransformsDtMd() (*asset, error) {
+	bytes, err := docsTransformsDtMdBytes()
+	if err != nil {
+		return nil, err
+	}
+
+	info := bindataFileInfo{name: "docs/transforms/dt.md", size: 0, mode: os.FileMode(0), modTime: time.Unix(0, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -1606,6 +1644,7 @@ var _bindata = map[string]func() (*asset, error){
 	"docs/transforms/count.md": docsTransformsCountMd,
 	"docs/transforms/distance.md": docsTransformsDistanceMd,
 	"docs/transforms/domain.md": docsTransformsDomainMd,
+	"docs/transforms/dt.md": docsTransformsDtMd,
 	"docs/transforms/filter.md": docsTransformsFilterMd,
 	"docs/transforms/first.md": docsTransformsFirstMd,
 	"docs/transforms/if.md": docsTransformsIfMd,
@@ -1693,6 +1732,7 @@ var _bintree = &bintree{nil, map[string]*bintree{
 			"count.md": &bintree{docsTransformsCountMd, map[string]*bintree{}},
 			"distance.md": &bintree{docsTransformsDistanceMd, map[string]*bintree{}},
 			"domain.md": &bintree{docsTransformsDomainMd, map[string]*bintree{}},
+			"dt.md": &bintree{docsTransformsDtMd, map[string]*bintree{}},
 			"filter.md": &bintree{docsTransformsFilterMd, map[string]*bintree{}},
 			"first.md": &bintree{docsTransformsFirstMd, map[string]*bintree{}},
 			"if.md": &bintree{docsTransformsIfMd, map[string]*bintree{}},

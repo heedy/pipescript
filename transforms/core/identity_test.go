@@ -100,3 +100,29 @@ func TestIdentity(t *testing.T) {
 	}.Run(t)
 
 }
+
+
+func TestIdentityD(t *testing.T) {
+	// d is same as identity. Make sure it works.
+	pipescript.TestCase{
+		Pipescript: "d | d",
+		Input: []pipescript.Datapoint{
+			{1, 1},
+			{2, true},
+			{3, "hi"},
+		},
+		Output: []pipescript.Datapoint{
+			{1, 1},
+			{2, true},
+			{3, "hi"},
+		},
+		SecondaryInput: []pipescript.Datapoint{
+			{4, 4},
+			{5, 5},
+		},
+		SecondaryOutput: []pipescript.Datapoint{
+			{4, 4},
+			{5, 5},
+		},
+	}.Run(t)
+}

@@ -1,6 +1,6 @@
 {
     "name": "pipescript",
-    "version": "0.2.4",
+    "version": "0.2.5",
     "description": "PipeScript javascript port",
     "main": "pipescript.js",
     "author": "ConnectorDB <support@connectordb.com> (https://connectordb.com)",

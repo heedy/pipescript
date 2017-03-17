@@ -39,6 +39,7 @@ func Register() {
 	If.Register()
 
 	IdentityTransform.Register()
+	D.Register()
 
 	Ifelse.Register()
 
@@ -51,6 +52,7 @@ func Register() {
 	Next.Register()
 
 	Count.Register()
+	I.Register()	// Same as count except 1 less
 	Sum.Register()
 
 	Length.Register()
@@ -59,6 +61,7 @@ func Register() {
 	Tshift.Register()
 	Ttrue.Register()
 	Tfalse.Register()
+	Dt.Register()
 
 	IMap.Register()
 	Map.Register()

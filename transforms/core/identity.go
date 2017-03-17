@@ -67,3 +67,13 @@ var IdentityTransform = pipescript.Transform{
 		return &pipescript.TransformInitializer{Transform: &subobjectTransform{dp.Data}}, nil
 	},
 }
+
+var D = pipescript.Transform{
+	Name: "d",
+	Description: "Same as $ - the data portion of a datapoint",
+	Documentation: "Look at the documentation of $",
+	OneToOne:      true,
+	Stateless:     true,
+	Args: IdentityTransform.Args,
+	Generator: IdentityTransform.Generator,
+}
