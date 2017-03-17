@@ -31,8 +31,10 @@
 // resources/docs/transforms/set.md
 // resources/docs/transforms/sum.md
 // resources/docs/transforms/t.md
+// resources/docs/transforms/tfalse.md
 // resources/docs/transforms/top.md
 // resources/docs/transforms/tshift.md
+// resources/docs/transforms/ttrue.md
 // resources/docs/transforms/wc.md
 // resources/docs/transforms/while.md
 // resources/data/AFINN.json
@@ -109,7 +111,7 @@ Suppose your stream has the following data:
 44,18,20,-35,20.23
 `+"`"+``+"`"+``+"`"+`
 
-The `+"`"+`$`+"`"+` transform will simply return your data unchanged:
+The $ transform will simply return your data unchanged:
 `+"`"+``+"`"+``+"`"+`json
 44,18,20,-35,20.23
 `+"`"+``+"`"+``+"`"+`
@@ -120,7 +122,7 @@ The `+"`"+`$`+"`"+` transform will simply return your data unchanged:
 The identity transform is perhaps the most used transform in all of pipescript.
 It is frequently used in comparisons and `+"`"+`if`+"`"+` filters.
 
-For example, the transform `+"`"+`$ > 20`+"`"+` is a comparison - it checks whether the current datapoint, rpresented by the identity is greater than 20. The result of this transform would be:
+For example, the transform `+"`"+`$ > 20`+"`"+` is a comparison - it checks whether the current datapoint, represented by the identity is greater than 20. The result of this transform would be:
 
 `+"`"+``+"`"+``+"`"+`json
 true,false,false,false,true
@@ -133,12 +135,12 @@ This is frequently used in filters: `+"`"+`if $ > 20`+"`"+` would return
 
 ### Objects
 
-The `+"`"+`$`+"`"+` transform accepts an optional argument. Sometimes, a datapoint isn't just your data - it can be an object:
+The $ transform accepts an optional argument. Sometimes, a datapoint isn't just your data - it can be an object:
 `+"`"+``+"`"+``+"`"+`json
 {"hi": "hello","foo":"bar"}, {"hi":"world","foo":"baz"}
 `+"`"+``+"`"+``+"`"+`
+Running this transform:
 
-By passing the object key to `+"`"+`$`+"`"+`, we can get the element:
 `+"`"+``+"`"+``+"`"+`javascript
 $("hi")
 `+"`"+``+"`"+``+"`"+`
@@ -148,7 +150,7 @@ gives us:
 "hello","world"
 `+"`"+``+"`"+``+"`"+`
 
-The `+"`"+`$`+"`"+` transform is the main method for accessing sub-elements of a datapoint. It also works for array indices.
+The $ transform is the main method for accessing sub-elements of a datapoint. It also works for array indices.
 `)
 
 func docsTransformsMdBytes() ([]byte, error) {
@@ -1274,6 +1276,53 @@ func docsTransformsTMd() (*asset, error) {
 	return a, nil
 }
 
+var _docsTransformsTfalseMd = []byte(`The time that a stream spends in the `+"`"+`false`+"`"+` state. This transform uses the timestamp, so the timestamp is displayed in the sequence:
+
+`+"`"+``+"`"+``+"`"+`json
+[
+    {"t": 1, "d": false},
+    {"t": 2, "d": false},
+    {"t": 4, "d": false},
+    {"t": 5, "d": true},
+    {"t": 6, "d": true},
+    {"t": 7, "d": false},
+    {"t": 8, "d": true},
+    {"t": 9, "d": false}
+]
+`+"`"+``+"`"+``+"`"+`
+
+Given the above data, we can get the following:
+`+"`"+``+"`"+``+"`"+`
+tfalse
+`+"`"+``+"`"+``+"`"+`
+
+`+"`"+``+"`"+``+"`"+`json
+[
+    {"t": 5, "d": 4},
+	{"t": 8, "d": 1}
+]
+`+"`"+``+"`"+``+"`"+`
+
+The stream was `+"`"+`false`+"`"+` from timestamp 1 to 5, when it changed to `+"`"+`true`+"`"+`. So the total time the stream was `+"`"+`false`+"`"+` was 4 seconds.
+The stream then turned `+"`"+`false`+"`"+` at timestamp 7, and turned `+"`"+`true`+"`"+` at timestamp 8, meaning that it was `+"`"+`false`+"`"+` for 1 second.
+Finally, the stream turned `+"`"+`false`+"`"+` at timestamp 9, but we don't know how long it was `+"`"+`false`+"`"+`, so `+"`"+`tfalse`+"`"+` does not return anything
+for this final part.`)
+
+func docsTransformsTfalseMdBytes() ([]byte, error) {
+	return _docsTransformsTfalseMd, nil
+}
+
+func docsTransformsTfalseMd() (*asset, error) {
+	bytes, err := docsTransformsTfalseMdBytes()
+	if err != nil {
+		return nil, err
+	}
+
+	info := bindataFileInfo{name: "docs/transforms/tfalse.md", size: 0, mode: os.FileMode(0), modTime: time.Unix(0, 0)}
+	a := &asset{bytes: bytes, info: info}
+	return a, nil
+}
+
 var _docsTransformsTopMd = []byte(`The `+"`"+`top`+"`"+` transform allows you to filter smaller elements of an object:
 
 `+"`"+``+"`"+``+"`"+`json
@@ -1352,6 +1401,53 @@ func docsTransformsTshiftMd() (*asset, error) {
 	return a, nil
 }
 
+var _docsTransformsTtrueMd = []byte(`The time that a stream spends in the `+"`"+`true`+"`"+` state. This transform uses the timestamp, so the timestamp is displayed in the sequence:
+
+`+"`"+``+"`"+``+"`"+`json
+[
+    {"t": 1, "d": true},
+    {"t": 2, "d": true},
+    {"t": 4, "d": true},
+    {"t": 5, "d": false},
+    {"t": 6, "d": false},
+    {"t": 7, "d": true},
+    {"t": 8, "d": false},
+    {"t": 9, "d": true}
+]
+`+"`"+``+"`"+``+"`"+`
+
+Given the above data, we can get the following:
+`+"`"+``+"`"+``+"`"+`
+ttrue
+`+"`"+``+"`"+``+"`"+`
+
+`+"`"+``+"`"+``+"`"+`json
+[
+    {"t": 5, "d": 4},
+	{"t": 8, "d": 1}
+]
+`+"`"+``+"`"+``+"`"+`
+
+The stream was `+"`"+`true`+"`"+` from timestamp 1 to 5, when it changed to `+"`"+`false`+"`"+`. So the total time the stream was `+"`"+`true`+"`"+` was 4 seconds.
+The stream then turned `+"`"+`true`+"`"+` at timestamp 7, and turned `+"`"+`false`+"`"+` at timestamp 8, meaning that it was `+"`"+`true`+"`"+` for 1 second.
+Finally, the stream turned `+"`"+`true`+"`"+` at timestamp 9, but we don't know how long it was `+"`"+`true`+"`"+`, so `+"`"+`ttrue`+"`"+` does not return anything
+for this final part.`)
+
+func docsTransformsTtrueMdBytes() ([]byte, error) {
+	return _docsTransformsTtrueMd, nil
+}
+
+func docsTransformsTtrueMd() (*asset, error) {
+	bytes, err := docsTransformsTtrueMdBytes()
+	if err != nil {
+		return nil, err
+	}
+
+	info := bindataFileInfo{name: "docs/transforms/ttrue.md", size: 0, mode: os.FileMode(0), modTime: time.Unix(0, 0)}
+	a := &asset{bytes: bytes, info: info}
+	return a, nil
+}
+
 var _docsTransformsWcMd = []byte(`This transform counts the words in a string:
 
 `+"`"+``+"`"+``+"`"+`json
@@ -1407,7 +1503,7 @@ This returns the mean of every consecutive three datapoints, making it easy to d
 The transform can also be used to implement error bars:
 
 `+"`"+``+"`"+``+"`"+`
-while(day==next:day, {"max": max, "min": min, "mean": "mean"})
+while(day==next:day, {"max": max, "min": min, "mean": mean})
 `+"`"+``+"`"+``+"`"+`
 
 This transform returns the mean, max and min datapoint for the day all at once, allowing to plot with error bars.
@@ -1528,8 +1624,10 @@ var _bindata = map[string]func() (*asset, error){
 	"docs/transforms/set.md": docsTransformsSetMd,
 	"docs/transforms/sum.md": docsTransformsSumMd,
 	"docs/transforms/t.md": docsTransformsTMd,
+	"docs/transforms/tfalse.md": docsTransformsTfalseMd,
 	"docs/transforms/top.md": docsTransformsTopMd,
 	"docs/transforms/tshift.md": docsTransformsTshiftMd,
+	"docs/transforms/ttrue.md": docsTransformsTtrueMd,
 	"docs/transforms/wc.md": docsTransformsWcMd,
 	"docs/transforms/while.md": docsTransformsWhileMd,
 	"data/AFINN.json": dataAfinnJson,
@@ -1613,8 +1711,10 @@ var _bintree = &bintree{nil, map[string]*bintree{
 			"set.md": &bintree{docsTransformsSetMd, map[string]*bintree{}},
 			"sum.md": &bintree{docsTransformsSumMd, map[string]*bintree{}},
 			"t.md": &bintree{docsTransformsTMd, map[string]*bintree{}},
+			"tfalse.md": &bintree{docsTransformsTfalseMd, map[string]*bintree{}},
 			"top.md": &bintree{docsTransformsTopMd, map[string]*bintree{}},
 			"tshift.md": &bintree{docsTransformsTshiftMd, map[string]*bintree{}},
+			"ttrue.md": &bintree{docsTransformsTtrueMd, map[string]*bintree{}},
 			"wc.md": &bintree{docsTransformsWcMd, map[string]*bintree{}},
 			"while.md": &bintree{docsTransformsWhileMd, map[string]*bintree{}},
 		}},

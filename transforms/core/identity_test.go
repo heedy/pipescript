@@ -38,6 +38,18 @@ func TestIdentity(t *testing.T) {
 	}.Run(t)
 
 	pipescript.TestCase{
+		Pipescript: "$(1)",
+		Input: []pipescript.Datapoint{
+			{1, []string{"hi", "ho"}},
+			{2, map[string]interface{}{"hello": "world", "1": map[string]interface{}{"wee": "mo"}}},
+		},
+		Output: []pipescript.Datapoint{
+			{1, "ho"},
+			{2, map[string]interface{}{"wee": "mo"}},
+		},
+	}.Run(t)
+
+	pipescript.TestCase{
 		Pipescript:  "$[1]",
 		OutputError: true,
 		Input: []pipescript.Datapoint{

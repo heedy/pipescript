@@ -26,7 +26,7 @@ This returns the mean of every consecutive three datapoints, making it easy to d
 The transform can also be used to implement error bars:
 
 ```
-while(day==next:day, {"max": max, "min": min, "mean": "mean"})
+while(day==next:day, {"max": max, "min": min, "mean": mean})
 ```
 
 This transform returns the mean, max and min datapoint for the day all at once, allowing to plot with error bars.

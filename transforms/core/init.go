@@ -57,6 +57,8 @@ func Register() {
 
 	T.Register()
 	Tshift.Register()
+	Ttrue.Register()
+	Tfalse.Register()
 
 	IMap.Register()
 	Map.Register()
