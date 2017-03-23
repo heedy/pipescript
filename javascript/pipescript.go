@@ -19,18 +19,20 @@ func main() {
 	transforms.Register()
 	interpolators.Register()
 
-	// Make it usable in script tags
-	js.Global.Set("pipescript", map[string]interface{}{
+	ps := map[string]interface{}{
 		"Script":        New,
 		"transforms":    pipescript.TransformRegistry,
 		"interpolators": interpolator.InterpolatorRegistry,
-	})
+	}
+
+	// Make it usable in script tags
+	js.Global.Set("pipescript", ps)
 
 	// Make it usable in node. Note that the above makes it register in global
 	// context also, which can't really be avoided easily
-	js.Module.Get("exports").Set("Script", New)
-	js.Module.Get("exports").Set("transforms", pipescript.TransformRegistry)
-	js.Module.Get("exports").Set("interpolators", interpolator.InterpolatorRegistry)
+	if js.Module != js.Undefined {
+		js.Module.Set("exports", ps)
+	}
 
 }
 
