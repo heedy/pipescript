@@ -3,7 +3,8 @@
     "version": "0.2.7",
     "description": "PipeScript javascript port",
     "main": "pipescript.js",
-    "author": "ConnectorDB <support@connectordb.com> (https://connectordb.com)",
+    "author": "ConnectorDB Contributors (https://connectordb.io)",
+    "license": "Apache-2.0",
     "scripts": {
         "test": "mocha --recursive",
         "build": "gopherjs build pipescript.go -m"
