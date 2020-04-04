@@ -3,60 +3,40 @@ package core
 import (
 	"testing"
 
-	"github.com/connectordb/pipescript"
+	"github.com/heedy/pipescript"
+	"github.com/stretchr/testify/require"
 )
 
 func TestWhile(t *testing.T) {
+	require.NoError(t, While.Register())
 	// This needs much more testing
 	pipescript.TestCase{
-		Pipescript: "while $!=1 sum",
+		Pipescript: "while $!=1 $",
 		Input: []pipescript.Datapoint{
-			{1, 5},
-			{2, 2},
-			{3, 3},
-			{4, 1},
-			{5, 2},
+			{Timestamp: 1, Data: 5},
+			{Timestamp: 2, Data: 2},
+			{Timestamp: 3, Data: 3},
+			{Timestamp: 4, Data: 1},
+			{Timestamp: 5, Data: 2},
 		},
 		Output: []pipescript.Datapoint{
-			{3, float64(10)},
-			{5, float64(3)},
-		},
-		SecondaryInput: []pipescript.Datapoint{
-			{1, 5},
-			{2, 2},
-			{3, 3},
-			{4, 1},
-			{5, 2},
-		},
-		SecondaryOutput: []pipescript.Datapoint{
-			{3, float64(10)},
-			{5, float64(3)},
+			{Timestamp: 3, Data: 3},
+			{Timestamp: 5, Data: 2},
 		},
 	}.Run(t)
-
+	require.NoError(t, I.Register())
 	pipescript.TestCase{
-		Pipescript: "while(count%3!=1, sum)",
+		Pipescript: "while(i%3!=0, $)",
 		Input: []pipescript.Datapoint{
-			{1, 5},
-			{2, 2},
-			{3, 3},
-			{4, 1},
-			{5, 2},
+			{Timestamp: 1, Data: 5},
+			{Timestamp: 2, Data: 2},
+			{Timestamp: 3, Data: 3},
+			{Timestamp: 4, Data: 1},
+			{Timestamp: 5, Data: 2},
 		},
 		Output: []pipescript.Datapoint{
-			{3, float64(10)},
-			{5, float64(3)},
-		},
-		SecondaryInput: []pipescript.Datapoint{
-			{1, 5},
-			{2, 2},
-			{3, 3},
-			{4, 1},
-			{5, 2},
-		},
-		SecondaryOutput: []pipescript.Datapoint{
-			{3, float64(10)},
-			{5, float64(3)},
+			{Timestamp: 3, Data: 3},
+			{Timestamp: 5, Data: 2},
 		},
 	}.Run(t)
 

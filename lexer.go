@@ -41,7 +41,7 @@ type parserLex struct {
 
 	errorString string
 
-	output *Script
+	output *Pipe
 }
 
 // Are we at the end of file?

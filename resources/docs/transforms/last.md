@@ -1,9 +1,15 @@
 `last` is true on the last datapoint of a sequence.
 
-It is *very* common in pipescript to end a transform with `if last` to only return the final datapoint, which contains the desired result of computation, without returning intermediate values.
-
 ```
-sum | if last
+filter first or last
 ```
 
-will sum up all datapoints, and return a single datapoint with the full sum. If `if last` were not there, all intermediate values of the sum would be returned.
+will return the first and last datapoint in your stream:
+
+```
+1,2,3,4,5
+```
+
+```
+1,5
+```

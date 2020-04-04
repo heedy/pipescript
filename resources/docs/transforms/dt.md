@@ -1,21 +1,25 @@
-The `dt` transform allows you to quickly find the time difference between the previous and this datapoint:
+Every datapoint in a stream has a duration. This value is hidden when performing operations in PipeScript, since all operations are performed on a datapoint's `d` (data) field. To permit processing based upon duration in PipeScript, the `dt` transform exposes the datapoint's duration.
+
+Remember that raw datapoints are in the form:
 
 ```json
 [
-    {"t": 4, "d": 4},
-	{"t": 20, "d": 5},
-	{"t": 50, "d": 6}
+  {
+    "t": 123456.23,
+    "d": 4,
+    "dt": 80.0
+  }
 ]
 ```
 
-```
-dt
-```
+When performing transforms, `$==4` will return `true`, since we operate on the "d" (data) field. But the duration is `80.0`, so the transform `dt` will result in the following datapoint:
 
 ```json
 [
-    {"t": 4, 0)},
-	{"t": 20, "d": 16},
-	{"t": 50, "d":30}
+  {
+    "t": 123456.23,
+    "d": 80.0,
+    "dt": 80.0
+  }
 ]
 ```

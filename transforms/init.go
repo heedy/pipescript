@@ -6,17 +6,17 @@ This package imports EVERYTHING
 package transforms
 
 import (
-	"github.com/connectordb/pipescript/transforms/core"     // The core transforms
-	"github.com/connectordb/pipescript/transforms/datetime" // Manipulating timestamps
-	"github.com/connectordb/pipescript/transforms/math"     // Statistical transforms
-	"github.com/connectordb/pipescript/transforms/misc"     // Miscellaneous transforms
-	"github.com/connectordb/pipescript/transforms/strings"  // Text-based transforms
+	"github.com/heedy/pipescript/transforms/core"     // The core transforms
+	"github.com/heedy/pipescript/transforms/datetime" // Manipulating timestamps
+	"github.com/heedy/pipescript/transforms/misc"     // Miscellaneous transforms
+	"github.com/heedy/pipescript/transforms/numeric"  // Statistical transforms
+	"github.com/heedy/pipescript/transforms/strings"  // Text-based transforms
 )
 
 // Register ALL functions
 func Register() {
 	core.Register()
-	math.Register()
+	numeric.Register()
 	datetime.Register()
 	strings.Register()
 	misc.Register()

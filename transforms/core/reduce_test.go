@@ -3,38 +3,27 @@ package core
 import (
 	"testing"
 
-	"github.com/connectordb/pipescript"
+	"github.com/heedy/pipescript"
 )
 
 func TestReduce(t *testing.T) {
-	Register()
+	Reduce.Register()
 	pipescript.TestCase{
 		Pipescript: "reduce",
-		ParseError: true,
+		Parsed:     "error",
 	}.Run(t)
 
 	pipescript.TestCase{
-		// This tests order of prescedence: ":" pipes are high prescedence, and will be executed first
-		Pipescript: "reduce(sum)",
+		Pipescript: "reduce(i+1)",
 		Input: []pipescript.Datapoint{
-			{1, map[string]interface{}{"a": 5, "b": 6, "c": 7}},
-			{2, map[string]interface{}{"a": 5, "b": -6, "c": 7}},
-			{3, map[string]interface{}{}},
+			{Timestamp: 1, Data: map[string]interface{}{"a": 5, "b": 6, "c": 7}},
+			{Timestamp: 2, Data: map[string]interface{}{"a": 5, "b": -6}},
+			{Timestamp: 3, Data: map[string]interface{}{}},
 		},
 		Output: []pipescript.Datapoint{
-			{1, float64(18)},
-			{2, float64(6)},
-			{3, nil},
-		},
-		SecondaryInput: []pipescript.Datapoint{
-			{1, map[string]interface{}{"a": 5, "b": 6, "c": 7}},
-			{2, map[string]interface{}{"a": 5, "b": -6, "c": 7}},
-			{3, map[string]interface{}{}},
-		},
-		SecondaryOutput: []pipescript.Datapoint{
-			{1, float64(18)},
-			{2, float64(6)},
-			{3, nil},
+			{Timestamp: 1, Data: float64(3)},
+			{Timestamp: 2, Data: float64(2)},
+			{Timestamp: 3, Data: nil},
 		},
 	}.Run(t)
 }

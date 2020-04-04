@@ -3,38 +3,142 @@ package core
 import (
 	"testing"
 
-	"github.com/connectordb/pipescript"
+	"github.com/heedy/pipescript"
+	"github.com/stretchr/testify/require"
 )
 
 func TestFilter(t *testing.T) {
-	Register()
+	require.NoError(t, Filter.Register())
 	pipescript.TestCase{
 		Pipescript: "filter",
-		ParseError: true,
+		Parsed:     "error",
 	}.Run(t)
 
 	pipescript.TestCase{
-		// Comment?
-		Pipescript: "filter($<0)",
+		Pipescript: "filter($)",
 		Input: []pipescript.Datapoint{
-			{1, map[string]interface{}{"a": 0, "b": -45, "c": 80}},
-			{2, map[string]interface{}{"a": 5, "b": 6, "c": -7}},
-			{3, map[string]interface{}{}},
+			{Timestamp: 1, Data: 1},
+			{Timestamp: 2, Data: true},
+			{Timestamp: 3, Data: false},
+			{Timestamp: 4, Data: "hi"},
 		},
 		Output: []pipescript.Datapoint{
-			{1, map[string]interface{}{"a": 0, "c": 80}},
-			{2, map[string]interface{}{"a": 5, "b": 6}},
-			{3, map[string]interface{}{}},
+			{Timestamp: 1, Data: 1},
+			{Timestamp: 2, Data: true},
 		},
-		SecondaryInput: []pipescript.Datapoint{
-			{1, map[string]interface{}{"a": 5, "b": 6, "c": 7}},
-			{2, map[string]interface{}{"a": 5, "b": -6, "c": 7}},
-			{3, map[string]interface{}{"a": -1.0}},
+
+		OutputError: true,
+	}.Run(t)
+
+	pipescript.TestCase{
+		Pipescript: "filter $",
+		Input: []pipescript.Datapoint{
+			{Timestamp: 1, Data: 1},
+			{Timestamp: 2, Data: true},
+			{Timestamp: 3, Data: false},
+			{Timestamp: 4, Data: "hi"},
 		},
-		SecondaryOutput: []pipescript.Datapoint{
-			{1, map[string]interface{}{"a": 5, "b": 6, "c": 7}},
-			{2, map[string]interface{}{"a": 5, "c": 7}},
-			{3, map[string]interface{}{}},
+		Output: []pipescript.Datapoint{
+			{Timestamp: 1, Data: 1},
+			{Timestamp: 2, Data: true},
+		},
+
+		OutputError: true,
+	}.Run(t)
+
+	pipescript.TestCase{
+		Pipescript: "filter $ < 5",
+		Input: []pipescript.Datapoint{
+			{Timestamp: 1, Data: 1},
+			{Timestamp: 2, Data: 8},
+			{Timestamp: 3, Data: false},
+		},
+		Output: []pipescript.Datapoint{
+			{Timestamp: 1, Data: 1},
+			{Timestamp: 3, Data: false},
 		},
 	}.Run(t)
+
+	pipescript.TestCase{
+		Pipescript: "filter $ < 5 | $ >= 3",
+		Input: []pipescript.Datapoint{
+			{Timestamp: 1, Data: 1},
+			{Timestamp: 2, Data: 10},
+			{Timestamp: 3, Data: 7},
+			{Timestamp: 4, Data: 1.0},
+			{Timestamp: 5, Data: 3},
+			{Timestamp: 6, Data: 2.0},
+			{Timestamp: 7, Data: 3.14},
+		},
+		Output: []pipescript.Datapoint{
+			{Timestamp: 1, Data: false},
+			{Timestamp: 4, Data: false},
+			{Timestamp: 5, Data: true},
+			{Timestamp: 6, Data: false},
+			{Timestamp: 7, Data: true},
+		},
+	}.Run(t)
+
+	pipescript.TestCase{
+		Pipescript: "filter($ < 5):($ >= 3)",
+		Input: []pipescript.Datapoint{
+			{Timestamp: 1, Data: 1},
+			{Timestamp: 2, Data: 10},
+			{Timestamp: 3, Data: 7},
+			{Timestamp: 4, Data: 1.0},
+			{Timestamp: 5, Data: 3},
+			{Timestamp: 6, Data: 2.0},
+			{Timestamp: 7, Data: 3.14},
+		},
+		Output: []pipescript.Datapoint{
+			{Timestamp: 1, Data: false},
+			{Timestamp: 4, Data: false},
+			{Timestamp: 5, Data: true},
+			{Timestamp: 6, Data: false},
+			{Timestamp: 7, Data: true},
+		},
+	}.Run(t)
+
+	pipescript.TestCase{
+		// This tests order of prescedence: ":" pipes are high prescedence, and will be executed first
+		Pipescript: "filter ($['test']:$ < 5) | $['test']",
+		Input: []pipescript.Datapoint{
+			{Timestamp: 1, Data: map[string]interface{}{"test": 4}},
+			{Timestamp: 2, Data: map[string]interface{}{"test": 8}},
+			{Timestamp: 3, Data: map[string]interface{}{"test": 3}},
+		},
+		Output: []pipescript.Datapoint{
+			{Timestamp: 1, Data: 4},
+			{Timestamp: 3, Data: 3},
+		},
+	}.Run(t)
+
+	pipescript.TestCase{
+		// This tests order of prescedence: ":" pipes are high prescedence, and will be executed first
+		Pipescript: "filter $['test']:$ < 5 | $['test']",
+		Input: []pipescript.Datapoint{
+			{Timestamp: 1, Data: map[string]interface{}{"test": 4}},
+			{Timestamp: 2, Data: map[string]interface{}{"test": 8}},
+			{Timestamp: 3, Data: map[string]interface{}{"test": 3}},
+		},
+		Output: []pipescript.Datapoint{
+			{Timestamp: 1, Data: 4},
+			{Timestamp: 3, Data: 3},
+		},
+	}.Run(t)
+
+	pipescript.TestCase{
+		// This tests order of prescedence: ":" pipes are high prescedence, and will be executed first
+		Pipescript: "filter $:5 > $['test']:$:$:$ | $['test']:$",
+		Input: []pipescript.Datapoint{
+			{Timestamp: 1, Data: map[string]interface{}{"test": 4}},
+			{Timestamp: 2, Data: map[string]interface{}{"test": 8}},
+			{Timestamp: 3, Data: map[string]interface{}{"test": 3}},
+		},
+		Output: []pipescript.Datapoint{
+			{Timestamp: 1, Data: 4},
+			{Timestamp: 3, Data: 3},
+		},
+	}.Run(t)
+
 }

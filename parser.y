@@ -1,18 +1,19 @@
 // A parser for PipeScript
 // Generate using:
-//	go tool yacc -o parser.go -p parser parser.y
+//	goyacc -o parser.go -p parser parser.y
 
 %{
 package pipescript
 
 import (
 	"fmt"
+	"errors"
 	"strconv"
 )
 
 type scriptFunc struct {
 	transform string
-	args []*Script
+	args []*Pipe
 }
 
 
@@ -21,10 +22,10 @@ type scriptFunc struct {
 
 
 %union{
-	script *Script
+	script *Pipe
 	sfunc scriptFunc
-	scriptArray []*Script
-	objBuilder map[string]*Script
+	scriptArray []*Pipe
+	objBuilder map[string]*Pipe
 	strVal string	// This is how variables are passed in: by their string value
 }
 
@@ -76,11 +77,7 @@ pipescript: transform
 	|
 	pipescript pPIPE transform
 		{
-			err := $1.Append($3)
-			if err!=nil {
-				parserlex.Error(err.Error())
-				goto ret1
-			}
+			$1.Join($3)
 			$$ = $1
 		}
 	;
@@ -116,7 +113,7 @@ function:
 	pIDENTIFIER_SPACE algebraic %prec pARGS
 		{
 			$$.transform = $1
-			$$.args = []*Script{$2}
+			$$.args = []*Pipe{$2}
 		}
 	;
 
@@ -133,11 +130,7 @@ algebraic: statement
 	|
 	algebraic pCOLON algebraic
 		{
-			err := $1.Append($3)
-			if err!=nil {
-				parserlex.Error(err.Error())
-				goto ret1
-			}
+			$1.Join($3)
 			$$ = $1
 		}
 	|
@@ -240,7 +233,7 @@ algebraic: statement
 		// First get the script of this function
 		sf := scriptFunc{
 			transform: $1,
-			args: []*Script{},
+			args: []*Pipe{},
 		}
 		s,err := parserGetScript(sf)
 		if err!=nil {
@@ -325,13 +318,7 @@ simpletransform:
 			$1[$2] = $4
 
 			// Now generate the objectScript
-			s,err := newObjectTransform($1)
-			if err!=nil {
-				parserlex.Error(err.Error())
-				goto ret1
-			}
-
-			$$ = s
+			$$ = MustPipe(NewObjectTransform($1),nil)
 		}
 	;
 
@@ -356,32 +343,32 @@ simplefunction:
 	pIDENTIFIER pLPARENS algebraic pRPARENS //%prec pARGS
 		{
 			$$.transform = $1
-			$$.args = []*Script{$3}
+			$$.args = []*Pipe{$3}
 		}
 	|
 	pIDENTIFIER pLSQUARE algebraic pRSQUARE //%prec pARGS
 		{
 			$$.transform = $1
-			$$.args = []*Script{$3}
+			$$.args = []*Pipe{$3}
 		}
 	|
 	pIDENTIFIER pLPARENS pRPARENS
 		{
 			// Allows calling as a function
 			$$.transform = $1
-			$$.args = []*Script{}
+			$$.args = []*Pipe{}
 		}
 	|
 	pIDENTIFIER %prec pNOARGS
 		{
 			$$.transform = $1
-			$$.args = []*Script{}
+			$$.args = []*Pipe{}
 		}
 	|
 	pIDENTIFIER_SPACE %prec pNOARGS
 		{
 			$$.transform = $1
-			$$.args = []*Script{}
+			$$.args = []*Pipe{}
 		}
 	;
 
@@ -398,19 +385,19 @@ script_array:
 	|
 	algebraic pCOMMA algebraic
 		{
-			$$ = []*Script{$1,$3}
+			$$ = []*Pipe{$1,$3}
 		}
 	;
 
 
 /*************************************************************************************
-object_builder allows us to read in a json-formatted object whic includes transforms as values
+object_builder allows us to read in a json-formatted object which includes transforms as values
 *************************************************************************************/
 
 object_builder:
 	pLBRACKET
 		{
-			$$ = make(map[string]*Script)
+			$$ = make(map[string]*Pipe)
 		}
 	|
 	object_builder pSTRING pCOLON algebraic pCOMMA
@@ -426,7 +413,7 @@ object_builder:
 
 /*************************************************************************************
 Prepare constant values. The lexed values are all strings, so convert to correct type
-and convert into ConstantScript
+and convert into NewConstTransform
  	Input: lexed values
 	Output: constant
 *************************************************************************************/
@@ -438,36 +425,116 @@ constant:
 				parserlex.Error(err.Error())
 				goto ret1
 			}
-			$$ = ConstantScript(num)
+			$$ = MustPipe(NewConstTransform(num),nil)
 		}
 	|
 	pSTRING
 		{
-			$$ = ConstantScript($1)
+			$$ = MustPipe(NewConstTransform($1),nil)
 		}
 	|
 	pBOOL
 		{
 			if $1=="true" {
-				$$ = ConstantScript(true)
+				$$ = MustPipe(NewConstTransform(true),nil)
 			} else {
-				$$ = ConstantScript(false)
+				$$ = MustPipe(NewConstTransform(false),nil)
 			}
 		}
 	;
 
 %%
 
-func parserGetScript(sf scriptFunc) (*Script,error) {
-	RegistryLock.RLock()
-	v,ok := TransformRegistry[sf.transform]
-	RegistryLock.RUnlock()
-	if ok {
-		s,err := v.Script(sf.args)
-		if err!=nil {
-			return nil, err
-		}
-		return s,nil
+func parserGetScript(sf scriptFunc) (*Pipe,error) {
+	return NewTransformPipe(sf.transform,sf.args)
+}
+
+func comparisonScript(comparison string, a1, a2 *Pipe) (*Pipe, error) {
+	var ti *Transform
+
+	switch comparison {
+	case "==":
+		ti = EqTransform
+	case "!=":
+		ti = NeTransform
+	case "<":
+		ti = LtTransform
+	case "<=":
+		ti = LteTransform
+	case ">":
+		ti = GtTransform
+	case ">=":
+		ti = GteTransform
+	default:
+		return nil, errors.New("Invalid comparison")
 	}
-	return nil, fmt.Errorf("Transform %s not found",sf.transform)
+	return NewElementPipe(ti,[]*Pipe{a1,a2})
+}
+
+func addScript(a1,a2 *Pipe) (*Pipe,error) {
+	ti := AddTransform
+	return NewElementPipe(ti,[]*Pipe{a1,a2})
+
+}
+
+func divScript(a1,a2 *Pipe) (*Pipe,error) {
+	ti := DivTransform
+return NewElementPipe(ti,[]*Pipe{a1,a2})
+
+}
+
+func subtractScript(a1,a2 *Pipe) (*Pipe,error) {
+	ti := SubTransform
+	return NewElementPipe(ti,[]*Pipe{a1,a2})
+
+}
+
+func mulScript(a1,a2 *Pipe) (*Pipe,error) {
+	ti := MulTransform
+	return NewElementPipe(ti,[]*Pipe{a1,a2})
+
+}
+
+func powScript(a1,a2 *Pipe) (*Pipe,error) {
+	ti := PowTransform
+	return NewElementPipe(ti,[]*Pipe{a1,a2})
+
+}
+
+func modScript(a1,a2 *Pipe) (*Pipe,error) {
+	ti := ModTransform
+	return NewElementPipe(ti,[]*Pipe{a1,a2})
+
+}
+
+func orScript(a1,a2 *Pipe) (*Pipe,error) {
+	ti := OrTransform
+	return NewElementPipe(ti,[]*Pipe{a1,a2})
+
+}
+
+func andScript(a1,a2 *Pipe) (*Pipe,error) {
+	ti := AndTransform
+	return NewElementPipe(ti,[]*Pipe{a1,a2})
+
+}
+
+func notScript(a1 *Pipe) (*Pipe,error) {
+	ti := NotTransform
+	pe,err := NewPipeElement(ti,nil)
+	if err!=nil {
+		return nil,err
+	}
+	a1.Append(pe)
+	return a1,nil
+}
+
+func negativeScript(a1 *Pipe) (*Pipe,error) {
+	ti := NegTransform
+	pe,err := NewPipeElement(ti,nil)
+	if err!=nil {
+		return nil,err
+	}
+	a1.Append(pe)
+	return a1,nil
 }

@@ -1,88 +1,123 @@
 package core
 
 import (
-	"errors"
-
-	"github.com/connectordb/pipescript"
-	"github.com/connectordb/pipescript/resources"
+	"github.com/heedy/pipescript"
+	"github.com/heedy/pipescript/resources"
 )
 
-type whileTransformStruct struct {
-	script *pipescript.Script
-	iter   *pipescript.SingleDatapointIterator
+// The argIterator ends iterating once the first arg is false
+type whileArgIterator struct {
+	args    []*pipescript.Datapoint
+	e       *pipescript.TransformEnv
+	startDP *pipescript.Datapoint
+	done    bool
 }
 
-func (t whileTransformStruct) Copy() (pipescript.TransformInstance, error) {
-	news, err := t.script.Copy()
+func (ai *whileArgIterator) Next(out *pipescript.Datapoint) (*pipescript.Datapoint, error) {
+	if ai.startDP != nil {
+		out.Timestamp = ai.startDP.Timestamp
+		out.Duration = ai.startDP.Duration
+		out.Data = ai.startDP.Data
+		ai.startDP = nil
+		return out, nil
+	}
+	dp, args, err := ai.e.Next(ai.args)
+	if err != nil || dp == nil {
+		ai.done = true
+		return dp, err
+	}
+	argval, err := args[0].Bool()
 	if err != nil {
 		return nil, err
 	}
-	iter := &pipescript.SingleDatapointIterator{}
-	news.SetInput(iter)
-	return whileTransformStruct{news, iter}, nil
+	if !argval {
+		ai.done = true
+		ai.startDP = dp
+		return nil, nil // The value was false. Pretend that the stream is finished
+	}
+	out.Timestamp = dp.Timestamp
+	out.Duration = dp.Duration
+	out.Data = dp.Data
+	return out, nil
 }
 
-// Next in the whileTransform works by peeking forward one datapoint. If the *next* argument is false, it means
-// that we return the result of the current datapoint. If not,
-func (t whileTransformStruct) Next(ti *pipescript.TransformIterator) (dp *pipescript.Datapoint, err error) {
-	// Reset the internal script
-	t.iter.Set(nil, nil)
-	t.script.Next()
+type whileIter struct {
+	args    []*pipescript.Datapoint
+	pipe    *pipescript.Pipe
+	startDP *pipescript.Datapoint
+	done    bool
+}
 
-	// When the code gets here, at all times we are either on the first datapoint or on a false, or at the end of the stream
+func (w *whileIter) OneToOne() bool {
+	return false
+}
+
+func (w *whileIter) Next(e *pipescript.TransformEnv, out *pipescript.Datapoint) (*pipescript.Datapoint, error) {
+
+	if w.done {
+		return nil, nil
+	}
 	for {
 
-		te := ti.Next()
-		if te.IsFinished() {
-			return te.Get()
+		p := w.pipe.Copy()
+		wi := &whileArgIterator{
+			args:    w.args,
+			e:       e,
+			startDP: w.startDP,
 		}
-		// Add the current datapoint to the script.
-		t.iter.Set(te.Datapoint, nil)
-		dp, err = t.script.Next()
-		if err != nil {
-			return dp, err
-		}
+		p.InputIterator(wi)
 
-		// Check the next datapoint. If it is false, or the end of the stream, return the value
-		te = ti.Peek(0)
-		if te.IsFinished() {
-			return dp, nil
-		}
-
-		v, err := te.Args[0].Bool()
+		// Loop until finished
+		dp, err := p.Next(out)
 		if err != nil {
 			return nil, err
 		}
 
-		if !v {
-			return dp, nil
+		dp2 := dp
+		for dp != nil {
+			dp2 = dp
+			dp, err = p.Next(out)
+			if err != nil {
+				return nil, err
+			}
 		}
+		var tmp pipescript.Datapoint
+		for !wi.done {
+			// The pipe finished before the iterator actually got to a false arg. Finish looping
+			_, err := wi.Next(&tmp)
+			if err != nil {
+				return nil, err
+			}
+		}
+
+		w.startDP = wi.startDP
+		if w.startDP == nil {
+			w.done = true
+		}
+		if dp2 != nil {
+			// Return the last datapoint returned from the pipe
+			return dp2, err
+		}
+		// Otherwise, keep looping through subsequent values
 	}
 
 }
 
-// While performs a while loop
-var While = pipescript.Transform{
+var While = &pipescript.Transform{
 	Name:          "while",
 	Description:   "Equivalent to a while loop that runs while the first argument is true. Restarts the loop when the argument is false.",
 	Documentation: string(resources.MustAsset("docs/transforms/while.md")),
-	OneToOne:      true,
 	Args: []pipescript.TransformArg{
 		{
 			Description: "The statement to check for truth",
+			Type:        pipescript.TransformArgType,
 		},
 		{
-			Description: "pipe to run, and to reset when the first arg is false",
-			Hijacked:    true,
+			Description: "transform to run, and to reset when the first arg is false",
+			Type:        pipescript.PipeArgType,
 		},
 	},
-	Generator: func(name string, args []*pipescript.Script) (*pipescript.TransformInitializer, error) {
-		if args[1].Peek {
-			return nil, errors.New("while cannot be used with transforms that peek")
-		}
-
-		iter := &pipescript.SingleDatapointIterator{}
-		args[1].SetInput(iter)
-		return &pipescript.TransformInitializer{Args: args[0:1], Transform: whileTransformStruct{args[1], iter}}, nil
+	Constructor: func(transform *pipescript.Transform, consts []interface{}, pipes []*pipescript.Pipe) (pipescript.TransformIterator, error) {
+		return &whileIter{args: make([]*pipescript.Datapoint, 1), pipe: pipes[0]}, nil
 	},
 }

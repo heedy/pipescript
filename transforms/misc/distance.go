@@ -4,103 +4,84 @@ import (
 	"errors"
 	"math"
 
-	"github.com/connectordb/duck"
-	"github.com/connectordb/pipescript"
-	"github.com/connectordb/pipescript/resources"
+	"github.com/heedy/pipescript"
+	"github.com/heedy/pipescript/resources"
 )
-
-type distanceTransform struct {
-	lat  float64
-	long float64
-}
-
-func (t *distanceTransform) Copy() (pipescript.TransformInstance, error) {
-	return &distanceTransform{t.lat, t.long}, nil
-}
 
 // EarthRadius is the earth radius in meters
 var EarthRadius = float64(6371000)
 
-// Radians is the multiplication cosntant to convert degrees to radians
+// Radians is the multiplication constant to convert degrees to radians
 var Radians = math.Pi / 180.0
-
-func (t *distanceTransform) Next(ti *pipescript.TransformIterator) (*pipescript.Datapoint, error) {
-	te := ti.Next()
-	if te.IsFinished() {
-		return te.Get()
-	}
-
-	s, err := te.Datapoint.Get("latitude")
-	if err != nil {
-		return nil, err
-	}
-	lat, ok := duck.Float(s)
-	if !ok {
-		return nil, errors.New("Could not convert latitude to float")
-	}
-	s, err = te.Datapoint.Get("longitude")
-	if err != nil {
-		return nil, err
-	}
-	long, ok := duck.Float(s)
-	if !ok {
-		return nil, errors.New("Could not convert longitude to float")
-	}
-
-	// https://en.wikipedia.org/wiki/Haversine_formula
-	// http://www.movable-type.co.uk/scripts/latlong.html
-
-	// Convert our distances to Radians
-	lat = lat * Radians
-	long = long * Radians
-
-	// The radian distances between chosen point and datapoint
-	dlat := lat - t.lat
-	dlong := long - t.long
-
-	// Now we compute the distance using haverside formula
-	a := math.Sin(dlat/2)*math.Sin(dlat/2) +
-		math.Cos(lat)*math.Cos(t.lat)*math.Sin(dlong/2)*math.Sin(dlong/2)
-
-	c := 2 * math.Atan2(math.Sqrt(a), math.Sqrt(1-a))
-
-	return te.Set(EarthRadius * c)
-}
 
 var Distance = pipescript.Transform{
 	Name:          "distance",
 	Description:   "Returns distance in meters from given latitude/longitude coordinates to datapoint",
-	OutputSchema:  `{"type": "boolean"}`,
 	Documentation: string(resources.MustAsset("docs/transforms/distance.md")),
-	OneToOne:      true,
-	Stateless:     true,
 	Args: []pipescript.TransformArg{
 		{
 			Description: "Latitude",
-			Constant:    true,
+			Type:        pipescript.ConstArgType,
 		},
 		{
 			Description: "Longitude",
-			Constant:    true,
+			Type:        pipescript.ConstArgType,
 		},
 	},
-	Generator: func(name string, args []*pipescript.Script) (*pipescript.TransformInitializer, error) {
-		dp, err := args[0].GetConstant()
-		if err != nil {
-			return nil, err
+	Constructor: pipescript.NewBasic(func(consts []interface{}, pipes []*pipescript.Pipe) ([]interface{}, []*pipescript.Pipe, error) {
+		c2 := make([]interface{}, 2)
+		f, ok := pipescript.Float(consts[0])
+		if !ok {
+			return nil, nil, errors.New("latitude must be a number")
 		}
-		lat, err := dp.Float()
-		if err != nil {
-			return nil, err
+		c2[0] = f * Radians
+		f, ok = pipescript.Float(consts[1])
+		if !ok {
+			return nil, nil, errors.New("longitude must be a number")
 		}
-		dp, err = args[1].GetConstant()
-		if err != nil {
-			return nil, err
+		c2[1] = f * Radians
+		return c2, pipes, nil
+	}, func(dp *pipescript.Datapoint, args []*pipescript.Datapoint, consts []interface{}, pipes []*pipescript.Pipe, out *pipescript.Datapoint) (*pipescript.Datapoint, error) {
+		data, ok := dp.Data.(map[string]interface{})
+		if !ok {
+			return nil, errors.New("Distance can only be found to objects with latitude and longitude keys")
 		}
-		long, err := dp.Float()
-		if err != nil {
-			return nil, err
+		v, ok := data["latitude"]
+		if !ok {
+			return nil, errors.New("Could not find latitude in datapoint")
 		}
-		return &pipescript.TransformInitializer{Transform: &distanceTransform{lat * Radians, long * Radians}}, nil
-	},
+		lat, ok := v.(float64)
+		if !ok {
+			return nil, errors.New("Latitude must be a number")
+		}
+
+		v, ok = data["longitude"]
+		if !ok {
+			return nil, errors.New("Could not find longitude in datapoint")
+		}
+		long, ok := v.(float64)
+		if !ok {
+			return nil, errors.New("Longitude must be a number")
+		}
+
+		// Convert our distances to Radians
+		lat = lat * Radians
+		long = long * Radians
+
+		arglat := consts[0].(float64)
+		arglong := consts[1].(float64)
+
+		// The radian distances between chosen point and datapoint
+		dlat := lat - arglat
+		dlong := long - arglong
+
+		// Now we compute the distance using haverside formula
+		a := math.Sin(dlat/2)*math.Sin(dlat/2) +
+			math.Cos(lat)*math.Cos(arglat)*math.Sin(dlong/2)*math.Sin(dlong/2)
+
+		c := 2 * math.Atan2(math.Sqrt(a), math.Sqrt(1-a))
+		out.Data = EarthRadius * c
+
+		return out, nil
+	}),
 }

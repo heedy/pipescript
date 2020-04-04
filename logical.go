@@ -1,73 +1,64 @@
 package pipescript
 
-// andTransform is used when given (a and b)
-type andTransform struct{}
+var NotTransform = &Transform{
+	Name:        "not",
+	Description: "Boolean not",
 
-func (a andTransform) Copy() (TransformInstance, error) {
-	return andTransform{}, nil
+	Constructor: NewBasic(nil, func(dp *Datapoint, args []*Datapoint, consts []interface{}, pipes []*Pipe, out *Datapoint) (*Datapoint, error) {
+		b, err := dp.Bool()
+		out.Data = !b
+		return out, err
+	}),
 }
 
-// Next performs an and on two boolean datapoints
-func (a andTransform) Next(ti *TransformIterator) (*Datapoint, error) {
-	te := ti.Next()
-	if te.IsFinished() {
-		return te.Get()
-	}
-	b1, err := te.Args[0].Bool()
-	if err != nil {
-		return nil, err
-	}
-	b2, err := te.Args[1].Bool()
-	if err != nil {
-		return nil, err
-	}
-	return te.Set(b1 && b2)
+var AndTransform = &Transform{
+	Name:        "and",
+	Description: "logical and",
+
+	Args: []TransformArg{
+		TransformArg{
+			Description: "Value to and against data",
+			Type:        TransformArgType,
+		},
+		TransformArg{
+			Description: "Value to and against data",
+			Type:        TransformArgType,
+		},
+	},
+	Constructor: NewArgBasic(func(args []*Datapoint, consts []interface{}, pipes []*Pipe, out *Datapoint) (*Datapoint, error) {
+		f1, err := args[0].Bool()
+		if err == nil {
+			var f2 bool
+			f2, err = args[1].Bool()
+
+			out.Data = f1 && f2
+		}
+		return out, err
+	}),
 }
 
-func andScript(a1, a2 *Script) (*Script, error) {
-	pe, err := NewPipelineElement([]*Script{a1, a2}, andTransform{})
+var OrTransform = &Transform{
+	Name:        "or",
+	Description: "logical or",
 
-	return &Script{
-		input:    pe,
-		output:   pe,
-		OneToOne: true,
-		Constant: a1.Constant && a2.Constant,
-	}, err
+	Args: []TransformArg{
+		TransformArg{
+			Description: "Value to or against data",
+			Type:        TransformArgType,
+		},
+		TransformArg{
+			Description: "Value to and against data",
+			Type:        TransformArgType,
+		},
+	},
+	Constructor: NewArgBasic(func(args []*Datapoint, consts []interface{}, pipes []*Pipe, out *Datapoint) (*Datapoint, error) {
+		f1, err := args[0].Bool()
+		if err == nil {
+			var f2 bool
+			f2, err = args[1].Bool()
 
-}
-
-// orTransform is used when given (a or b)
-type orTransform struct{}
-
-func (o orTransform) Copy() (TransformInstance, error) {
-	return orTransform{}, nil
-}
-
-// Next performs an or on two boolean datapoints
-func (o orTransform) Next(ti *TransformIterator) (*Datapoint, error) {
-	te := ti.Next()
-	if te.IsFinished() {
-		return te.Get()
-	}
-	b1, err := te.Args[0].Bool()
-	if err != nil {
-		return nil, err
-	}
-	b2, err := te.Args[1].Bool()
-	if err != nil {
-		return nil, err
-	}
-	return te.Set(b1 || b2)
-}
-
-func orScript(a1, a2 *Script) (*Script, error) {
-	pe, err := NewPipelineElement([]*Script{a1, a2}, orTransform{})
-
-	return &Script{
-		input:    pe,
-		output:   pe,
-		OneToOne: true,
-		Constant: a1.Constant && a2.Constant,
-	}, err
-
+			out.Data = f1 || f2
+		}
+		return out, err
+	}),
 }

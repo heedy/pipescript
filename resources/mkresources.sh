@@ -1,0 +1,3 @@
+#!/bin/bash
+cd "${0%/*}"
+go-bindata -pkg resources -nocompress -nometadata docs/...

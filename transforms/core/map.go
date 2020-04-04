@@ -1,100 +1,116 @@
 package core
 
 import (
-	"errors"
-	"fmt"
-
-	"github.com/connectordb/pipescript"
-	"github.com/connectordb/pipescript/resources"
+	"github.com/heedy/pipescript"
+	"github.com/heedy/pipescript/resources"
 )
 
-// The maximum number of elements in a map
-var SplitMax = 50000
-
-type mapTransform struct {
-	script *pipescript.Script // The uninitialized script to be used for splitting
+type mapChannel struct {
+	cp   *pipescript.ChannelPipe
+	done bool
 }
 
-func (t *mapTransform) Copy() (pipescript.TransformInstance, error) {
-	return &mapTransform{t.script}, nil
-}
-
-func (t *mapTransform) Next(ti *pipescript.TransformIterator) (*pipescript.Datapoint, error) {
-	te := ti.Next()
-	if te.IsFinished() {
-		return te.Get()
-	}
-
-	scriptmap := make(map[string]*pipescript.Script)
-	datamap := make(map[string]interface{})
-	iter := &pipescript.SingleDatapointIterator{}
-	var lasttimestamp float64
-
-	for !te.IsFinished() {
-		lasttimestamp = te.Datapoint.Timestamp
-
-		// Convert the key value to string
-		v, err := te.Args[0].DataString()
-		if err != nil {
-			return nil, err
-		}
-
-		//Check if the value exists
-		s, ok := scriptmap[v]
-		if !ok {
-			if len(scriptmap) >= SplitMax {
-				return nil, fmt.Errorf("Reached maximum map amount %d.", SplitMax)
-			}
-
-			// Initialize the new script, and add it to our map
-			s, err = t.script.Copy()
-			if err != nil {
-				return nil, err
-			}
-			//Set the script input to be the internal iterator
-			s.SetInput(iter)
-			scriptmap[v] = s
-		}
-
-		//Send the current datapoint to the iterator
-		iter.Set(te.Datapoint, nil)
-		dp, err := s.Next()
-		if err != nil {
-			return nil, err
-		}
-
-		// Set the data in our map
-		datamap[v] = dp.Data
-
-		te = ti.Next()
-
-	}
-
-	return &pipescript.Datapoint{Timestamp: lasttimestamp, Data: datamap}, te.Error
-
-}
-
-// Map splits the dtaapoints by its first argument
-var Map = pipescript.Transform{
+var Map = &pipescript.Transform{
 	Name:          "map",
-	Description:   `Splits the script by the first argument's value, creating new instances of the second argument's script.`,
+	Description:   "Splits the timeseries by the first arg, and returns an object where each key is the result of running the pipe in the transform in the second arg on the split series",
 	Documentation: string(resources.MustAsset("docs/transforms/map.md")),
 	Args: []pipescript.TransformArg{
 		{
 			Description: "The value to split on. This must be something that can be converted to string.",
+			Type:        pipescript.TransformArgType,
 		},
 		{
-			Description: "The script to instantiate for each different value of the first argument.",
-			Hijacked:    true,
+			Description: "The transform to instantiate for each different value of the first argument.",
+			Type:        pipescript.PipeArgType,
 		},
 	},
-	Generator: func(name string, args []*pipescript.Script) (*pipescript.TransformInitializer, error) {
-		if args[1].Peek {
-			return nil, errors.New("Map cannot be used with transforms that peek.")
+	Constructor: pipescript.NewAggregator(func(e *pipescript.TransformEnv, consts []interface{}, pipes []*pipescript.Pipe, out *pipescript.Datapoint) (*pipescript.Datapoint, error) {
+		// Make the output map
+		data := make(map[string]interface{})
+
+		cp := make(map[string]*mapChannel)
+
+		// The pipes need to be closed
+		defer func() {
+			for _, p := range cp {
+				p.cp.Close()
+			}
+		}()
+
+		argarray := make([]*pipescript.Datapoint, 1)
+		// While there is new data, keep adding it to the appropriate pipe
+		dp, args, err := e.Next(argarray)
+		if err != nil || dp == nil {
+			return nil, err
 		}
-		return &pipescript.TransformInitializer{
-			Args:      []*pipescript.Script{args[0]},
-			Transform: &mapTransform{args[1]},
-		}, nil
-	},
+		dp2 := dp
+		out.Timestamp = dp.Timestamp
+		for dp != nil {
+			dp2 = dp
+			key := args[0].ToString()
+			p, ok := cp[key]
+			if !ok {
+				p = &mapChannel{pipescript.NewChannelPipe(pipes[0].Copy()), false}
+				cp[key] = p
+			}
+			sentDP := false
+			for !sentDP && !p.done {
+				select {
+				case res := <-p.cp.Receiver:
+					if res.Err != nil {
+						return nil, res.Err
+					}
+					if res.DP == nil {
+						p.done = true
+					} else {
+						data[key] = res.DP.Data
+					}
+				case p.cp.Sender <- dp:
+					sentDP = true
+				}
+			}
+
+			dp, args, err = e.Next(argarray)
+			if err != nil {
+				return nil, err
+			}
+		}
+		// All the data was sent. Now send the null datapoint, signaling end of stream
+		for key, p := range cp {
+			sentDP := false
+			for !sentDP && !p.done {
+				select {
+				case res := <-p.cp.Receiver:
+					if res.Err != nil {
+						return nil, res.Err
+					}
+					if res.DP == nil {
+						p.done = true
+					} else {
+						data[key] = res.DP.Data
+					}
+				case p.cp.Sender <- nil:
+					sentDP = true
+				}
+			}
+		}
+		// Finally, empty all the pipes of data
+		for key, p := range cp {
+			for !p.done {
+				res := <-p.cp.Receiver
+				if res.Err != nil {
+					return nil, res.Err
+				}
+				if res.DP == nil {
+					p.done = true
+				} else {
+					data[key] = res.DP.Data
+				}
+			}
+		}
+
+		out.Duration = dp2.Timestamp + dp2.Duration - out.Timestamp
+		out.Data = data
+		return out, nil
+	}),
 }
