@@ -5,6 +5,7 @@
 // docs/transforms/anytrue.md
 // docs/transforms/bucket.md
 // docs/transforms/changed.md
+// docs/transforms/contains.md
 // docs/transforms/count.md
 // docs/transforms/distance.md
 // docs/transforms/dt.md
@@ -15,9 +16,11 @@
 // docs/transforms/map.md
 // docs/transforms/mean.md
 // docs/transforms/reduce.md
+// docs/transforms/regex.md
 // docs/transforms/sum.md
 // docs/transforms/t.md
 // docs/transforms/tshift.md
+// docs/transforms/wc.md
 // docs/transforms/while.md
 // DO NOT EDIT!
 
@@ -318,6 +321,33 @@ func docsTransformsChangedMd() (*asset, error) {
 	}
 
 	info := bindataFileInfo{name: "docs/transforms/changed.md", size: 0, mode: os.FileMode(0), modTime: time.Unix(0, 0)}
+	a := &asset{bytes: bytes, info: info}
+	return a, nil
+}
+
+var _docsTransformsContainsMd = []byte(``+"`"+`contains`+"`"+` permits you to check if a datapoint with a string data value contains the given substring:
+
+`+"`"+``+"`"+``+"`"+`json
+["Hello World!","hello world","hi there"]
+`+"`"+``+"`"+``+"`"+`
+
+Running the transform `+"`"+`contains("World")`+"`"+` will give:
+`+"`"+``+"`"+``+"`"+`json
+[true,false,false]
+`+"`"+``+"`"+``+"`"+`
+`)
+
+func docsTransformsContainsMdBytes() ([]byte, error) {
+	return _docsTransformsContainsMd, nil
+}
+
+func docsTransformsContainsMd() (*asset, error) {
+	bytes, err := docsTransformsContainsMdBytes()
+	if err != nil {
+		return nil, err
+	}
+
+	info := bindataFileInfo{name: "docs/transforms/contains.md", size: 0, mode: os.FileMode(0), modTime: time.Unix(0, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -801,6 +831,38 @@ func docsTransformsReduceMd() (*asset, error) {
 	return a, nil
 }
 
+var _docsTransformsRegexMd = []byte(`The regex transform checks if the data string matches the given regex.
+
+For example, given a regex to check for valid usernames: `+"`"+`regex('^[a-z0-9_-]{3,16}$')`+"`"+`, we get:
+
+`+"`"+``+"`"+``+"`"+`json
+[
+  "Hello World!",
+  "valid_username",
+  "1"
+]
+`+"`"+``+"`"+``+"`"+`
+
+`+"`"+``+"`"+``+"`"+`json
+[false,true,false]
+`+"`"+``+"`"+``+"`"+`
+`)
+
+func docsTransformsRegexMdBytes() ([]byte, error) {
+	return _docsTransformsRegexMd, nil
+}
+
+func docsTransformsRegexMd() (*asset, error) {
+	bytes, err := docsTransformsRegexMdBytes()
+	if err != nil {
+		return nil, err
+	}
+
+	info := bindataFileInfo{name: "docs/transforms/regex.md", size: 0, mode: os.FileMode(0), modTime: time.Unix(0, 0)}
+	a := &asset{bytes: bytes, info: info}
+	return a, nil
+}
+
 var _docsTransformsSumMd = []byte(`The `+"`"+`sum`+"`"+` transform sums up numeric values. Given the data:
 
 `+"`"+``+"`"+``+"`"+`json
@@ -887,6 +949,33 @@ func docsTransformsTshiftMd() (*asset, error) {
 	}
 
 	info := bindataFileInfo{name: "docs/transforms/tshift.md", size: 0, mode: os.FileMode(0), modTime: time.Unix(0, 0)}
+	a := &asset{bytes: bytes, info: info}
+	return a, nil
+}
+
+var _docsTransformsWcMd = []byte(`This transform counts the words in a string:
+
+`+"`"+``+"`"+``+"`"+`json
+["Hello World!"]
+`+"`"+``+"`"+``+"`"+`
+
+Running `+"`"+`wc`+"`"+` on the above returns:
+`+"`"+``+"`"+``+"`"+`json
+[2]
+`+"`"+``+"`"+``+"`"+`
+`)
+
+func docsTransformsWcMdBytes() ([]byte, error) {
+	return _docsTransformsWcMd, nil
+}
+
+func docsTransformsWcMd() (*asset, error) {
+	bytes, err := docsTransformsWcMdBytes()
+	if err != nil {
+		return nil, err
+	}
+
+	info := bindataFileInfo{name: "docs/transforms/wc.md", size: 0, mode: os.FileMode(0), modTime: time.Unix(0, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -996,6 +1085,7 @@ var _bindata = map[string]func() (*asset, error){
 	"docs/transforms/anytrue.md": docsTransformsAnytrueMd,
 	"docs/transforms/bucket.md": docsTransformsBucketMd,
 	"docs/transforms/changed.md": docsTransformsChangedMd,
+	"docs/transforms/contains.md": docsTransformsContainsMd,
 	"docs/transforms/count.md": docsTransformsCountMd,
 	"docs/transforms/distance.md": docsTransformsDistanceMd,
 	"docs/transforms/dt.md": docsTransformsDtMd,
@@ -1006,9 +1096,11 @@ var _bindata = map[string]func() (*asset, error){
 	"docs/transforms/map.md": docsTransformsMapMd,
 	"docs/transforms/mean.md": docsTransformsMeanMd,
 	"docs/transforms/reduce.md": docsTransformsReduceMd,
+	"docs/transforms/regex.md": docsTransformsRegexMd,
 	"docs/transforms/sum.md": docsTransformsSumMd,
 	"docs/transforms/t.md": docsTransformsTMd,
 	"docs/transforms/tshift.md": docsTransformsTshiftMd,
+	"docs/transforms/wc.md": docsTransformsWcMd,
 	"docs/transforms/while.md": docsTransformsWhileMd,
 }
 
@@ -1059,6 +1151,7 @@ var _bintree = &bintree{nil, map[string]*bintree{
 			"anytrue.md": &bintree{docsTransformsAnytrueMd, map[string]*bintree{}},
 			"bucket.md": &bintree{docsTransformsBucketMd, map[string]*bintree{}},
 			"changed.md": &bintree{docsTransformsChangedMd, map[string]*bintree{}},
+			"contains.md": &bintree{docsTransformsContainsMd, map[string]*bintree{}},
 			"count.md": &bintree{docsTransformsCountMd, map[string]*bintree{}},
 			"distance.md": &bintree{docsTransformsDistanceMd, map[string]*bintree{}},
 			"dt.md": &bintree{docsTransformsDtMd, map[string]*bintree{}},
@@ -1069,9 +1162,11 @@ var _bintree = &bintree{nil, map[string]*bintree{
 			"map.md": &bintree{docsTransformsMapMd, map[string]*bintree{}},
 			"mean.md": &bintree{docsTransformsMeanMd, map[string]*bintree{}},
 			"reduce.md": &bintree{docsTransformsReduceMd, map[string]*bintree{}},
+			"regex.md": &bintree{docsTransformsRegexMd, map[string]*bintree{}},
 			"sum.md": &bintree{docsTransformsSumMd, map[string]*bintree{}},
 			"t.md": &bintree{docsTransformsTMd, map[string]*bintree{}},
 			"tshift.md": &bintree{docsTransformsTshiftMd, map[string]*bintree{}},
+			"wc.md": &bintree{docsTransformsWcMd, map[string]*bintree{}},
 			"while.md": &bintree{docsTransformsWhileMd, map[string]*bintree{}},
 		}},
 	}},

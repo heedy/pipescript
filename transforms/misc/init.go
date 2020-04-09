@@ -7,8 +7,5 @@ func Register() {
 	First.Register()
 	Last.Register()
 	Distance.Register()
-	/*
-		Domain.Register()
-		Distance.Register()
-	*/
+	Length.Register()
 }

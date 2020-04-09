@@ -14,7 +14,7 @@ var EarthRadius = float64(6371000)
 // Radians is the multiplication constant to convert degrees to radians
 var Radians = math.Pi / 180.0
 
-var Distance = pipescript.Transform{
+var Distance = &pipescript.Transform{
 	Name:          "distance",
 	Description:   "Returns distance in meters from given latitude/longitude coordinates to datapoint",
 	Documentation: string(resources.MustAsset("docs/transforms/distance.md")),
