@@ -30,3 +30,5 @@ javascript/pipescript.js
 javascript/pipescript.js.map
 
 config/test_default.conf
+
+profile.cov

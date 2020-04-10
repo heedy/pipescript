@@ -266,6 +266,26 @@ func (p *Pipe) Next(dp *Datapoint) (*Datapoint, error) {
 	return p.Arr[len(p.Arr)-1].Next(dp)
 }
 
+func (p *Pipe) Last(dp *Datapoint) (*Datapoint, error) {
+	dp2 := &Datapoint{}
+	var err error
+	dp2, err = p.Next(dp2)
+	if err != nil || dp2 == nil {
+		return dp2, err
+	}
+	for dp2 != nil {
+		dp.Timestamp = dp2.Timestamp
+		dp.Duration = dp2.Duration
+		dp.Data = dp2.Data
+
+		dp2, err = p.Next(dp2)
+		if err != nil {
+			return nil, err
+		}
+	}
+	return dp, nil
+}
+
 // Append returns a pipe with the given PipeElement added
 func (p *Pipe) Append(e *PipeElement) {
 	plen := len(p.Arr)

@@ -224,3 +224,18 @@ func (i *BufferIterator) Peek(idx int) (*Datapoint, error) {
 	curv = curp.Value.(*bufferPage)
 	return curv.DP[pageIndex], nil
 }
+
+type IteratorFromBI struct {
+	BI *BufferIterator
+}
+
+func (it IteratorFromBI) Next(out *Datapoint) (*Datapoint, error) {
+	dp, err := it.BI.Next()
+	if err != nil || dp == nil {
+		return dp, err
+	}
+	out.Timestamp = dp.Timestamp
+	out.Duration = dp.Duration
+	out.Data = dp.Data
+	return out, nil
+}

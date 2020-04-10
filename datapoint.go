@@ -6,9 +6,9 @@ import (
 )
 
 type Datapoint struct {
-	Timestamp float64
-	Duration  float64
-	Data      interface{}
+	Timestamp float64     `json:"t"`
+	Duration  float64     `json:"dt"`
+	Data      interface{} `json:"d"`
 }
 
 func (dp *Datapoint) Float() (float64, error) {
