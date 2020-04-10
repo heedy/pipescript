@@ -53,7 +53,16 @@ var Startswith = &pipescript.Transform{
 		{
 			Description: "The substring to check for",
 			Type:        pipescript.ConstArgType,
+			Schema: map[string]interface{}{
+				"type": "string",
+			},
 		},
+	},
+	InputSchema: map[string]interface{}{
+		"type": "string",
+	},
+	OutputSchema: map[string]interface{}{
+		"type": "boolean",
 	},
 	Constructor: pipescript.NewBasic(constString, func(dp *pipescript.Datapoint, args []*pipescript.Datapoint, consts []interface{}, pipes []*pipescript.Pipe, out *pipescript.Datapoint) (*pipescript.Datapoint, error) {
 		d, err := dp.String()
@@ -74,7 +83,16 @@ var Endswith = &pipescript.Transform{
 		{
 			Description: "The substring to check for",
 			Type:        pipescript.ConstArgType,
+			Schema: map[string]interface{}{
+				"type": "string",
+			},
 		},
+	},
+	InputSchema: map[string]interface{}{
+		"type": "string",
+	},
+	OutputSchema: map[string]interface{}{
+		"type": "boolean",
 	},
 	Constructor: pipescript.NewBasic(constString, func(dp *pipescript.Datapoint, args []*pipescript.Datapoint, consts []interface{}, pipes []*pipescript.Pipe, out *pipescript.Datapoint) (*pipescript.Datapoint, error) {
 		d, err := dp.String()

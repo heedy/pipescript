@@ -12,6 +12,9 @@ var Hour = &pipescript.Transform{
 	Args: []pipescript.TransformArg{
 		timezoneArg,
 	},
+	OutputSchema: map[string]interface{}{
+		"type": "integer",
+	},
 	Constructor: NewTimeBasic(0, func(dp *pipescript.Datapoint, args []*pipescript.Datapoint, consts []interface{}, pipes []*pipescript.Pipe, tz *time.Location, st time.Time, out *pipescript.Datapoint) (*pipescript.Datapoint, error) {
 		tval := dp.Time().In(tz)
 		out.Data = int64(tval.Sub(st) / time.Hour)
@@ -24,6 +27,9 @@ var Day = &pipescript.Transform{
 	Description: "Returns the number of days since Jan 1 1970 in the given time zone.",
 	Args: []pipescript.TransformArg{
 		timezoneArg,
+	},
+	OutputSchema: map[string]interface{}{
+		"type": "integer",
 	},
 	Constructor: NewTimeBasic(0, func(dp *pipescript.Datapoint, args []*pipescript.Datapoint, consts []interface{}, pipes []*pipescript.Pipe, tz *time.Location, st time.Time, out *pipescript.Datapoint) (*pipescript.Datapoint, error) {
 		tval := dp.Time().In(tz)
@@ -38,6 +44,9 @@ var Dayhour = &pipescript.Transform{
 	Args: []pipescript.TransformArg{
 		timezoneArg,
 	},
+	OutputSchema: map[string]interface{}{
+		"type": "integer",
+	},
 	Constructor: NewTimeBasic(0, func(dp *pipescript.Datapoint, args []*pipescript.Datapoint, consts []interface{}, pipes []*pipescript.Pipe, tz *time.Location, st time.Time, out *pipescript.Datapoint) (*pipescript.Datapoint, error) {
 		tval := dp.Time().In(tz)
 		out.Data = tval.Hour()
@@ -50,6 +59,9 @@ var Week = &pipescript.Transform{
 	Description: "Returns the number of weeks since Jan 5 1970 (First Monday after unix time) in the given time zone.",
 	Args: []pipescript.TransformArg{
 		timezoneArg,
+	},
+	OutputSchema: map[string]interface{}{
+		"type": "integer",
 	},
 	Constructor: NewTimeBasic(0, func(dp *pipescript.Datapoint, args []*pipescript.Datapoint, consts []interface{}, pipes []*pipescript.Pipe, tz *time.Location, st time.Time, out *pipescript.Datapoint) (*pipescript.Datapoint, error) {
 		tval := dp.Time().In(tz)
@@ -66,6 +78,9 @@ var Weekday = &pipescript.Transform{
 	Args: []pipescript.TransformArg{
 		timezoneArg,
 	},
+	OutputSchema: map[string]interface{}{
+		"type": "string",
+	},
 	Constructor: NewTimeBasic(0, func(dp *pipescript.Datapoint, args []*pipescript.Datapoint, consts []interface{}, pipes []*pipescript.Pipe, tz *time.Location, st time.Time, out *pipescript.Datapoint) (*pipescript.Datapoint, error) {
 		tval := dp.Time().In(tz)
 		out.Data = tval.Weekday().String()
@@ -78,6 +93,9 @@ var Month = &pipescript.Transform{
 	Description: "Returns the number of months since Jan 1 1970 in the given time zone.",
 	Args: []pipescript.TransformArg{
 		timezoneArg,
+	},
+	OutputSchema: map[string]interface{}{
+		"type": "integer",
 	},
 	Constructor: NewTimeBasic(0, func(dp *pipescript.Datapoint, args []*pipescript.Datapoint, consts []interface{}, pipes []*pipescript.Pipe, tz *time.Location, st time.Time, out *pipescript.Datapoint) (*pipescript.Datapoint, error) {
 		tval := dp.Time().In(tz)
@@ -105,6 +123,9 @@ var Year = &pipescript.Transform{
 	Args: []pipescript.TransformArg{
 		timezoneArg,
 	},
+	OutputSchema: map[string]interface{}{
+		"type": "integer",
+	},
 	Constructor: NewTimeBasic(0, func(dp *pipescript.Datapoint, args []*pipescript.Datapoint, consts []interface{}, pipes []*pipescript.Pipe, tz *time.Location, st time.Time, out *pipescript.Datapoint) (*pipescript.Datapoint, error) {
 		tval := dp.Time().In(tz)
 		out.Data = tval.Year()
@@ -118,6 +139,9 @@ var Yearmonth = &pipescript.Transform{
 	Args: []pipescript.TransformArg{
 		timezoneArg,
 	},
+	OutputSchema: map[string]interface{}{
+		"type": "string",
+	},
 	Constructor: NewTimeBasic(0, func(dp *pipescript.Datapoint, args []*pipescript.Datapoint, consts []interface{}, pipes []*pipescript.Pipe, tz *time.Location, st time.Time, out *pipescript.Datapoint) (*pipescript.Datapoint, error) {
 		tval := dp.Time().In(tz)
 		out.Data = tval.Month().String()
@@ -130,6 +154,9 @@ var Yearday = &pipescript.Transform{
 	Description: "Returns the day of the year during which the datapoint happened [1,365] non-leap, and [1,366] for leap years.",
 	Args: []pipescript.TransformArg{
 		timezoneArg,
+	},
+	OutputSchema: map[string]interface{}{
+		"type": "integer",
 	},
 	Constructor: NewTimeBasic(0, func(dp *pipescript.Datapoint, args []*pipescript.Datapoint, consts []interface{}, pipes []*pipescript.Pipe, tz *time.Location, st time.Time, out *pipescript.Datapoint) (*pipescript.Datapoint, error) {
 		tval := dp.Time().In(tz)

@@ -40,6 +40,9 @@ var Filter = &pipescript.Transform{
 		{
 			Description: "Statement to check for truth value",
 			Type:        pipescript.TransformArgType,
+			Schema: map[string]interface{}{
+				"type": "boolean",
+			},
 		},
 	},
 	Constructor: func(transform *pipescript.Transform, consts []interface{}, pipes []*pipescript.Pipe) (pipescript.TransformIterator, error) {

@@ -22,11 +22,32 @@ var Distance = &pipescript.Transform{
 		{
 			Description: "Latitude",
 			Type:        pipescript.ConstArgType,
+			Schema: map[string]interface{}{
+				"type": "number",
+			},
 		},
 		{
 			Description: "Longitude",
 			Type:        pipescript.ConstArgType,
+			Schema: map[string]interface{}{
+				"type": "number",
+			},
 		},
+	},
+	InputSchema: map[string]interface{}{
+		"type": "object",
+		"properties": map[string]interface{}{
+			"latitude": map[string]interface{}{
+				"type": "number",
+			},
+			"longitude": map[string]interface{}{
+				"type": "number",
+			},
+		},
+		"required": []string{"latitude", "longitude"},
+	},
+	OutputSchema: map[string]interface{}{
+		"type": "number",
 	},
 	Constructor: pipescript.NewBasic(func(consts []interface{}, pipes []*pipescript.Pipe) ([]interface{}, []*pipescript.Pipe, error) {
 		c2 := make([]interface{}, 2)

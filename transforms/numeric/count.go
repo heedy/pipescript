@@ -9,6 +9,9 @@ var Count = &pipescript.Transform{
 	Name:          "count",
 	Description:   "returns the total number of datapoints in the stream",
 	Documentation: string(resources.MustAsset("docs/transforms/count.md")),
+	OutputSchema: map[string]interface{}{
+		"type": "number",
+	},
 	Constructor: pipescript.NewAggregator(func(e *pipescript.TransformEnv, consts []interface{}, pipes []*pipescript.Pipe, out *pipescript.Datapoint) (*pipescript.Datapoint, error) {
 		count := int64(0)
 		out.Timestamp = 0

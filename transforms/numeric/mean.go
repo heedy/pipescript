@@ -9,6 +9,12 @@ var Mean = &pipescript.Transform{
 	Name:          "mean",
 	Description:   "Finds the mean of the timeseries data",
 	Documentation: string(resources.MustAsset("docs/transforms/mean.md")),
+	InputSchema: map[string]interface{}{
+		"type": "number",
+	},
+	OutputSchema: map[string]interface{}{
+		"type": "number",
+	},
 	Constructor: pipescript.NewAggregator(func(e *pipescript.TransformEnv, consts []interface{}, pipes []*pipescript.Pipe, out *pipescript.Datapoint) (*pipescript.Datapoint, error) {
 		dp, _, err := e.Next(nil)
 		if err != nil || dp == nil {

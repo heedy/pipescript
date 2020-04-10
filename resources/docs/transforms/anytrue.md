@@ -3,13 +3,13 @@ The `anytrue` transform returns `true` if any of the datapoints in the stream we
 Given the following data:
 
 ```
-false,false,false,true,false,false
+[false,false,false,true,false,false]
 ```
 
 `anytrue` will return:
 
 ```
-true
+[true]
 ```
 
 ### Why It's Useful

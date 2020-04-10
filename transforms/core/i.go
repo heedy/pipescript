@@ -29,6 +29,9 @@ var I = &pipescript.Transform{
 	Name:          "i",
 	Description:   "Gives array index of the timeseries",
 	Documentation: string(resources.MustAsset("docs/transforms/i.md")),
+	OutputSchema: map[string]interface{}{
+		"type": "integer",
+	},
 	Constructor: func(transform *pipescript.Transform, consts []interface{}, pipes []*pipescript.Pipe) (pipescript.TransformIterator, error) {
 		return &iIter{}, nil
 	},

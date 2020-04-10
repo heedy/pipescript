@@ -61,19 +61,20 @@ func (a *ArgType) UnmarshalJSON(b []byte) error {
 }
 
 type TransformArg struct {
-	Description string  `json:"description"`       // A description of what the arg represents
-	Optional    bool    `json:"optional"`          // Whether the arg is optional
-	Default     *Pipe   `json:"default,omitempty"` // If the arg is optional, what is its default value
-	Type        ArgType `json:"arg_type"`          // The type expected of the arg
+	Description string                 `json:"description"`       // A description of what the arg represents
+	Schema      map[string]interface{} `json:"schema"`            // The schema that the arg conforms to
+	Optional    bool                   `json:"optional"`          // Whether the arg is optional
+	Default     *Pipe                  `json:"default,omitempty"` // If the arg is optional, what is its default value
+	Type        ArgType                `json:"arg_type"`          // The type expected of the arg
 }
 
 type Transform struct {
-	Name          string         `json:"name"`              // The name of the transform
-	Description   string         `json:"description"`       // A single line description of the transform
-	Documentation string         `json:"documentation"`     // Full markdown documentation of the transform
-	InputSchema   string         `json:"ischema,omitempty"` // The schema of the input datapoint that the given transform expects (optional)
-	OutputSchema  string         `json:"oschema,omitempty"` // The schema of the output data that this transform gives (optional).
-	Args          []TransformArg `json:"args"`              // The arguments that the transform accepts
+	Name          string                 `json:"name"`          // The name of the transform
+	Description   string                 `json:"description"`   // A single line description of the transform
+	Documentation string                 `json:"documentation"` // Full markdown documentation of the transform
+	InputSchema   map[string]interface{} `json:"ischema"`       // The schema of the input datapoint that the given transform expects (optional)
+	OutputSchema  map[string]interface{} `json:"oschema"`       // The schema of the output data that this transform gives (optional).
+	Args          []TransformArg         `json:"args"`          // The arguments that the transform accepts
 
 	Constructor TransformConstructor `json:"-"` // The function that constructs a transform
 }
@@ -89,11 +90,7 @@ var (
 	// TransformRegistry is the map of all the transforms that are currently registered.
 	// Do not manually add/remove elements from this map.
 	// Use Transform.Register to insert new transforms.
-	TransformRegistry = map[string]*Transform{
-		"$":  Identity,
-		"t":  T,
-		"dt": DT,
-	}
+	TransformRegistry = map[string]*Transform{}
 
 	// RegistryLock enables adding/deleting transforms during runtime. It is exported, since some
 	// applications (heedy) might want to print out the registry
@@ -112,12 +109,21 @@ func (t *Transform) Register() error {
 	if t.Name == "" || t.Constructor == nil {
 		return fmt.Errorf("Attempted to register invalid transform: '%s'", t.Name)
 	}
+	if t.InputSchema == nil {
+		t.InputSchema = make(map[string]interface{})
+	}
+	if t.OutputSchema == nil {
+		t.OutputSchema = make(map[string]interface{})
+	}
 	hadOptional := false
 	for i := range t.Args {
 		if t.Args[i].Optional {
 			hadOptional = true
 		} else if hadOptional {
 			return fmt.Errorf("Transform '%s' has required arg after optional args", t.Name)
+		}
+		if t.Args[i].Schema == nil {
+			t.Args[i].Schema = make(map[string]interface{})
 		}
 	}
 

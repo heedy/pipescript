@@ -39,6 +39,9 @@ var Changed = pipescript.Transform{
 	Name:          "changed",
 	Description:   "Returns true if the datapoint has a different value from the previous one",
 	Documentation: string(resources.MustAsset("docs/transforms/changed.md")),
+	OutputSchema: map[string]interface{}{
+		"type": "boolean",
+	},
 	Constructor: func(transform *pipescript.Transform, consts []interface{}, pipes []*pipescript.Pipe) (pipescript.TransformIterator, error) {
 		return changedIter{}, nil
 	},

@@ -455,6 +455,24 @@ func (p *Pipe) GetConst() (interface{}, error) {
 	return nil, fmt.Errorf("Cannot use %s as constant value", p.String())
 }
 
+func (p *Pipe) MarshalJSON() ([]byte, error) {
+	return json.Marshal(p.String())
+}
+
+func (p *Pipe) UnmarshalJSON(b []byte) error {
+	var av string
+	err := json.Unmarshal(b, &av)
+	if err != nil {
+		return err
+	}
+	p2, err := Parse(av)
+	if err != nil {
+		return err
+	}
+	p.Arr = p2.Arr
+	return nil
+}
+
 type chanIterator struct {
 	Receiver chan *Datapoint
 }

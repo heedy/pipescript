@@ -44,6 +44,7 @@ func basicGetElement(dp *Datapoint, args []*Datapoint, consts []interface{}, pip
 
 var Identity = &Transform{
 	Name:          "$",
+	Description:   `Represents the current datapoint. It is the identity transform.`,
 	Documentation: string(resources.MustAsset("docs/transforms/$.md")),
 	Args: []TransformArg{
 		TransformArg{
@@ -94,7 +95,7 @@ func (t dtIter) Next(e *TransformEnv, out *Datapoint) (*Datapoint, error) {
 	return out, nil
 }
 
-var DT = &Transform{
+var Dt = &Transform{
 	Name:          "dt",
 	Description:   "Gives access to the datapoint's duration",
 	Documentation: string(resources.MustAsset("docs/transforms/dt.md")),
@@ -129,4 +130,10 @@ var T = &Transform{
 	Constructor: func(transform *Transform, consts []interface{}, pipes []*Pipe) (TransformIterator, error) {
 		return tIter{}, nil
 	},
+}
+
+func init() {
+	Identity.Register()
+	T.Register()
+	Dt.Register()
 }

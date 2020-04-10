@@ -18,6 +18,9 @@ var Map = &pipescript.Transform{
 		{
 			Description: "The value to split on. This must be something that can be converted to string.",
 			Type:        pipescript.TransformArgType,
+			Schema: map[string]interface{}{
+				"type": "boolean",
+			},
 		},
 		{
 			Description: "The transform to instantiate for each different value of the first argument.",

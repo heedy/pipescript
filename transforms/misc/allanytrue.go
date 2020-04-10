@@ -9,6 +9,12 @@ var Alltrue = &pipescript.Transform{
 	Name:          "alltrue",
 	Description:   "Returns true if all datapoints seen have been true, otherwise returns false",
 	Documentation: string(resources.MustAsset("docs/transforms/alltrue.md")),
+	InputSchema: map[string]interface{}{
+		"type": "boolean",
+	},
+	OutputSchema: map[string]interface{}{
+		"type": "boolean",
+	},
 	Constructor: pipescript.NewAggregator(func(e *pipescript.TransformEnv, consts []interface{}, pipes []*pipescript.Pipe, out *pipescript.Datapoint) (*pipescript.Datapoint, error) {
 		dp, _, err := e.Next(nil)
 		if err != nil || dp == nil {
@@ -44,6 +50,12 @@ var Anytrue = pipescript.Transform{
 	Name:          "anytrue",
 	Description:   "Returns true if at least one of the datapoints seen was true",
 	Documentation: string(resources.MustAsset("docs/transforms/anytrue.md")),
+	InputSchema: map[string]interface{}{
+		"type": "boolean",
+	},
+	OutputSchema: map[string]interface{}{
+		"type": "boolean",
+	},
 	Constructor: pipescript.NewAggregator(func(e *pipescript.TransformEnv, consts []interface{}, pipes []*pipescript.Pipe, out *pipescript.Datapoint) (*pipescript.Datapoint, error) {
 		dp, _, err := e.Next(nil)
 		if err != nil || dp == nil {

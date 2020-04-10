@@ -9,6 +9,9 @@ import (
 var Length = &pipescript.Transform{
 	Name:        "length",
 	Description: "Returns the length of an array/string, or number of object keys.",
+	OutputSchema: map[string]interface{}{
+		"type": "integer",
+	},
 	Constructor: pipescript.NewBasic(nil, func(dp *pipescript.Datapoint, args []*pipescript.Datapoint, consts []interface{}, pipes []*pipescript.Pipe, out *pipescript.Datapoint) (*pipescript.Datapoint, error) {
 		switch v := dp.Data.(type) {
 		case string:

@@ -12,10 +12,19 @@ var Regex = &pipescript.Transform{
 	Name:          "regex",
 	Description:   "Returns true if the given regular expression matches the data string",
 	Documentation: string(resources.MustAsset("docs/transforms/regex.md")),
+	InputSchema: map[string]interface{}{
+		"type": "string",
+	},
+	OutputSchema: map[string]interface{}{
+		"type": "boolean",
+	},
 	Args: []pipescript.TransformArg{
 		{
 			Description: "The regular expression to use",
 			Type:        pipescript.ConstArgType,
+			Schema: map[string]interface{}{
+				"type": "string",
+			},
 		},
 	},
 	Constructor: pipescript.NewBasic(func(consts []interface{}, pipes []*pipescript.Pipe) ([]interface{}, []*pipescript.Pipe, error) {

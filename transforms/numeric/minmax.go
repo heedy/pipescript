@@ -13,6 +13,12 @@ var Min = &pipescript.Transform{
 			Type:        pipescript.TransformArgType,
 		},
 	},
+	InputSchema: map[string]interface{}{
+		"type": "number",
+	},
+	OutputSchema: map[string]interface{}{
+		"type": "number",
+	},
 	Constructor: pipescript.NewAggregator(func(e *pipescript.TransformEnv, consts []interface{}, pipes []*pipescript.Pipe, out *pipescript.Datapoint) (*pipescript.Datapoint, error) {
 		args := make([]*pipescript.Datapoint, 1)
 		dp, args, err := e.Next(args)
@@ -61,6 +67,12 @@ var Max = &pipescript.Transform{
 			Default:     pipescript.IdentityPipe,
 			Type:        pipescript.TransformArgType,
 		},
+	},
+	InputSchema: map[string]interface{}{
+		"type": "number",
+	},
+	OutputSchema: map[string]interface{}{
+		"type": "number",
 	},
 	Constructor: pipescript.NewAggregator(func(e *pipescript.TransformEnv, consts []interface{}, pipes []*pipescript.Pipe, out *pipescript.Datapoint) (*pipescript.Datapoint, error) {
 		args := make([]*pipescript.Datapoint, 1)

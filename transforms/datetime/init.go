@@ -57,6 +57,9 @@ var timezoneArg = pipescript.TransformArg{
 	Optional:    true,
 	Default:     pipescript.MustPipe(pipescript.NewConstTransform("Local"), nil),
 	Type:        pipescript.ConstArgType,
+	Schema: map[string]interface{}{
+		"type": "string",
+	},
 }
 
 func getTimezone(arg interface{}) (*time.Location, error) {

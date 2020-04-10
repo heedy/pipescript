@@ -111,6 +111,9 @@ var While = &pipescript.Transform{
 		{
 			Description: "The statement to check for truth",
 			Type:        pipescript.TransformArgType,
+			Schema: map[string]interface{}{
+				"type": "boolean",
+			},
 		},
 		{
 			Description: "transform to run, and to reset when the first arg is false",

@@ -1,15 +1,13 @@
-The `alltrue` transform returns `true` if and only if all of the datapoints in the stream are true:
-
 Given the following data:
 
 ```
-true,true,true,false,true,true
+[true,true,true,false,true,true]
 ```
 
 `alltrue` will return:
 
 ```
-false
+[false]
 ```
 
 ### Why It's Useful
