@@ -15,17 +15,29 @@ var Bucket = pipescript.Transform{
 	Documentation: string(resources.MustAsset("docs/transforms/bucket.md")),
 	Args: []pipescript.TransformArg{
 		{
-			Description: "The size of each bucket (float)",
+			Description: "The size of each bucket",
 			Optional:    true,
 			Default:     pipescript.MustPipe(pipescript.NewConstTransform(10), nil),
 			Type:        pipescript.ConstArgType,
+			Schema: map[string]interface{}{
+				"type": "number",
+			},
 		},
 		{
 			Description: "Start location for bucketing",
 			Optional:    true,
 			Default:     pipescript.MustPipe(pipescript.NewConstTransform(0), nil),
 			Type:        pipescript.ConstArgType,
+			Schema: map[string]interface{}{
+				"type": "number",
+			},
 		},
+	},
+	InputSchema: map[string]interface{}{
+		"type": "number",
+	},
+	OutputSchema: map[string]interface{}{
+		"type": "string",
 	},
 	Constructor: pipescript.NewBasic(func(consts []interface{}, pipes []*pipescript.Pipe) ([]interface{}, []*pipescript.Pipe, error) {
 		f, ok := pipescript.Float(consts[0])

@@ -7,17 +7,14 @@ var Min = &pipescript.Transform{
 	Description: "Returns the minimum datapoint in the timeseries",
 	Args: []pipescript.TransformArg{
 		{
-			Description: "Optional, if this is set, then the result of this argument is checked for min",
+			Description: "The value of this argument is used to check for min",
 			Optional:    true,
 			Default:     pipescript.IdentityPipe,
 			Type:        pipescript.TransformArgType,
+			Schema: map[string]interface{}{
+				"type": "number",
+			},
 		},
-	},
-	InputSchema: map[string]interface{}{
-		"type": "number",
-	},
-	OutputSchema: map[string]interface{}{
-		"type": "number",
 	},
 	Constructor: pipescript.NewAggregator(func(e *pipescript.TransformEnv, consts []interface{}, pipes []*pipescript.Pipe, out *pipescript.Datapoint) (*pipescript.Datapoint, error) {
 		args := make([]*pipescript.Datapoint, 1)
@@ -62,17 +59,14 @@ var Max = &pipescript.Transform{
 	Description: "Returns the maximum datapoint in the timeseries",
 	Args: []pipescript.TransformArg{
 		{
-			Description: "Optional, if this is set, then the result of this argument is checked for min",
+			Description: "The value of this argument is used to check for max",
 			Optional:    true,
 			Default:     pipescript.IdentityPipe,
 			Type:        pipescript.TransformArgType,
+			Schema: map[string]interface{}{
+				"type": "number",
+			},
 		},
-	},
-	InputSchema: map[string]interface{}{
-		"type": "number",
-	},
-	OutputSchema: map[string]interface{}{
-		"type": "number",
 	},
 	Constructor: pipescript.NewAggregator(func(e *pipescript.TransformEnv, consts []interface{}, pipes []*pipescript.Pipe, out *pipescript.Datapoint) (*pipescript.Datapoint, error) {
 		args := make([]*pipescript.Datapoint, 1)

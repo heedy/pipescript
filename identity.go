@@ -48,10 +48,20 @@ var Identity = &Transform{
 	Documentation: string(resources.MustAsset("docs/transforms/$.md")),
 	Args: []TransformArg{
 		TransformArg{
-			Description: "If it is given an integer, peeks to the given place in the array. If string, tries to get the element of an object",
+			Description: "If it is given an integer, peeks to the relative index in array. If string, tries to get the object key",
 			Type:        ConstArgType,
 			Optional:    true,
 			Default:     MustPipe(NewConstTransform(0), nil),
+			Schema: map[string]interface{}{
+				"oneOf": []interface{}{
+					map[string]interface{}{
+						"type": "string",
+					},
+					map[string]interface{}{
+						"type": "integer",
+					},
+				},
+			},
 		},
 	},
 	Constructor: func(transform *Transform, consts []interface{}, pipes []*Pipe) (TransformIterator, error) {
