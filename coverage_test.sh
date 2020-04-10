@@ -20,7 +20,7 @@ if ls $dir/*.go &> /dev/null; then
 fi
 done
 
-go tool cover -func profile.cov
+# go tool cover -func profile.cov
 
 # To submit the test coverage result to coveralls.io,
 # use goveralls (https://github.com/mattn/goveralls)

@@ -8,7 +8,7 @@ import (
 
 var ErrBeforeStart = errors.New("There is no value for this query yet")
 
-const bufferPageSize = 3
+const bufferPageSize = 100
 const backPages = 1
 const uintMax = ^uint64(0)
 
