@@ -64,7 +64,7 @@ func (tri *timeRangeIterator) Next(out *pipescript.Datapoint) (*pipescript.Datap
 		return nil, nil
 	}
 	out.Timestamp = tri.T
-	out.Duration = tri.Dt
+	// out.Duration = tri.Dt
 	tri.T += tri.Dt
 	return out, nil
 

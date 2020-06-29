@@ -15,15 +15,16 @@ func TestDataset(t *testing.T) {
 		{Timestamp: 0.1, Data: 4},
 		{Timestamp: 0.8, Data: 2},
 		{Timestamp: 3.2, Data: 2},
+		{Timestamp: 8, Data: 2},
 	}))
 	require.NoError(t, err)
 	ds.Add("k1", ipltr)
 
 	out := []pipescript.Datapoint{
-		{Timestamp: 1, Duration: 1, Data: map[string]interface{}{"k1": int64(2)}},
-		{Timestamp: 2, Duration: 1, Data: map[string]interface{}{"k1": int64(0)}},
-		{Timestamp: 3, Duration: 1, Data: map[string]interface{}{"k1": int64(0)}},
-		{Timestamp: 4, Duration: 1, Data: map[string]interface{}{"k1": int64(1)}},
+		{Timestamp: 1, Data: map[string]interface{}{"k1": int64(2)}},
+		{Timestamp: 2, Data: map[string]interface{}{"k1": int64(0)}},
+		{Timestamp: 3, Data: map[string]interface{}{"k1": int64(0)}},
+		{Timestamp: 4, Data: map[string]interface{}{"k1": int64(1)}},
 	}
 
 	for i := range out {
