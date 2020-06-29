@@ -225,6 +225,16 @@ func (i *BufferIterator) Peek(idx int) (*Datapoint, error) {
 	return curv.DP[pageIndex], nil
 }
 
+func (i *BufferIterator) Close() {
+	for j, it := range i.Buf.Iterators {
+		if it == i {
+			i.Buf.Iterators[j] = i.Buf.Iterators[len(i.Buf.Iterators)-1]
+			i.Buf.Iterators = i.Buf.Iterators[:len(i.Buf.Iterators)-1]
+			break
+		}
+	}
+}
+
 type IteratorFromBI struct {
 	BI *BufferIterator
 }

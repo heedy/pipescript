@@ -75,6 +75,18 @@ func TestBuffer(t *testing.T) {
 	require.NoError(t, err)
 }
 
+func TestBufferClose(t *testing.T) {
+	b := NewBuffer(&testIterator{})
+	it1 := b.Iterator()
+	it2 := b.Iterator()
+	require.Len(t, b.Iterators, 2)
+	it1.Close()
+	require.Len(t, b.Iterators, 1)
+	require.Equal(t, b.Iterators[0], it2)
+	it2.Close()
+	require.Len(t, b.Iterators, 0)
+}
+
 func BenchmarkBuffer(b *testing.B) {
 	buf := NewBuffer(&testIterator{maxi: b.N})
 	it := buf.Iterator()
