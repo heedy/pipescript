@@ -249,3 +249,9 @@ func (it IteratorFromBI) Next(out *Datapoint) (*Datapoint, error) {
 	out.Data = dp.Data
 	return out, nil
 }
+
+type EmptyIterator struct{}
+
+func (e EmptyIterator) Next(dp *Datapoint) (*Datapoint, error) {
+	return nil, nil
+}
