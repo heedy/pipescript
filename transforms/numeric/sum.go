@@ -16,28 +16,38 @@ var Sum = &pipescript.Transform{
 		"type": "number",
 	},
 	Constructor: pipescript.NewAggregator(func(e *pipescript.TransformEnv, consts []interface{}, pipes []*pipescript.Pipe, out *pipescript.Datapoint) (*pipescript.Datapoint, error) {
+		cursum := float64(0)
+		out.Timestamp = 0
+		out.Duration = 0
 		dp, _, err := e.Next(nil)
-		if err != nil || dp == nil {
+		if err != nil {
 			return nil, err
 		}
+
+		if dp != nil {
+			out.Timestamp = dp.Timestamp
+		}
 		ldp := dp
-		out.Timestamp = dp.Timestamp
-		cursum := float64(0)
+
 		for dp != nil {
 			f, err := dp.Float()
 			if err != nil {
 				return nil, err
 			}
 			cursum += f
-			ldp = dp
+
 			dp, _, err = e.Next(nil)
 			if err != nil {
 				return nil, err
 			}
+			ldp = dp
 		}
 
 		out.Data = cursum
-		out.Duration = ldp.Timestamp + ldp.Duration - out.Timestamp
+		if ldp != nil {
+			out.Duration = ldp.Timestamp + ldp.Duration - out.Timestamp
+		}
+
 		return out, nil
 	}),
 }

@@ -40,6 +40,14 @@ func TestSum2(t *testing.T) {
 			{Timestamp: 1, Duration: 2, Data: map[string]interface{}{"s": float64(9), "i": 4}},
 		},
 	}.Run(t)
+
+	pipescript.TestCase{
+		Pipescript: "sum",
+		Input:      []pipescript.Datapoint{},
+		Output: []pipescript.Datapoint{
+			{Timestamp: 0, Duration: 0, Data: float64(0)},
+		},
+	}.Run(t)
 }
 
 type testIterator struct {
