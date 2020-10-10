@@ -13,6 +13,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"runtime/pprof"
 
 	"github.com/heedy/pipescript"
 	"github.com/heedy/pipescript/bytestreams"
@@ -54,6 +55,11 @@ func runner(c *cli.Context, str string) {
 	// Now set up the datapoint reader
 	var dpr pipescript.Iterator
 	switch c.String("ifmt") {
+	case "dpa":
+		dpr, err = bytestreams.NewArrayReader(r)
+		if err != nil {
+			log.Fatal(err)
+		}
 	case "dp":
 
 		dpr, err = bytestreams.NewDatapointReader(r)
@@ -174,6 +180,20 @@ func main() {
 			Aliases: []string{"r"},
 			Usage:   "Run a transform.",
 			Action: func(c *cli.Context) error {
+				cpuprofile := c.String("cpuprofile")
+				if cpuprofile != "" {
+					fmt.Printf("Creating CPU Profile at '%s'", cpuprofile)
+					f, err := os.Create(cpuprofile)
+					if err != nil {
+						return err
+					}
+					defer f.Close()
+					if err := pprof.StartCPUProfile(f); err != nil {
+						return err
+					}
+					defer pprof.StopCPUProfile()
+
+				}
 				runner(c, c.Args().First())
 				return nil
 			},
@@ -205,6 +225,11 @@ func main() {
 					Name:  "timestamp",
 					Value: "",
 					Usage: "Allows to explicitly set the field name to use for timestamp values",
+				},
+				cli.StringFlag{
+					Name:  "cpuprofile",
+					Value: "",
+					Usage: "Generate a cpu profile of the run",
 				},
 			},
 		},

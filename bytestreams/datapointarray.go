@@ -3,9 +3,20 @@ package bytestreams
 import (
 	"encoding/json"
 	"io"
+	"io/ioutil"
 
 	"github.com/heedy/pipescript"
 )
+
+func NewArrayReader(r io.Reader) (*pipescript.DatapointArrayIterator, error) {
+	b, err := ioutil.ReadAll(r)
+	if err != nil {
+		return nil, err
+	}
+	var dpa []pipescript.Datapoint
+	err = json.Unmarshal(b, &dpa)
+	return pipescript.NewDatapointArrayIterator(dpa), err
+}
 
 //DatapointReader
 type DatapointReader struct {

@@ -2,8 +2,6 @@ package pipescript
 
 import (
 	"encoding/json"
-	"math"
-	"reflect"
 	"strconv"
 )
 
@@ -113,6 +111,90 @@ func Bool(v interface{}) (bool, bool) {
 
 }
 
+func FloatNoBool(v interface{}) (float64, bool) {
+	switch n := v.(type) {
+	case float64:
+		return n, true
+	case float32:
+		return float64(n), true
+	case int64:
+		return float64(n), true
+	case int:
+		return float64(n), true
+	default:
+		return 0, false
+	}
+}
+
+func IntNoBool(v interface{}) (int64, bool) {
+	switch n := v.(type) {
+	case float64:
+		res := int64(n)
+		return res, float64(res) == n
+	case float32:
+		res := int64(n)
+		return res, float32(res) == n
+	case int64:
+		return n, true
+	case int:
+		return int64(n), true
+	default:
+		return 0, false
+	}
+}
+
+func Equal(o1, o2 interface{}) bool {
+	if o1 == o2 || o1 == nil || o2 == nil {
+		return o1 == o2
+	}
+	switch v1 := o1.(type) {
+	case string:
+		v2, ok := o2.(string)
+		return ok && v1 == v2
+	case float64:
+		v2, ok := FloatNoBool(o2)
+		return ok && v1 == v2
+	case float32:
+		v2, ok := FloatNoBool(o2)
+		return ok && float64(v1) == v2
+	case int:
+		v2, ok := IntNoBool(o2)
+		return ok && int64(v1) == v2
+	case int64:
+		v2, ok := IntNoBool(o2)
+		return ok && v1 == v2
+	case bool:
+		v2, ok := o2.(bool)
+		return ok && v1 == v2
+	case map[string]interface{}:
+		v2, ok := o2.(map[string]interface{})
+		if !ok || len(v1) != len(v2) {
+			return false
+		}
+		for k, vv1 := range v1 {
+			vv2, ok := v2[k]
+			if !ok || !Equal(vv1, vv2) {
+				return false
+			}
+		}
+		return true
+	case []interface{}:
+		v2, ok := o2.([]interface{})
+		if !ok || len(v1) != len(v2) {
+			return false
+		}
+		for i := range v1 {
+			if !Equal(v1[i], v2[i]) {
+				return false
+			}
+		}
+		return true
+	default:
+		panic("Unknown interface type for Equal")
+	}
+}
+
+/*
 //Equal attempts to check equality between two interfaces. If the values
 //are not directly comparable thru DeepEqual, tries to do a "duck" comparison.
 //	true true -> true
@@ -156,3 +238,4 @@ func Equal(arg1 interface{}, arg2 interface{}) bool {
 	// that required forking parseFloat to be faster.
 	return reflect.DeepEqual(arg1, arg2)
 }
+*/
