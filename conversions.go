@@ -144,7 +144,7 @@ func IntNoBool(v interface{}) (int64, bool) {
 }
 
 func Equal(o1, o2 interface{}) bool {
-	if o1 == o2 || o1 == nil || o2 == nil {
+	if o1 == nil || o2 == nil {
 		return o1 == o2
 	}
 	switch v1 := o1.(type) {
