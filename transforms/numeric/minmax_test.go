@@ -21,7 +21,7 @@ func TestMin(t *testing.T) {
 	}.Run(t)
 
 	pipescript.TestCase{
-		Pipescript: "min(-$)",
+		Pipescript: "min(-d)",
 		Input: []pipescript.Datapoint{
 			{Timestamp: 1, Data: 3},
 			{Timestamp: 2, Data: 1},
@@ -38,7 +38,7 @@ func TestMax(t *testing.T) {
 	Register()
 
 	pipescript.TestCase{
-		Pipescript: "max(-$)",
+		Pipescript: "max(-d)",
 		Input: []pipescript.Datapoint{
 			{Timestamp: 1, Data: 3},
 			{Timestamp: 2, Data: 1},

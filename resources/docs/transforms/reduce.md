@@ -32,7 +32,7 @@ Suppose you want to find the average number of steps taken every weekday.
 Running the following transform will give you a map of weekday to average step count:
 
 ```
-while(day==$[1]:day,sum) | map(weekday, mean)
+while(day==d[1]:day,sum) | map(weekday, mean)
 ```
 
 For example, a possible result of the above transform could be:
@@ -54,5 +54,5 @@ For example, a possible result of the above transform could be:
 You can now find the average per weekday by running `reduce(mean)`, giving a final transform:
 
 ```
-while(day==$[1]:day,sum) | map(weekday, mean) | reduce(mean)
+while(day==d[1]:day,sum) | map(weekday, mean) | reduce(mean)
 ```

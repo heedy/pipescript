@@ -11,7 +11,7 @@ func TestWhile(t *testing.T) {
 	require.NoError(t, While.Register())
 	// This needs much more testing
 	pipescript.TestCase{
-		Pipescript: "while $!=1 $",
+		Pipescript: "while d!=1 d",
 		Input: []pipescript.Datapoint{
 			{Timestamp: 1, Data: 5},
 			{Timestamp: 2, Data: 2},
@@ -26,7 +26,7 @@ func TestWhile(t *testing.T) {
 	}.Run(t)
 	require.NoError(t, I.Register())
 	pipescript.TestCase{
-		Pipescript: "while(i%3!=0, $)",
+		Pipescript: "while(i%3!=0, d)",
 		Input: []pipescript.Datapoint{
 			{Timestamp: 1, Data: 5},
 			{Timestamp: 2, Data: 2},

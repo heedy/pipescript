@@ -8,14 +8,14 @@ import (
 )
 
 func TestFilter(t *testing.T) {
-	require.NoError(t, Filter.Register())
+	require.NoError(t, Where.Register())
 	pipescript.TestCase{
-		Pipescript: "filter",
+		Pipescript: "where",
 		Parsed:     "error",
 	}.Run(t)
 
 	pipescript.TestCase{
-		Pipescript: "filter($)",
+		Pipescript: "where(d)",
 		Input: []pipescript.Datapoint{
 			{Timestamp: 1, Data: 1},
 			{Timestamp: 2, Data: true},
@@ -31,7 +31,7 @@ func TestFilter(t *testing.T) {
 	}.Run(t)
 
 	pipescript.TestCase{
-		Pipescript: "filter $",
+		Pipescript: "where d",
 		Input: []pipescript.Datapoint{
 			{Timestamp: 1, Data: 1},
 			{Timestamp: 2, Data: true},
@@ -47,7 +47,7 @@ func TestFilter(t *testing.T) {
 	}.Run(t)
 
 	pipescript.TestCase{
-		Pipescript: "filter $ < 5",
+		Pipescript: "where d < 5",
 		Input: []pipescript.Datapoint{
 			{Timestamp: 1, Data: 1},
 			{Timestamp: 2, Data: 8},
@@ -60,7 +60,7 @@ func TestFilter(t *testing.T) {
 	}.Run(t)
 
 	pipescript.TestCase{
-		Pipescript: "filter $ < 5 | $ >= 3",
+		Pipescript: "where d < 5 | d >= 3",
 		Input: []pipescript.Datapoint{
 			{Timestamp: 1, Data: 1},
 			{Timestamp: 2, Data: 10},
@@ -80,7 +80,7 @@ func TestFilter(t *testing.T) {
 	}.Run(t)
 
 	pipescript.TestCase{
-		Pipescript: "filter($ < 5):($ >= 3)",
+		Pipescript: "where(d < 5):(d >= 3)",
 		Input: []pipescript.Datapoint{
 			{Timestamp: 1, Data: 1},
 			{Timestamp: 2, Data: 10},
@@ -101,7 +101,7 @@ func TestFilter(t *testing.T) {
 
 	pipescript.TestCase{
 		// This tests order of prescedence: ":" pipes are high prescedence, and will be executed first
-		Pipescript: "filter ($['test']:$ < 5) | $['test']",
+		Pipescript: "where (d['test']:d < 5) | d['test']",
 		Input: []pipescript.Datapoint{
 			{Timestamp: 1, Data: map[string]interface{}{"test": 4}},
 			{Timestamp: 2, Data: map[string]interface{}{"test": 8}},
@@ -115,7 +115,7 @@ func TestFilter(t *testing.T) {
 
 	pipescript.TestCase{
 		// This tests order of prescedence: ":" pipes are high prescedence, and will be executed first
-		Pipescript: "filter $['test']:$ < 5 | $['test']",
+		Pipescript: "where d['test']:d < 5 | d['test']",
 		Input: []pipescript.Datapoint{
 			{Timestamp: 1, Data: map[string]interface{}{"test": 4}},
 			{Timestamp: 2, Data: map[string]interface{}{"test": 8}},
@@ -129,7 +129,7 @@ func TestFilter(t *testing.T) {
 
 	pipescript.TestCase{
 		// This tests order of prescedence: ":" pipes are high prescedence, and will be executed first
-		Pipescript: "filter $:5 > $['test']:$:$:$ | $['test']:$",
+		Pipescript: "where d:5 > d['test']:d:d:d | d['test']:d",
 		Input: []pipescript.Datapoint{
 			{Timestamp: 1, Data: map[string]interface{}{"test": 4}},
 			{Timestamp: 2, Data: map[string]interface{}{"test": 8}},

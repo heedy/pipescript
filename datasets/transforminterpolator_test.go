@@ -10,7 +10,7 @@ import (
 func TestTransformInterpolator(t *testing.T) {
 	numeric.Count.Register()
 	TestCase{
-		Interpolator: "$", // Use a PipeScript
+		Interpolator: "d", // Use a PipeScript
 		Reference: []pipescript.Datapoint{
 			{Timestamp: 0.1},
 			{Timestamp: 1.3},

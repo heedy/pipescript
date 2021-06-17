@@ -21,7 +21,7 @@ Suppose your data stream is the following:
 
 Mapping by activity:
 ```
-map($("activity"), $("steps"):sum )
+map(d("activity"), d("steps"):sum )
 ```
 
 gives you
@@ -32,7 +32,7 @@ gives you
 }]
 ```
 
-The map transform split the dataset by its first argument (`$("activity")`), and performed the second transform (`$("steps"):sum`) on each subset independently. This allows directly returning the sum of datapoints where you were walking and running.
+The map transform split the dataset by its first argument (`d("activity")`), and performed the second transform (`d("steps"):sum`) on each subset independently. This allows directly returning the sum of datapoints where you were walking and running.
 
 The map transform is frequently used in conjunction with the `reduce` transform for quick analysis.
 

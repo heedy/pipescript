@@ -431,7 +431,7 @@ func (p *Pipe) Simplify() *Pipe {
 	if len(p.Arr) == 0 {
 		// If all elements were removed, add a basic 0 peek iterator back
 		pe, err := NewPipeElement(&Transform{
-			Name: "$",
+			Name: "d",
 			Constructor: func(transform *Transform, consts []interface{}, pipes []*Pipe) (TransformIterator, error) {
 				return peekIterator{0}, nil
 			},

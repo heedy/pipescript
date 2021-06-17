@@ -5,15 +5,15 @@ import (
 	"github.com/heedy/pipescript/resources"
 )
 
-type filterIter struct {
+type whereIter struct {
 	args []*pipescript.Datapoint
 }
 
-func (f filterIter) OneToOne() bool {
+func (f whereIter) OneToOne() bool {
 	return false
 }
 
-func (f filterIter) Next(e *pipescript.TransformEnv, out *pipescript.Datapoint) (*pipescript.Datapoint, error) {
+func (f whereIter) Next(e *pipescript.TransformEnv, out *pipescript.Datapoint) (*pipescript.Datapoint, error) {
 	for {
 		dp, args, err := e.Next(f.args)
 		if dp == nil || err != nil {
@@ -32,10 +32,10 @@ func (f filterIter) Next(e *pipescript.TransformEnv, out *pipescript.Datapoint) 
 	}
 }
 
-var Filter = &pipescript.Transform{
-	Name:          "filter",
+var Where = &pipescript.Transform{
+	Name:          "where",
 	Description:   "Filters all datapoints that do not pass the given conditional",
-	Documentation: string(resources.MustAsset("docs/transforms/filter.md")),
+	Documentation: string(resources.MustAsset("docs/transforms/where.md")),
 	Args: []pipescript.TransformArg{
 		{
 			Description: "Statement to check for truth value",
@@ -46,6 +46,6 @@ var Filter = &pipescript.Transform{
 		},
 	},
 	Constructor: func(transform *pipescript.Transform, consts []interface{}, pipes []*pipescript.Pipe) (pipescript.TransformIterator, error) {
-		return filterIter{make([]*pipescript.Datapoint, 1)}, nil
+		return whereIter{make([]*pipescript.Datapoint, 1)}, nil
 	},
 }

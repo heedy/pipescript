@@ -12,7 +12,7 @@ Remember that raw datapoints are in the form:
 ]
 ```
 
-When performing transforms, `$==4` will return `true`, since we operate on the "d" (data) field. But the timestamp is `123456.23`, so the transform `t` will result in the following datapoint:
+When performing transforms, `d==4` will return `true`, since we operate on the "d" (data) field. But the timestamp is `123456.23`, so the transform `t` will result in the following datapoint:
 
 ```json
 [

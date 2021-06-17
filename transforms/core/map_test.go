@@ -12,7 +12,7 @@ func TestMap(t *testing.T) {
 
 	pipescript.TestCase{
 		// This tests order of prescedence: ":" pipes are high prescedence, and will be executed first
-		Pipescript: "map $ > 5 (i+1)",
+		Pipescript: "map d > 5 (i+1)",
 		Input: []pipescript.Datapoint{
 			{Timestamp: 1, Data: 4},
 			{Timestamp: 2, Data: 6},
@@ -25,7 +25,7 @@ func TestMap(t *testing.T) {
 
 	pipescript.TestCase{
 		// This tests order of prescedence: ":" pipes are high prescedence, and will be executed first
-		Pipescript: "map($ > 5,i+1)",
+		Pipescript: "map(d > 5,i+1)",
 		Input: []pipescript.Datapoint{
 			{Timestamp: 1, Data: 4},
 			{Timestamp: 2, Data: 6},

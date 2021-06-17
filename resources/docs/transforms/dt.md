@@ -12,7 +12,7 @@ Remember that raw datapoints are in the form:
 ]
 ```
 
-When performing transforms, `$==4` will return `true`, since we operate on the "d" (data) field. But the duration is `80.0`, so the transform `dt` will result in the following datapoint:
+When performing transforms, `d==4` will return `true`, since we operate on the "d" (data) field. But the duration is `80.0`, so the transform `dt` will result in the following datapoint:
 
 ```json
 [

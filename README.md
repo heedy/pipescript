@@ -41,8 +41,6 @@ The standalone can be used to run PipeScript queries on datapoint, json, and csv
 pipes run -i myfile.csv -ifmt csv --notimestamp "count"
 ```
 
-Remember that you need to escape the identity transform ($) in bash (\$)
-
 #### SQL
 
 If you want to perform SQL queries on files, please look at [q](https://github.com/harelba/q).

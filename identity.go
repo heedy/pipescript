@@ -43,9 +43,9 @@ func basicGetElement(dp *Datapoint, args []*Datapoint, consts []interface{}, pip
 }
 
 var Identity = &Transform{
-	Name:          "$",
-	Description:   `Represents the current datapoint. It is the identity transform.`,
-	Documentation: string(resources.MustAsset("docs/transforms/$.md")),
+	Name:          "d",
+	Description:   `Represents the data portion of the current datapoint. It is the identity transform.`,
+	Documentation: string(resources.MustAsset("docs/transforms/d.md")),
 	Args: []TransformArg{
 		TransformArg{
 			Description: "If it is given an integer, peeks to the relative index in array. If string, tries to get the object key",

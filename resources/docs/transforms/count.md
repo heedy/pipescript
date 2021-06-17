@@ -13,7 +13,7 @@ No matter what the datapoints, the sequence of data that count returns is:
 Suppose you want to count the number of times you were in a great mood:
 
 ```
-filter $ >= 8 | count
+where d >= 8 | count
 ```
 
 The above transform will return only the datapoints where your mood rating was 8 or above, it will count them, and only return the last datapoint (which contains the full count).
@@ -23,10 +23,10 @@ The above transform will return only the datapoints where your mood rating was 8
 Suppose you want to find how many times you visited a friend:
 
 ```
-distance(<latitude>,<longitude>) < 50 | filter changed | filter $ | count
+distance(<latitude>,<longitude>) < 50 | where changed | where d | count
 ```
 
-The above transform finds when you were within 50 meters of the given coordinates (your friend's home), filters these datapoints so only changes remain (so each time you visit, you get one `true`, followed by a `false` when you leave), filter the false values, and count the number of times you visited. Note that `filter $ | count` can be replaced with `sum` in this case.
+The above transform finds when you were within 50 meters of the given coordinates (your friend's home), filters these datapoints so only changes remain (so each time you visit, you get one `true`, followed by a `false` when you leave), filter the false values, and count the number of times you visited. Note that `where d | count` can be replaced with `sum` in this case.
 
 #### Counting Weekdays
 

@@ -1,5 +1,5 @@
 ```
-filter first or last
+where first or last
 ```
 
 will return the first and last datapoint in your stream:

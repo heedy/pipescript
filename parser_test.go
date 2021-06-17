@@ -62,7 +62,7 @@ func TestParser(t *testing.T) {
 	// Here we perform more advanced pipes to make sure everything works as it should in the parser
 	// We assume all built-in functions are available
 	TestCase{
-		Pipescript: "$==1",
+		Pipescript: "d==1",
 		Input: []Datapoint{
 			{Timestamp: 1, Data: 1},
 			{Timestamp: 2, Data: 2},
@@ -73,7 +73,7 @@ func TestParser(t *testing.T) {
 		},
 	}.Run(t)
 	TestCase{
-		Pipescript: "$!=1",
+		Pipescript: "d!=1",
 		Input: []Datapoint{
 			{Timestamp: 1, Data: 1},
 			{Timestamp: 2, Data: 2},
@@ -85,7 +85,7 @@ func TestParser(t *testing.T) {
 	}.Run(t)
 
 	TestCase{
-		Pipescript: "$ >= 3",
+		Pipescript: "d >= 3",
 		Input: []Datapoint{
 			{Timestamp: 1, Data: 1},
 			{Timestamp: 4, Data: 1.0},
@@ -103,7 +103,7 @@ func TestParser(t *testing.T) {
 	}.Run(t)
 
 	TestCase{
-		Pipescript: "$(1):($ >= 3)",
+		Pipescript: "d(1):(d >= 3)",
 		Input: []Datapoint{
 			{Timestamp: 1, Data: 1},
 			{Timestamp: 4, Data: 1.0},
@@ -121,7 +121,7 @@ func TestParser(t *testing.T) {
 
 	TestCase{
 		// This tests order of prescedence: ":" pipes are high prescedence, and will be executed first
-		Pipescript: "$['test']",
+		Pipescript: "d['test']",
 		Input: []Datapoint{
 			{Timestamp: 1, Data: map[string]interface{}{"test": 4}},
 			{Timestamp: 3, Data: map[string]interface{}{"test": 3}},
@@ -134,7 +134,7 @@ func TestParser(t *testing.T) {
 
 	TestCase{
 		// This tests order of prescedence: ":" pipes are high prescedence, and will be executed first
-		Pipescript: "$['test'] - $[2-1]:$['test']",
+		Pipescript: "d['test'] - d[2-1]:d['test']",
 		Input: []Datapoint{
 			{Timestamp: 1, Data: map[string]interface{}{"test": 4}},
 			{Timestamp: 2, Data: map[string]interface{}{"test": 8}, Duration: 1},
@@ -186,7 +186,7 @@ func TestParser(t *testing.T) {
 
 func TestObject(t *testing.T) {
 	TestCase{
-		Pipescript: "{'a':$,'b':$[1]}",
+		Pipescript: "{'a':d,'b':d[1]}",
 		Input: []Datapoint{
 			{Timestamp: 1, Data: 1},
 			{Timestamp: 4, Data: 2},

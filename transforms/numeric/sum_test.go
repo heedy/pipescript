@@ -30,7 +30,7 @@ func TestSum(t *testing.T) {
 func TestSum2(t *testing.T) {
 	Sum.Register()
 	pipescript.TestCase{
-		Pipescript: "{'s': sum, 'i': $}",
+		Pipescript: "{'s': sum, 'i': d}",
 		Input: []pipescript.Datapoint{
 			{Timestamp: 1, Data: int64(2)},
 			{Timestamp: 2, Data: 3},
